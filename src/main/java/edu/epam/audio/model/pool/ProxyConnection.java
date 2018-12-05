@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-//todo: ask В каком случае нельзя обойтись без прокси?
+//todo: change close method
 public class ProxyConnection implements Connection {
     private Connection connection;
 
@@ -46,7 +46,8 @@ public class ProxyConnection implements Connection {
     }
 
     public void close() throws SQLException {
-        connection.close();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        pool.releaseConnection(this);
     }
 
     public boolean isClosed() throws SQLException {

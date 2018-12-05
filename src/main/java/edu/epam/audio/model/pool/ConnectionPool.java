@@ -1,20 +1,16 @@
 package edu.epam.audio.model.pool;
 
-import edu.epam.audio.model.util.DBConfigReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-//todo: ask Должен ли он быть синглтоном?
-//todo: ask Нужна ли в этом классе параметризация?
-//todo: ask Из-за того, что класс синглтон, с ленивой инициализацией, инициализация в методе init() сервлета происходит с помощью getInstance.
 
 //todo: add dynamic creation connections
 public final class ConnectionPool {
@@ -26,8 +22,6 @@ public final class ConnectionPool {
     private static AtomicBoolean initialized = new AtomicBoolean(false);
     private static Lock lock = new ReentrantLock();
 
-    //todo: ask Можно ли кидать тут runtime.
-    //todo: ask Параметризация самого синглтона.
     public static ConnectionPool getInstance(){
         if (!initialized.get()){
             try {
@@ -66,32 +60,25 @@ public final class ConnectionPool {
         DBConfigReader config = DBConfigReader.getInstance();
 
         String url = config.getUrl();
-        String user = config.getUser();
-        String password = config.getPassword();
-
-        logger.debug("URL : " + url);
-        logger.debug("USER : " + user);
-        logger.debug("Password : " + password);
+        Properties properties = config.createProperties();
 
         for (int i = 0; i < size; i++) {
-            ProxyConnection connection = createConnection(url, user, password);
+            ProxyConnection connection = createConnection(url, properties);
             connectionQueue.offer(connection);
         }
     }
-
 
     public ProxyConnection getConnection() throws InterruptedException {
         return connectionQueue.take();
     }
 
-    //todo: ask В каком случае могут возникнуть проблемы с возвращением конекшена.
     //todo: change method
     public void releaseConnection(ProxyConnection connection){
         connectionQueue.offer(connection);
     }
     
-    private ProxyConnection createConnection(String url, String user, String password) throws SQLException {
-        Connection connection = DriverManager.getConnection(url, user, password);
-        return (new ProxyConnection(connection));
+    private ProxyConnection createConnection(String url, Properties properties) throws SQLException {
+        Connection connection = DriverManager.getConnection(url, properties);
+        return new ProxyConnection(connection);
     }
 }

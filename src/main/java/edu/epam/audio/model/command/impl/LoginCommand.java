@@ -1,11 +1,13 @@
 package edu.epam.audio.model.command.impl;
 
 import edu.epam.audio.model.command.Command;
-import edu.epam.audio.model.command.service.UserServiceLogin;
+import edu.epam.audio.model.service.UserService;
 import edu.epam.audio.model.entity.User;
 import edu.epam.audio.model.exception.CommandException;
 import edu.epam.audio.model.exception.LogicLayerException;
 import edu.epam.audio.model.util.PagePath;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,18 +20,21 @@ public class LoginCommand implements Command {
     private static final String PARAM_NAME_EMAIL = "e-mail";
     private static final String PARAM_NAME_PASSWORD = "password";
 
-    private UserServiceLogin receiver = new UserServiceLogin();
+    private UserService receiver = new UserService();
 
+    private static Logger logger = LogManager.getLogger();
     //todo: think about optional, String password
     public String execute(HttpServletRequest request) throws CommandException {
         String email = request.getParameter(PARAM_NAME_EMAIL);
         String password = request.getParameter(PARAM_NAME_PASSWORD);
 
-        //todo: ask some validation, валидация должна происходить здесь или в бизнес логике?
-        //todo: ask Это правильное разделение бизнес логики и Command?
+        logger.info("Email param : " + email);
+        logger.info("Password param : " + password);
         try {
             if (receiver.checkPassword(email, password)){
+                logger.info("Password is walid.");
                 Optional<User> user = receiver.createUser(email);
+                System.out.println("user is walid.");
                 if (user.isPresent()){
                     User userObject = user.get();
 
@@ -43,11 +48,11 @@ public class LoginCommand implements Command {
                     return PagePath.LOGIN_PAGE;
                 }
             } else {
+                logger.info("Password is invalid.");
                 //todo: установить атрибут, сообщающий об ошибке.
                 return PagePath.LOGIN_PAGE;
             }
         } catch (LogicLayerException e) {
-            //todo: ask Нужен ли exception на уровень команды?
             throw new CommandException("Exception in login command.", e);
         }
     }

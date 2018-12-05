@@ -2,8 +2,8 @@ package edu.epam.audio.controller;
 
 import edu.epam.audio.model.command.Command;
 import edu.epam.audio.model.command.CommandFactory;
+import edu.epam.audio.model.exception.CommandException;
 import edu.epam.audio.model.pool.ConnectionPool;
-import edu.epam.audio.model.pool.ProxyConnection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,9 +14,11 @@ import java.io.IOException;
 
 @WebServlet("/Controller")
 public class Controller extends HttpServlet {
+    private static final int ERROR_CODE = 500;
+
     @Override
     public void init() throws ServletException {
-        ConnectionPool<ProxyConnection> instance = ConnectionPool.getInstance();
+        ConnectionPool.getInstance();
     }
 
     @Override
@@ -26,8 +28,15 @@ public class Controller extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("Post");
         CommandFactory commandFactory = new CommandFactory();
-        Command command = commandFactory.defineCommand(req);
-        String page = command.execute(req);
+        Command command;
+        try {
+            command = commandFactory.defineCommand(req);
+            String page = command.execute(req);
+            System.out.println("Page : " + page);
+        } catch (CommandException e) {
+            resp.sendError(ERROR_CODE);
+        }
     }
 }

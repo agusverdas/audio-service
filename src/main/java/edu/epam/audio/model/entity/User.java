@@ -2,6 +2,7 @@ package edu.epam.audio.model.entity;
 
 //todo: change photo and role to blob and enum
 public class User extends Entity {
+    private Long userId;
     private String email;
     private String name;
     private String photo;
@@ -12,13 +13,18 @@ public class User extends Entity {
 
     }
 
-    public User(String email, String name, String photo, String role, Double bonus) {
+    public User(Long userId, String email, String name, String photo, String role, Double bonus) {
+        this.userId = userId;
         this.email = email;
         this.name = name;
         this.photo = photo;
         this.role = role;
         this.bonus = bonus;
     }
+
+    public Long getUserId() { return userId; }
+
+    public void setUserId(Long userId) { this.userId = userId; }
 
     public String getEmail() {
         return email;
@@ -82,5 +88,17 @@ public class User extends Entity {
         result = 31 * result + (role != null ? role.hashCode() : 0);
         result = 31 * result + (bonus != null ? bonus.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", photo='" + photo + '\'' +
+                ", role='" + role + '\'' +
+                ", bonus=" + bonus +
+                '}';
     }
 }

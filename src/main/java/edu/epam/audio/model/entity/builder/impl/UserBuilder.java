@@ -12,6 +12,11 @@ public class UserBuilder implements Builder<User> {
         user = new User();
     }
 
+    public UserBuilder addId(Long id){
+        user.setUserId(id);
+        return this;
+    }
+
     public UserBuilder addEmail(String email){
         user.setEmail(email);
         return this;
