@@ -5,6 +5,7 @@ import edu.epam.audio.model.command.CommandFactory;
 import edu.epam.audio.model.exception.CommandException;
 import edu.epam.audio.model.pool.ConnectionPool;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,10 +32,14 @@ public class Controller extends HttpServlet {
         System.out.println("Post");
         CommandFactory commandFactory = new CommandFactory();
         Command command;
+        RequestDispatcher dispatcher;
         try {
             command = commandFactory.defineCommand(req);
             String page = command.execute(req);
             System.out.println("Page : " + page);
+
+            dispatcher = getServletContext().getRequestDispatcher(page);
+            dispatcher.forward(req,resp);
         } catch (CommandException e) {
             resp.sendError(ERROR_CODE);
         }
