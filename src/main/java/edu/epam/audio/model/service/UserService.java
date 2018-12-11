@@ -15,7 +15,6 @@ public class UserService {
         boolean isUserPresent;
         try {
             isUserPresent = userDao.findUserByEmail(email).isPresent();
-            System.out.println("is present : " + isUserPresent);
         } catch (DaoException e) {
             throw new LogicLayerException("Exception while checking user", e);
         }
@@ -44,6 +43,27 @@ public class UserService {
         }
     }
 
+    public Optional<User> extractUser(long id) throws LogicLayerException {
+        UserDao userDao = UserDao.getInstance();
+
+        try {
+            return userDao.findEntityById(id);
+        } catch (DaoException e) {
+            throw new LogicLayerException("Exception while extracting user.", e);
+        }
+    }
+
+    public Optional<User> extractByName(String name) throws LogicLayerException {
+        UserDao userDao = UserDao.getInstance();
+
+        try{
+            return userDao.findUserByName(name);
+        } catch (DaoException e) {
+            throw new LogicLayerException("Exception while finding user by name.", e);
+        }
+    }
+
+    //todo: ask Метод относится к бизгнес логике, но по сути просто обращается к DAO.
     public Optional<User> createUser(String email, String password, String name) throws LogicLayerException {
         UserDao userDao = UserDao.getInstance();
 
@@ -53,4 +73,21 @@ public class UserService {
             throw new LogicLayerException("Exception while creating user.");
         }
     }
+
+    //todo: ask МОжно ли переделать так, чтобы посылать какое-то сообщение уровню команды?
+    public Optional<User> updateUserInfo(String email, String name) throws LogicLayerException {
+        UserDao userDao = UserDao.getInstance();
+        try {
+            if (Optional.of(userDao.findPasswordByEmail(email)).isPresent()) {
+                return Optional.empty();
+            }
+            if (Optional.of(userDao.findUserByName(name)).isPresent()) {
+
+            }
+        } catch (DaoException e){
+
+        }
+        return null;
+    }
+
 }

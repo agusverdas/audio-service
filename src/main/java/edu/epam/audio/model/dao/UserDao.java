@@ -26,8 +26,12 @@ public final class UserDao implements BaseDao<Long, User>{
     private static final String ROLE = "role";
     private static final String BONUS = "bonus";
 
+    private static final String SELECT_USER_BY_ID = "SELECT * FROM USER WHERE user_id=?";
     private static final String SELECT_USER_BY_EMAIL = "SELECT * FROM USER WHERE email=?";
     private static final String SELECT_PASSWORD_BY_EMAIL = "SELECT password FROM USER WHERE email=?";
+    private static final String SELECT_USER_BY_NAME = "SELECT * FROM USER WHERE user_name=?";
+
+    private static final String UPDATE_USER = "UPDATE USER SET email=?, ";
 
     private static final String INSERT_USER = "INSERT INTO USER(" + EMAIL +
             ", " + PASSWORD + ", " + NAME + ", " + ROLE + ") values(?, ?, ?, 'USER')";
@@ -111,14 +115,70 @@ public final class UserDao implements BaseDao<Long, User>{
         }
     }
 
+    public Optional<User> findUserByName(String name) throws DaoException{
+        Optional<User> user = Optional.empty();
+        ConnectionPool pool = ConnectionPool.getInstance();
+
+        try(ProxyConnection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_NAME)){
+            preparedStatement.setString(1, name);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                User userObject = new UserBuilder()
+                        .addId(resultSet.getLong(ID))
+                        .addEmail(resultSet.getString(EMAIL))
+                        .addName(resultSet.getString(NAME))
+                        .addPhoto(resultSet.getString(PHOTO))
+                        .addRole(Privileges.valueOf(resultSet.getString(ROLE)))
+                        .addBonus(resultSet.getDouble(BONUS))
+                        .build();
+
+                user = Optional.of(userObject);
+            }
+
+            return user;
+        } catch (InterruptedException e) {
+            throw new DaoException("Exception while getting connection from connection pool.", e);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DaoException("Exception while executing statement.", e);
+        }
+    }
     @Override
     public List<User> findAll() {
         return null;
     }
 
     @Override
-    public User findEntityById(Long id) {
-        return null;
+    public Optional<User> findEntityById(Long id) throws DaoException {
+        Optional<User> user = Optional.empty();
+        ConnectionPool pool = ConnectionPool.getInstance();
+
+        try(ProxyConnection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID)){
+            preparedStatement.setLong(1, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                User userObject = new UserBuilder()
+                        .addId(resultSet.getLong(ID))
+                        .addEmail(resultSet.getString(EMAIL))
+                        .addName(resultSet.getString(NAME))
+                        .addPhoto(resultSet.getString(PHOTO))
+                        .addRole(Privileges.valueOf(resultSet.getString(ROLE)))
+                        .addBonus(resultSet.getDouble(BONUS))
+                        .build();
+
+                user = Optional.of(userObject);
+            }
+
+            return user;
+        } catch (InterruptedException e) {
+            throw new DaoException("Exception while getting connection from connection pool.", e);
+        } catch (SQLException e) {
+            throw new DaoException("Exception while executing statement.", e);
+        }
     }
 
     @Override
@@ -138,6 +198,7 @@ public final class UserDao implements BaseDao<Long, User>{
 
     @Override
     public User update(User entity) {
+
         return null;
     }
 }

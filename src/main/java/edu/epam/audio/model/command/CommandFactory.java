@@ -21,7 +21,7 @@ public class CommandFactory {
         }
 
         logger.info("Command " + action + " came to server.");
-        CommandEnum currentEnum = CommandEnum.valueOf(action.toUpperCase());
+        CommandEnum currentEnum = CommandEnum.valueOf(action.toUpperCase().replaceAll("-","_"));
         return currentEnum.getCommand();
     }
 }

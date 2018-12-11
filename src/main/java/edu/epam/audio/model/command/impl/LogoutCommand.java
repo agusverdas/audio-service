@@ -16,9 +16,7 @@ public class LogoutCommand implements Command {
         try {
             HttpSession session = request.getSession();
             lock.lock();
-            session.removeAttribute(SESSION_ATTRIBUTE_ID);
-            session.removeAttribute(SESSION_ATTRIBUTE_NAME);
-            session.removeAttribute(SESSION_ATTRIBUTE_ROLE);
+            session.removeAttribute(SESSION_ATTRIBUTE_USER);
         } finally {
             lock.unlock();
         }

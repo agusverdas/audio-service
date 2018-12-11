@@ -48,12 +48,9 @@ public class RegistrationCommand implements Command {
                             User userObject = user.get();
 
                             HttpSession session = request.getSession();
-                            //todo: ask Как избежать повторения этих строк?
                             try {
                                 lock.lock();
-                                session.setAttribute(SESSION_ATTRIBUTE_ID, userObject.getUserId());
-                                session.setAttribute(SESSION_ATTRIBUTE_NAME, userObject.getName());
-                                session.setAttribute(SESSION_ATTRIBUTE_ROLE, userObject.getRole());
+                                session.setAttribute(SESSION_ATTRIBUTE_USER, userObject);
                             } finally {
                                 lock.unlock();
                             }

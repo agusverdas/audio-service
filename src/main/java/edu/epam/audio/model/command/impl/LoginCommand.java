@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+//todo: ask ГЛАВНЫЙ ВОПРОС Разделение логики и команды!!!
 public class LoginCommand implements Command {
     private static final String PARAM_NAME_EMAIL = "e-mail";
     private static final String PARAM_NAME_PASSWORD = "password";
@@ -44,9 +45,7 @@ public class LoginCommand implements Command {
                     //todo: ask Потокобезопасная запись в сессию?
                     try {
                         lock.lock();
-                        session.setAttribute(SESSION_ATTRIBUTE_ID, userObject.getUserId());
-                        session.setAttribute(SESSION_ATTRIBUTE_NAME, userObject.getName());
-                        session.setAttribute(SESSION_ATTRIBUTE_ROLE, userObject.getRole());
+                        session.setAttribute(SESSION_ATTRIBUTE_USER, userObject);
                     } finally {
                         lock.unlock();
                     }
