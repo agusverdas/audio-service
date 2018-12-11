@@ -20,21 +20,4 @@ public interface BaseDao<K, T extends Entity> {
     boolean delete(T entity);
     boolean create(T entity);
     T update(T entity);
-
-    default void close(Statement statement){
-        try {
-            if (statement != null) {
-                statement.close();
-            }
-        } catch (SQLException e) {
-            logger.warn("Exception in closing connection.", e);
-        }
-    }
-
-    default void close(ProxyConnection connection){
-        if (connection != null){
-            ConnectionPool pool = ConnectionPool.getInstance();
-            pool.releaseConnection(connection);
-        }
-    }
 }

@@ -14,6 +14,8 @@ public class CommandFactory {
     public Command defineCommand(HttpServletRequest request) throws CommandException {
         String action = request.getParameter(PARAMETER_NAME);
 
+        logger.debug("Action : " + action);
+
         if (action == null || action.isEmpty()){
             throw new CommandException("Exception in command value.");
         }

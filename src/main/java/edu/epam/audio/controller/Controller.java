@@ -4,6 +4,8 @@ import edu.epam.audio.model.command.Command;
 import edu.epam.audio.model.command.CommandFactory;
 import edu.epam.audio.model.exception.CommandException;
 import edu.epam.audio.model.pool.ConnectionPool;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,6 +18,7 @@ import java.io.IOException;
 @WebServlet("/Controller")
 public class Controller extends HttpServlet {
     private static final int ERROR_CODE = 500;
+    private static Logger logger = LogManager.getLogger();
 
     @Override
     public void init() throws ServletException {
@@ -24,23 +27,27 @@ public class Controller extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
+        processRequest(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Post");
+        processRequest(req, resp);
+    }
+
+    private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
         CommandFactory commandFactory = new CommandFactory();
         Command command;
         RequestDispatcher dispatcher;
+        logger.debug("Request came.");
         try {
             command = commandFactory.defineCommand(req);
             String page = command.execute(req);
-            System.out.println("Page : " + page);
 
             dispatcher = getServletContext().getRequestDispatcher(page);
             dispatcher.forward(req,resp);
         } catch (CommandException e) {
+            //todo: think about throw or sendError
             resp.sendError(ERROR_CODE);
         }
     }

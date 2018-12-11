@@ -6,14 +6,14 @@ public class User extends Entity {
     private String email;
     private String name;
     private String photo;
-    private String role;
+    private Privileges role;
     private Double bonus;
 
     public User(){
-
+        role = Privileges.USER;
     }
 
-    public User(Long userId, String email, String name, String photo, String role, Double bonus) {
+    public User(Long userId, String email, String name, String photo, Privileges role, Double bonus) {
         this.userId = userId;
         this.email = email;
         this.name = name;
@@ -50,11 +50,11 @@ public class User extends Entity {
         this.photo = photo;
     }
 
-    public String getRole() {
+    public Privileges getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Privileges role) {
         this.role = role;
     }
 

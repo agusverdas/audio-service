@@ -1,5 +1,6 @@
 package edu.epam.audio.model.entity.builder.impl;
 
+import edu.epam.audio.model.entity.Privileges;
 import edu.epam.audio.model.entity.User;
 import edu.epam.audio.model.entity.builder.Builder;
 
@@ -32,7 +33,7 @@ public class UserBuilder implements Builder<User> {
         return this;
     }
 
-    public UserBuilder addRole(String role){
+    public UserBuilder addRole(Privileges role){
         user.setRole(role);
         return this;
     }
