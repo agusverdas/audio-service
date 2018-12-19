@@ -16,6 +16,7 @@
     Photo:   ${sessionScope.user.photo}<br/>
     Role:    ${sessionScope.user.role}<br/>
     Bonus:   ${sessionScope.user.bonus}<br/>
-    <a href="Controller?command=logout">Logout</a>
+    <a href="Controller?command=logout">Logout</a><br/>
+    <a href="edit_profile.jsp">Edit profie</a>
 </body>
 </html>

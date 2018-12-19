@@ -68,6 +68,7 @@ public final class ConnectionPool {
         }
     }
 
+    //todo: Этот метод не должен выкидывать InterruptedException
     public ProxyConnection getConnection() throws InterruptedException {
         return connectionQueue.take();
     }

@@ -1,20 +1,24 @@
 package edu.epam.audio.model.service;
 
-import edu.epam.audio.model.dao.UserDao;
+import edu.epam.audio.model.dao.impl.UserDaoImpl;
 import edu.epam.audio.model.entity.User;
 import edu.epam.audio.model.exception.DaoException;
 import edu.epam.audio.model.exception.LogicLayerException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 
 //todo: encrypt passwords
 public class UserService {
+    private static Logger logger = LogManager.getLogger();
+
     public boolean checkUserByEmail(String email) throws LogicLayerException {
-        UserDao userDao = UserDao.getInstance();
+        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
 
         boolean isUserPresent;
         try {
-            isUserPresent = userDao.findUserByEmail(email).isPresent();
+            isUserPresent = userDaoImpl.findUserByEmail(email).isPresent();
         } catch (DaoException e) {
             throw new LogicLayerException("Exception while checking user", e);
         }
@@ -23,10 +27,10 @@ public class UserService {
     }
     
     public boolean checkPassword(String email, String password) throws LogicLayerException {
-        UserDao userDao = UserDao.getInstance();
+        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
 
         try {
-            Optional<String> queryPassword = userDao.findPasswordByEmail(email);
+            Optional<String> queryPassword = userDaoImpl.findPasswordByEmail(email);
             return queryPassword.isPresent() && queryPassword.get().equals(password);
         } catch (DaoException e) {
             throw new LogicLayerException("Exception while checking password", e);
@@ -34,30 +38,30 @@ public class UserService {
     }
 
     public Optional<User> extractUser(String email) throws LogicLayerException {
-        UserDao userDao = UserDao.getInstance();
+        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
 
         try {
-            return userDao.findUserByEmail(email);
+            return userDaoImpl.findUserByEmail(email);
         } catch (DaoException e) {
             throw new LogicLayerException("Exception while extracting user.", e);
         }
     }
 
     public Optional<User> extractUser(long id) throws LogicLayerException {
-        UserDao userDao = UserDao.getInstance();
+        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
 
         try {
-            return userDao.findEntityById(id);
+            return userDaoImpl.findEntityById(id);
         } catch (DaoException e) {
             throw new LogicLayerException("Exception while extracting user.", e);
         }
     }
 
     public Optional<User> extractByName(String name) throws LogicLayerException {
-        UserDao userDao = UserDao.getInstance();
+        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
 
         try{
-            return userDao.findUserByName(name);
+            return userDaoImpl.findUserByName(name);
         } catch (DaoException e) {
             throw new LogicLayerException("Exception while finding user by name.", e);
         }
@@ -65,29 +69,25 @@ public class UserService {
 
     //todo: ask Метод относится к бизгнес логике, но по сути просто обращается к DAO.
     public Optional<User> createUser(String email, String password, String name) throws LogicLayerException {
-        UserDao userDao = UserDao.getInstance();
+        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
 
         try {
-            return userDao.insertUser(email,password,name);
+            return userDaoImpl.insertUser(email,password,name);
         } catch (DaoException e) {
-            throw new LogicLayerException("Exception while creating user.");
+            throw new LogicLayerException("Exception while creating user.", e);
         }
     }
 
-    //todo: ask МОжно ли переделать так, чтобы посылать какое-то сообщение уровню команды?
-    public Optional<User> updateUserInfo(String email, String name) throws LogicLayerException {
-        UserDao userDao = UserDao.getInstance();
+    public Optional<User> updateUserInfo(User user) throws LogicLayerException {
+        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
+
         try {
-            if (Optional.of(userDao.findPasswordByEmail(email)).isPresent()) {
-                return Optional.empty();
-            }
-            if (Optional.of(userDao.findUserByName(name)).isPresent()) {
-
-            }
-        } catch (DaoException e){
-
+            logger.debug("Service level update started.");
+            User updated = userDaoImpl.update(user);
+            return Optional.ofNullable(updated);
+        } catch (DaoException e) {
+            throw new LogicLayerException("Exception while updating user.", e);
         }
-        return null;
     }
 
 }

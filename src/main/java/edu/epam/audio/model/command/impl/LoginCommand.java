@@ -15,7 +15,6 @@ import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-//todo: ask ГЛАВНЫЙ ВОПРОС Разделение логики и команды!!!
 public class LoginCommand implements Command {
     private static final String PARAM_NAME_EMAIL = "e-mail";
     private static final String PARAM_NAME_PASSWORD = "password";
@@ -27,7 +26,6 @@ public class LoginCommand implements Command {
 
     private static Logger logger = LogManager.getLogger();
 
-    //todo: think about optional, String password
     public String execute(HttpServletRequest request) throws CommandException {
         String email = request.getParameter(PARAM_NAME_EMAIL);
         String password = request.getParameter(PARAM_NAME_PASSWORD);
@@ -42,13 +40,13 @@ public class LoginCommand implements Command {
                     User userObject = user.get();
 
                     HttpSession session = request.getSession();
-                    //todo: ask Потокобезопасная запись в сессию?
                     try {
                         lock.lock();
                         session.setAttribute(SESSION_ATTRIBUTE_USER, userObject);
                     } finally {
                         lock.unlock();
                     }
+                    request.removeAttribute(ATTRIBUTE_NAME_ERROR);
                     return PagePath.MAIN_PAGE;
                 } else {
                     request.setAttribute(ATTRIBUTE_NAME_ERROR, "User doesn't exist.");

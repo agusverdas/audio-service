@@ -15,17 +15,21 @@
     <form action="/Controller" method="POST" enctype="multipart/form-data">
         <fieldset>
             <legend>Profile info edit</legend>
-            <input type="hidden" value="edit-profile">
+            <input type="hidden" name="command" value="edit-profile">
             <p><label>
                     Name:
-                    <input type="text" value="${sessionScope.user.name}" name="nick">
+                    <input type="text" value="${user.name}" name="nick">
             </label></p>
             <p><label>
                     E-mail:
-                    <input type="email" value="${sessionScope.user.email}" name="e-mail">
+                    <input type="email" value="${user.email}" name="e-mail">
+            </label></p>
+            <p><label>
+                    Photo:
+                    <input type="file" name="photo">
             </label></p>
             <input type="submit" value="OK">
-            ${errorEditMsg}
+            <span style="color:red">${errorEditMsg}</span>
         </fieldset>
     </form>
 </body>

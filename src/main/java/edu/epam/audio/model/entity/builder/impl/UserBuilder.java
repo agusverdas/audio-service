@@ -4,8 +4,6 @@ import edu.epam.audio.model.entity.Privileges;
 import edu.epam.audio.model.entity.User;
 import edu.epam.audio.model.entity.builder.Builder;
 
-//todo: ask Это вообще хорошая идея?
-
 public class UserBuilder implements Builder<User> {
     private User user;
 

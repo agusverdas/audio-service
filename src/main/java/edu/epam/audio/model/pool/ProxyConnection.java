@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-//todo: change close method
 public class ProxyConnection implements Connection {
     private Connection connection;
 

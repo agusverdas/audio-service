@@ -12,14 +12,13 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
-//todo: autoclosable
-public interface BaseDao<K, T extends Entity> {
-    Logger logger = LogManager.getLogger();
+public interface BaseDao<T extends Entity> {
+    void create(T entity) throws DaoException;
 
-    List<T> findAll();
-    Optional<T> findEntityById(K id) throws DaoException;
-    boolean delete(K id);
-    boolean delete(T entity);
-    boolean create(T entity);
-    T update(T entity);
+    List<T> findAll() throws DaoException;
+    Optional<T> findEntityById(long id) throws DaoException;
+
+    void update(T entity) throws DaoException;
+
+    boolean delete(T entity) throws DaoException;
 }

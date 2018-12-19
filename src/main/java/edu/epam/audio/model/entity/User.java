@@ -1,30 +1,37 @@
 package edu.epam.audio.model.entity;
 
-//todo: change photo and role to blob and enum
+//todo: add money
 public class User extends Entity {
-    private Long userId;
+    private long userId;
     private String email;
+    private String password;
     private String name;
     private String photo;
     private Privileges role;
-    private Double bonus;
+    private double money;
+    private double bonus;
 
     public User(){
         role = Privileges.USER;
     }
 
-    public User(Long userId, String email, String name, String photo, Privileges role, Double bonus) {
+    public User(long userId, String email, String password, String name, String photo, Privileges role, double bonus) {
         this.userId = userId;
         this.email = email;
+        this.password = password;
         this.name = name;
         this.photo = photo;
         this.role = role;
         this.bonus = bonus;
     }
 
-    public Long getUserId() { return userId; }
+    public long getUserId() {
+        return userId;
+    }
 
-    public void setUserId(Long userId) { this.userId = userId; }
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
 
     public String getEmail() {
         return email;
@@ -32,6 +39,14 @@ public class User extends Entity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {
@@ -58,12 +73,25 @@ public class User extends Entity {
         this.role = role;
     }
 
+    public double getMoney() {
+        return money;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
+    }
+
     public double getBonus() {
         return bonus;
     }
 
-    public void setBonus(Double bonus) {
+    public void setBonus(double bonus) {
         this.bonus = bonus;
+    }
+
+    @Override
+    public User clone() throws CloneNotSupportedException {
+        return (User) super.clone();
     }
 
     @Override
@@ -73,32 +101,30 @@ public class User extends Entity {
 
         User user = (User) o;
 
+        if (userId != user.userId) return false;
+        if (Double.compare(user.money, money) != 0) return false;
+        if (Double.compare(user.bonus, bonus) != 0) return false;
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (name != null ? !name.equals(user.name) : user.name != null) return false;
         if (photo != null ? !photo.equals(user.photo) : user.photo != null) return false;
-        if (role != null ? !role.equals(user.role) : user.role != null) return false;
-        return bonus != null ? bonus.equals(user.bonus) : user.bonus == null;
+        return role == user.role;
     }
 
     @Override
     public int hashCode() {
-        int result = email != null ? email.hashCode() : 0;
+        int result;
+        long temp;
+        result = (int) (userId ^ (userId >>> 32));
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (photo != null ? photo.hashCode() : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
-        result = 31 * result + (bonus != null ? bonus.hashCode() : 0);
+        temp = Double.doubleToLongBits(money);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(bonus);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", photo='" + photo + '\'' +
-                ", role='" + role + '\'' +
-                ", bonus=" + bonus +
-                '}';
     }
 }

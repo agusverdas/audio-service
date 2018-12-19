@@ -11,7 +11,7 @@ useLegacyDatetimeCode=false
 serverTimezone=UTC
 useSSL=true
 serverSslCert=classpath:server.crt
- */
+*/
 
 final class DBConfigReader {
     private static final String BUNDLE_NAME = "dbconfig";

@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="ctg" uri="/WEB-INF/tld/custom.tld" %>
 <html>
 <head>
     <title>Main page</title>
@@ -16,11 +17,8 @@
     <hr/>
         ${sessionScope.user.name}, hello!
     <hr/>
-    <c:if test="${sessionScope.role =='ADMIN'}">
-        <c:out value="You are admin" />
-    </c:if>
-    <!--todo: ask Можно ли так вызывать logout?-->
-    <!--todo: ask Если нужно, то как замазать URL?-->
+    <ctg:hello role="${sessionScope.user.role}"/>
+
     <a href="./pages/profile.jsp">Go to profile</a>
     <a href="Controller?command=logout">Logout</a>
 </body>

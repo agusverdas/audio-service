@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/Controller")
+@MultipartConfig( fileSizeThreshold = 1024 * 1024,
+        maxFileSize = 1024 * 1024 * 5,
+        maxRequestSize = 1024 * 1024 * 5 * 5)
 public class Controller extends HttpServlet {
     private static final int ERROR_CODE = 500;
     private static Logger logger = LogManager.getLogger();
@@ -47,8 +51,7 @@ public class Controller extends HttpServlet {
             dispatcher = getServletContext().getRequestDispatcher(page);
             dispatcher.forward(req,resp);
         } catch (CommandException e) {
-            //todo: think about throw or sendError
-            resp.sendError(ERROR_CODE);
+            throw new ServletException(e.getMessage(), e);
         }
     }
 }
