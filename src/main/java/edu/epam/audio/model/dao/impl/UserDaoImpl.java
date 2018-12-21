@@ -2,11 +2,8 @@ package edu.epam.audio.model.dao.impl;
 
 import edu.epam.audio.model.dao.DBMetaInfo;
 import edu.epam.audio.model.dao.UserDao;
-import edu.epam.audio.model.entity.Album;
 import edu.epam.audio.model.entity.Privileges;
-import edu.epam.audio.model.entity.Song;
 import edu.epam.audio.model.entity.User;
-import edu.epam.audio.model.entity.builder.impl.SongBuilder;
 import edu.epam.audio.model.entity.builder.impl.UserBuilder;
 import edu.epam.audio.model.exception.DaoException;
 import edu.epam.audio.model.pool.ConnectionPool;
@@ -21,21 +18,24 @@ import java.util.List;
 import java.util.Optional;
 
 public final class UserDaoImpl implements UserDao {
+    //todo make insert with all fields except id
     private static UserDaoImpl instance = new UserDaoImpl();
 
     private static final String INSERT_USER = "insert into USER(" + DBMetaInfo.EMAIL +
-            ", " + DBMetaInfo.PASSWORD + ", " + DBMetaInfo.USER_NAME + ", " + DBMetaInfo.ROLE + ") values(?, ?, ?, 'USER')";
+            ", " + DBMetaInfo.PASSWORD + ", " + DBMetaInfo.USER_NAME + ", " + DBMetaInfo.PHOTO + ", " + DBMetaInfo.ROLE +
+            ", " + DBMetaInfo.MONEY + ", " + DBMetaInfo.BONUS +") values(?, ?, ?, ?, 'USER', ?, ?)";
 
     private static final String SELECT_ALL_USERS = "select * from USER";
-    private static final String SELECT_USER_BY_ID = "select * from USER where user_id=?";
-    private static final String SELECT_USER_BY_EMAIL = "select * from USER where email=?";
-    private static final String SELECT_USER_BY_NAME = "select * from USER where user_name=?";
-    private static final String SELECT_PASSWORD_BY_EMAIL = "select password from USER where email=?";
+    private static final String SELECT_USER_BY_ID = "select * from USER where " + DBMetaInfo.USER_ID + "=?";
+    private static final String SELECT_USER_BY_EMAIL = "select * from USER where " + DBMetaInfo.EMAIL + "=?";
+    private static final String SELECT_USER_BY_NAME = "select * from USER where " + DBMetaInfo.USER_NAME + "=?";
+    private static final String SELECT_PASSWORD_BY_EMAIL = "select " + DBMetaInfo.PASSWORD + " from USER where " + DBMetaInfo.EMAIL + "=?";
 
-    private static final String SELECT_ALL_USER_SONGS = "select * from USER natural join USER_SONG natural join SONG where user_id=?";
     private static final String SELECT_ALL_USER_ALBUMS = "SELECT * FROM USER NATURAL JOIN USER_ALBUM NATURAL JOIN ALBUM WHERE user_id=?";
 
-    private static final String UPDATE_USER = "update USER set email=?, user_name=?, photo=? where user_id=?";
+    private static final String UPDATE_USER = "update USER set " + DBMetaInfo.EMAIL + "=?, " + DBMetaInfo.PASSWORD + "=?, "
+            + DBMetaInfo.USER_NAME + "=?, " + DBMetaInfo.PHOTO + "=?, " + DBMetaInfo.ROLE + "=?, " + DBMetaInfo.MONEY + "=?, "
+            + DBMetaInfo.BONUS + "=? where " + DBMetaInfo.USER_ID + "=?";
 
     private UserDaoImpl(){}
 
@@ -52,6 +52,9 @@ public final class UserDaoImpl implements UserDao {
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setString(3, user.getName());
+            preparedStatement.setString(4, user.getPhoto());
+            preparedStatement.setDouble(5, user.getMoney());
+            preparedStatement.setDouble(6, user.getBonus());
 
             preparedStatement.executeUpdate();
         } catch (InterruptedException e) {
@@ -67,9 +70,9 @@ public final class UserDaoImpl implements UserDao {
         ConnectionPool pool = ConnectionPool.getInstance();
 
         try (ProxyConnection connection = pool.getConnection();
-             Statement preparedStatement = connection.createStatement()){
+             Statement statement = connection.createStatement()){
 
-            ResultSet resultSet = preparedStatement.executeQuery(SELECT_ALL_USERS);
+            ResultSet resultSet = statement.executeQuery(SELECT_ALL_USERS);
             while (resultSet.next()){
                 User userObject = new UserBuilder()
                         .addId(resultSet.getLong(DBMetaInfo.USER_ID))
@@ -77,6 +80,7 @@ public final class UserDaoImpl implements UserDao {
                         .addName(resultSet.getString(DBMetaInfo.USER_NAME))
                         .addPhoto(resultSet.getString(DBMetaInfo.PHOTO))
                         .addRole(Privileges.valueOf(resultSet.getString(DBMetaInfo.ROLE)))
+                        .addMoney(resultSet.getDouble(DBMetaInfo.MONEY))
                         .addBonus(resultSet.getDouble(DBMetaInfo.BONUS))
                         .build();
 
@@ -107,6 +111,7 @@ public final class UserDaoImpl implements UserDao {
                         .addName(resultSet.getString(DBMetaInfo.USER_NAME))
                         .addPhoto(resultSet.getString(DBMetaInfo.PHOTO))
                         .addRole(Privileges.valueOf(resultSet.getString(DBMetaInfo.ROLE)))
+                        .addMoney(resultSet.getDouble(DBMetaInfo.MONEY))
                         .addBonus(resultSet.getDouble(DBMetaInfo.BONUS))
                         .build();
 
@@ -137,6 +142,7 @@ public final class UserDaoImpl implements UserDao {
                                     .addName(resultSet.getString(DBMetaInfo.USER_NAME))
                                     .addPhoto(resultSet.getString(DBMetaInfo.PHOTO))
                                     .addRole(Privileges.valueOf(resultSet.getString(DBMetaInfo.ROLE)))
+                                    .addMoney(resultSet.getDouble(DBMetaInfo.MONEY))
                                     .addBonus(resultSet.getDouble(DBMetaInfo.BONUS))
                                     .build();
 
@@ -168,6 +174,7 @@ public final class UserDaoImpl implements UserDao {
                         .addName(resultSet.getString(DBMetaInfo.USER_NAME))
                         .addPhoto(resultSet.getString(DBMetaInfo.PHOTO))
                         .addRole(Privileges.valueOf(resultSet.getString(DBMetaInfo.ROLE)))
+                        .addMoney(resultSet.getDouble(DBMetaInfo.MONEY))
                         .addBonus(resultSet.getDouble(DBMetaInfo.BONUS))
                         .build();
 
@@ -207,51 +214,19 @@ public final class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<Song> findUserSongs(User user) throws DaoException {
-        List<Song> songs = new ArrayList<>();
-        ConnectionPool pool = ConnectionPool.getInstance();
-
-        try(ProxyConnection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USER_SONGS)){
-            preparedStatement.setLong(1, user.getUserId());
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
-                Song songObject = new SongBuilder()
-                        .addId(resultSet.getLong(DBMetaInfo.SONG_ID))
-                        .addTitle(resultSet.getString(DBMetaInfo.SONG_TITLE))
-                        .addPath(resultSet.getString(DBMetaInfo.PATH))
-                        .addAlbumId(resultSet.getLong(DBMetaInfo.ALBUM_ID))
-                        .addCost(resultSet.getDouble(DBMetaInfo.SONG_COST))
-                        .build();
-
-                songs.add(songObject);
-            }
-            return songs;
-        } catch (InterruptedException e) {
-            throw new DaoException("Exception while getting connection from connection pool.", e);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new DaoException("Exception while executing statement.", e);
-        }
-    }
-
-    //todo: add realization
-    @Override
-    public List<Album> findUserAlbums(User user) throws DaoException {
-        return null;
-    }
-
-    @Override
     public void update(User entity) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
 
         try(ProxyConnection connection = pool.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER)){
             preparedStatement.setString(1, entity.getEmail());
-            preparedStatement.setString(2, entity.getName());
-            preparedStatement.setString(3, entity.getPhoto());
-            preparedStatement.setLong(4, entity.getUserId());
+            preparedStatement.setString(2, entity.getPassword());
+            preparedStatement.setString(3, entity.getName());
+            preparedStatement.setString(4, entity.getPhoto());
+            preparedStatement.setString(5, entity.getRole().toString());
+            preparedStatement.setDouble(6, entity.getMoney());
+            preparedStatement.setDouble(7, entity.getBonus());
+            preparedStatement.setDouble(8, entity.getUserId());
 
             preparedStatement.executeUpdate();
         } catch (InterruptedException e) {

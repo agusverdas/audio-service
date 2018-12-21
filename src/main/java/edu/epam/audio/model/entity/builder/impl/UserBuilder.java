@@ -36,6 +36,11 @@ public class UserBuilder implements Builder<User> {
         return this;
     }
 
+    public UserBuilder addMoney(double money){
+        user.setMoney(money);
+        return this;
+    }
+
     public UserBuilder addBonus(Double bonus){
         user.setBonus(bonus);
         return this;

@@ -2,6 +2,7 @@ package edu.epam.audio.model.entity;
 
 import java.util.List;
 
+//todo: hierarchy
 public class Album extends Entity {
     private long albumId;
     private String albumTitle;
