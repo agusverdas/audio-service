@@ -11,9 +11,10 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="#">Home<span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="./pages/profile.jsp">To profile</a>
-            <a class="nav-item nav-link" href="Controller?command=logout">Log out</a>
+            <a class="nav-item nav-link active" href="${pageContext.request.contextPath}/pages/main.jsp">Home<span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="${pageContext.request.contextPath}/pages/profile.jsp">To profile</a>
+            <a class="nav-item nav-link" href="/Controller?command=logout">Log out</a>
+            <ctg:admin-button/>
         </div>
     </div>
 </nav>

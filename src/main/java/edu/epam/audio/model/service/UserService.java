@@ -48,8 +48,6 @@ public class UserService {
 
         try {
             Optional<User> userFromDb = userDao.findUserByEmail(potentialUser);
-            System.out.println("Password from db : " + userFromDb.get().getPassword());
-            System.out.println("Encrypted : " + encryptedPassword);
             if (userFromDb.isPresent()) {
                 if (userFromDb.get().getPassword().equals(encryptedPassword)) {
                     wrapper.setSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER, userFromDb.get());
@@ -134,19 +132,17 @@ public class UserService {
                         fileSaveDir.mkdirs();
                     }
 
-                    String formedPath = null;
+                    String formedPath;
                     Part part = wrapper.getRequestPart(WebValuesNames.PARAM_NAME_PHOTO);
-                    System.out.println("Updating begins");
 
                     if (part.getSubmittedFileName() != null && !part.getSubmittedFileName().isEmpty()) {
                         formedPath = path + File.separator + part.getSubmittedFileName();
                         part.write(formedPath);
+                        String pathToLoad = WebValuesNames.PATH_TO_SAVE + WebValuesNames.UPLOAD_PHOTOS_DIR
+                                + WebValuesNames.PATH_DELIMITER + part.getSubmittedFileName();
+                        updatedUser.setPhoto(pathToLoad);
                     }
 
-                    if (formedPath != null){
-                        updatedUser.setPhoto(formedPath);
-                    }
-                    System.out.println(updatedUser);
                     userDao.update(updatedUser);
                     wrapper.setSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER, updatedUser);
 

@@ -13,11 +13,12 @@
     <title>Main page</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link href="../css/styles.css" rel="stylesheet">
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
 </head>
 <body>
     <%@include file="header.jsp" %>
-
+    <%@include file="footer.jsp" %>
 </body>
 </html>

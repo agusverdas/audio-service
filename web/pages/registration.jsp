@@ -9,30 +9,22 @@
 <html>
 <head>
     <title>Registration</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="../css/styles.css" rel="stylesheet">
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery-3.3.1.min.js"></script>
 </head>
 <body>
-    <form method="POST" action="/Controller">
-        <fieldset>
-            <legend>Registration</legend>
-            <input type="hidden" name="command" value="registration">
-            <p>
-            <label>E-mail:
-                <input type="email" name="e-mail" maxlength="32">
-            </label>
-            </p>
-            <p>
-            <label>Name:
-                <input type="text" name="nick" maxlength="10">
-            </label>
-            </p>
-            <p>
-            <label>Password:
-                <input type="password" name="password" minlength="6" maxlength="8">
-            </label>
-            </p>
-            <input type="submit" value="OK"><br>
-            <span style="color:red">${errorMessage}</span>
-        </fieldset>
+<div class="login">
+    <h1>Registration</h1>
+    <form method="post" action="/Controller">
+        <input type="hidden" name="command" value="registration">
+        <input type="email" name="e-mail" placeholder="E-mail" required="required" maxlength="32"/>
+        <input type="text" name="nick" placeholder="Nickname" required="required" maxlength="10"/>
+        <input type="password" name="password" placeholder="Password" required="required" minlength="6" maxlength="10"/>
+        <button type="submit" class="btn btn-primary btn-block btn-large">OK</button>
+        <span style="color:red">${errorMessage}</span>
     </form>
+</div>
 </body>
 </html>

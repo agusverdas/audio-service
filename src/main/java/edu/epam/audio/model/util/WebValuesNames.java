@@ -14,5 +14,8 @@ public final class WebValuesNames {
     public static final String UPLOAD_PHOTOS_DIR = "photos";
     public static final String UPLOAD_SONGS_DIR = "songs";
 
+    public static final String PATH_TO_SAVE = "http://localhost:8080/";
+    public static final String PATH_DELIMITER = "/";
+
     private WebValuesNames() {}
 }
