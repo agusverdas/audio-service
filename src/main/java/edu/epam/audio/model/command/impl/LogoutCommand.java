@@ -2,6 +2,7 @@ package edu.epam.audio.model.command.impl;
 
 import edu.epam.audio.model.command.Command;
 import edu.epam.audio.model.util.PagePath;
+import edu.epam.audio.model.util.WebValuesNames;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -16,7 +17,7 @@ public class LogoutCommand implements Command {
         try {
             HttpSession session = request.getSession();
             lock.lock();
-            session.removeAttribute(SESSION_ATTRIBUTE_USER);
+            session.removeAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER);
         } finally {
             lock.unlock();
         }

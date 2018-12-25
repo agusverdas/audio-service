@@ -6,6 +6,7 @@ import edu.epam.audio.model.exception.CommandException;
 import edu.epam.audio.model.exception.LogicLayerException;
 import edu.epam.audio.model.service.UserService;
 import edu.epam.audio.model.util.PagePath;
+import edu.epam.audio.model.util.WebValuesNames;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,6 +31,11 @@ public class EditProfileCommand implements Command {
     private static Logger logger = LogManager.getLogger();
 
     @Override
+    public String execute(HttpServletRequest request) throws CommandException {
+        return null;
+    }
+
+    /*@Override
     public String execute(HttpServletRequest request) throws CommandException {
         String email = request.getParameter(EMAIL_PARAM);
         String name = request.getParameter(NAME_PARAM);
@@ -59,7 +65,7 @@ public class EditProfileCommand implements Command {
         logger.debug("Formed path to load : " + formedPath);
 
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(SESSION_ATTRIBUTE_USER);
+        User user = (User) session.getAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER);
 
         //todo: ПОДУМАТЬ КАК ЭТО ПЕРЕПИСАТЬ
         try {
@@ -95,5 +101,5 @@ public class EditProfileCommand implements Command {
             throw new CommandException("Exception while cloning existing user.", e);
         }
         return PagePath.MAIN_PAGE;
-    }
+    }*/
 }

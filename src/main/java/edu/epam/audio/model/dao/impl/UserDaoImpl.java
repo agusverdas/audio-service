@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 
 public final class UserDaoImpl implements UserDao {
-    //todo make insert with all fields except id
     private static UserDaoImpl instance = new UserDaoImpl();
 
     private static final String INSERT_USER = "insert into USER(" + DBMetaInfo.EMAIL +
@@ -139,6 +138,7 @@ public final class UserDaoImpl implements UserDao {
                 User userObject = new UserBuilder()
                                     .addId(resultSet.getLong(DBMetaInfo.USER_ID))
                                     .addEmail(resultSet.getString(DBMetaInfo.EMAIL))
+                                    .addPassword(resultSet.getString(DBMetaInfo.PASSWORD))
                                     .addName(resultSet.getString(DBMetaInfo.USER_NAME))
                                     .addPhoto(resultSet.getString(DBMetaInfo.PHOTO))
                                     .addRole(Privileges.valueOf(resultSet.getString(DBMetaInfo.ROLE)))

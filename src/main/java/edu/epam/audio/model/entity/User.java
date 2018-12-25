@@ -1,6 +1,5 @@
 package edu.epam.audio.model.entity;
 
-//todo: add money
 public class User extends Entity {
     private long userId;
     private String email;
@@ -126,5 +125,19 @@ public class User extends Entity {
         temp = Double.doubleToLongBits(bonus);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", photo='" + photo + '\'' +
+                ", role=" + role +
+                ", money=" + money +
+                ", bonus=" + bonus +
+                '}';
     }
 }

@@ -21,6 +21,11 @@ public class UserBuilder implements Builder<User> {
         return this;
     }
 
+    public UserBuilder addPassword(String password){
+        user.setPassword(password);
+        return this;
+    }
+
     public UserBuilder addName(String name){
         user.setName(name);
         return this;

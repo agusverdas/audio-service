@@ -31,7 +31,7 @@ public class RegistrationCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) throws CommandException {
-        String email = request.getParameter(EMAIL_PARAM);
+        /*String email = request.getParameter(EMAIL_PARAM);
         String password = request.getParameter(PASSWORD_PARAM);
         String name = request.getParameter(NICKNAME_PARAM);
 
@@ -74,6 +74,7 @@ public class RegistrationCommand implements Command {
             throw new CommandException("Exception while user register", e);
         }
 
-        return PagePath.REGISTRATION_PAGE;
+        return PagePath.REGISTRATION_PAGE;*/
+        return null;
     }
 }

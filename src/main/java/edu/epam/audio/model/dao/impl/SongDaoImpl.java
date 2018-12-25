@@ -24,7 +24,7 @@ public final class SongDaoImpl implements SongDao {
     private static SongDaoImpl instance = new SongDaoImpl();
 
     private static final String INSERT_SONG = "insert into SONG(" + DBMetaInfo.SONG_TITLE + ", " + DBMetaInfo.PATH + ", "
-            + DBMetaInfo.SONG_COST + ") values(?, ?, ?)";
+            + DBMetaInfo.ALBUM_ID + ", " + DBMetaInfo.SONG_COST + ") values(?, ?, ?, ?)";
     private static final String SELECT_ALL_SONGS = "select * from SONG";
     private static final String SELECT_SONG_BY_ID = "select * from SONG where " + DBMetaInfo.SONG_ID + "=?";
     private static final String SELECT_SONGS_BY_AUTHOR = "select * from SONG natural join SONG_AUTHOR natural join AUTHOR where "
@@ -49,7 +49,8 @@ public final class SongDaoImpl implements SongDao {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SONG)){
             preparedStatement.setString(1, song.getTitle());
             preparedStatement.setString(2, song.getPath());
-            preparedStatement.setDouble(3, song.getCost());
+            preparedStatement.setLong(3, song.getAlbumId());
+            preparedStatement.setDouble(4, song.getCost());
 
             preparedStatement.executeUpdate();
         } catch (InterruptedException e) {

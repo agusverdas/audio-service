@@ -1,9 +1,12 @@
 package edu.epam.audio.model.service;
 
+import edu.epam.audio.controller.WebParamWrapper;
 import edu.epam.audio.model.dao.impl.UserDaoImpl;
 import edu.epam.audio.model.entity.User;
+import edu.epam.audio.model.entity.builder.impl.UserBuilder;
 import edu.epam.audio.model.exception.DaoException;
 import edu.epam.audio.model.exception.LogicLayerException;
+import edu.epam.audio.model.util.WebValuesNames;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,30 +16,43 @@ import java.util.Optional;
 public class UserService {
     private static Logger logger = LogManager.getLogger();
 
-    public boolean checkUserByEmail(String email) throws LogicLayerException {
-        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
+    //todo: ask Правильно ли я делаю? Есть ли способ лучше?
+    //todo: Проверить изменение через параметр
+    public void loginUser(WebParamWrapper wrapper) throws LogicLayerException {
+        UserDaoImpl userDao = UserDaoImpl.getInstance();
 
-        boolean isUserPresent;
+        String email = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_EMAIL);
+        String password = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_PASSWORD);
+
+        logger.debug("Email incoming : " + email);
+        logger.debug("Password incoming : " + password);
+
+        User potentialUser = new UserBuilder()
+                .addEmail(email)
+                .build();
+
         try {
-            isUserPresent = userDaoImpl.findUserByEmail(email).isPresent();
+            Optional<User> userFromDb = userDao.findUserByEmail(potentialUser);
+
+            if (userFromDb.isPresent()) {
+                logger.debug("User is present : " + userFromDb.get());
+                if (userFromDb.get().getPassword().equals(password)) {
+                    wrapper.setSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER, userFromDb.get());
+                    logger.debug("User in session : " + wrapper.getSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER));
+                } else {
+                    wrapper.setRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR, WebValuesNames.INCORRECT_PASSWORD_MES);
+                }
+            } else {
+                wrapper.setRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR, WebValuesNames.INCORRECT_EMAIL_MES);
+            }
         } catch (DaoException e) {
-            throw new LogicLayerException("Exception while checking user", e);
-        }
-
-        return isUserPresent;
-    }
-    
-    public boolean checkPassword(String email, String password) throws LogicLayerException {
-        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
-
-        try {
-            Optional<String> queryPassword = userDaoImpl.findPasswordByEmail(email);
-            return queryPassword.isPresent() && queryPassword.get().equals(password);
-        } catch (DaoException e) {
-            throw new LogicLayerException("Exception while checking password", e);
+            throw new LogicLayerException("Exception while logging into app.", e);
         }
     }
 
+}
+
+    /*
     public Optional<User> extractUser(String email) throws LogicLayerException {
         UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
 
@@ -88,6 +104,5 @@ public class UserService {
         } catch (DaoException e) {
             throw new LogicLayerException("Exception while updating user.", e);
         }
-    }
+    }*/
 
-}
