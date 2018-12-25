@@ -11,15 +11,13 @@
 <html>
 <head>
     <title>Main page</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
 </head>
 <body>
-    <h3>Welcome</h3>
-    <hr/>
-        ${sessionScope.user.name}, hello!
-    <hr/>
-    <ctg:hello role="${sessionScope.user.role}"/>
+    <%@include file="header.jsp" %>
 
-    <a href="./pages/profile.jsp">Go to profile</a>
-    <a href="Controller?command=logout">Logout</a>
 </body>
 </html>
