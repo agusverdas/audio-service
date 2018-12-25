@@ -39,7 +39,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-3 img">
-            <img src=${user.photo} style="max-height: 100%; max-width: 100%;" class="img-rounded">
+            <img style="max-height: 100%; max-width: 100%" class="img-rounded" src=${user.photo}  />
         </div>
         <div class="col-md-3 details">
             <blockquote>
