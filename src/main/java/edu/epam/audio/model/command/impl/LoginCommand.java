@@ -19,26 +19,21 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class LoginCommand implements Command {
     private UserService userService = new UserService();
-    private static Logger logger = LogManager.getLogger();
 
     public String execute(HttpServletRequest request) throws CommandException {
         WebParamWrapper valuesWrapper = new WebParamWrapper();
         valuesWrapper.init(request);
 
-        logger.debug("Begin login into app.");
         try{
             userService.loginUser(valuesWrapper);
-            if (valuesWrapper.getSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER) != null){
-                logger.debug("Attribute after login : " + valuesWrapper.getSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER));
-                valuesWrapper.setRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR, null);
+            valuesWrapper.extractValues(request);
+            if (request.getSession().getAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER) != null){
                 return PagePath.MAIN_PAGE;
             }
             else {
-                valuesWrapper.extractValues(request);
                 return PagePath.LOGIN_PAGE;
             }
         } catch (LogicLayerException e) {
-            e.printStackTrace();
             throw new CommandException("Exception in login command.", e);
         }
     }

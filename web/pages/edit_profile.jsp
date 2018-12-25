@@ -29,7 +29,7 @@
                     <input type="file" name="photo">
             </label></p>
             <input type="submit" value="OK">
-            <span style="color:red">${errorEditMsg}</span>
+            <span style="color:red">${errorMessage}</span>
         </fieldset>
     </form>
 </body>

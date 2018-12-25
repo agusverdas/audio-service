@@ -31,7 +31,7 @@
             </label>
             </p>
             <input type="submit" value="OK"><br>
-            <span style="color:red">${errorRegistrationMsg}</span>
+            <span style="color:red">${errorMessage}</span>
         </fieldset>
     </form>
 </body>

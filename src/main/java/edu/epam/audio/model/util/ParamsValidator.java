@@ -2,12 +2,10 @@ package edu.epam.audio.model.util;
 
 //todo: change regex
 public final class ParamsValidator {
-    private static final String PASSWORD_REGEX = "[\\w|\\d]+";
-    private static final String NAME_REGEX = "\\w+";
+    private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8}$";
+    private static final String NAME_REGEX = "\\w{6,}";
 
-    private ParamsValidator(){
-
-    }
+    private ParamsValidator(){}
 
     public static boolean validatePassword(String password){
         return password.matches(PASSWORD_REGEX);

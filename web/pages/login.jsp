@@ -29,7 +29,7 @@
             <input type="submit" value="Submit">
             <a href="./pages/registration.jsp">Registration </a>
             <br/>
-            <span style="color:red">${errorLoginMessage}</span>
+            <span style="color:red">${errorMessage}</span>
         </fieldset>
     </form>
 </body>

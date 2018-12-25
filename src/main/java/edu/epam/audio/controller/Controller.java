@@ -21,7 +21,6 @@ import java.io.IOException;
         maxFileSize = 1024 * 1024 * 5,
         maxRequestSize = 1024 * 1024 * 5 * 5)
 public class Controller extends HttpServlet {
-    private static final int ERROR_CODE = 500;
     private static Logger logger = LogManager.getLogger();
 
     @Override

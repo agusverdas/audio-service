@@ -1,23 +1,18 @@
 package edu.epam.audio.controller;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import java.util.*;
 
 public class WebParamWrapper {
-    private HashMap<String, String[]> requestParamsMap;
-    private HashMap<String, Object> requestAttributesMap;
-    private HashMap<String, Object> sessionAttributesMap;
-
-    private static Logger logger = LogManager.getLogger();
+    private HashMap<String, String[]> requestParamsMap = new HashMap<>();
+    private HashMap<String, Object> requestAttributesMap = new HashMap<>();
+    private HashMap<String, Object> sessionAttributesMap = new HashMap<>();
+    private HashMap<String, Part> requestPartMap = new HashMap<>();
 
     public void init(HttpServletRequest request){
         requestParamsMap = new HashMap<>(request.getParameterMap());
-        requestAttributesMap = new HashMap<>();
-        sessionAttributesMap = new HashMap<>();
 
         Enumeration e = request.getAttributeNames();
         while (e.hasMoreElements()){
@@ -65,4 +60,14 @@ public class WebParamWrapper {
     }
 
     public Object getSessionAttribute(String key) { return sessionAttributesMap.get(key); }
+
+    public void setRequestPart(String key, Part part) { requestPartMap.put(key,part); }
+
+    public Part getRequestPart(String key) { return requestPartMap.get(key); }
+
+    public void removeSessionAttribute(String key) {
+        sessionAttributesMap.remove(key);
+    }
+
+    public void removeRequestAttribute(String key) { requestAttributesMap.remove(key); }
 }
