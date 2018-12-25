@@ -9,10 +9,39 @@
 <html>
 <head>
     <title>Login</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="../css/login.css" rel="stylesheet">
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery-3.3.1.min.js"></script>
 </head>
 <body>
+
+<div class="login">
+
+    <h1>Login</h1>
+    <form method="post" action="Controller">
+        <input type="hidden" name="command" value="login">
+        <input type="email" name="e-mail" placeholder="E-mail" required="required" maxlength="32"/>
+        <input type="password" name="password" placeholder="Password" required="required" minlength="6" maxlength="10"/>
+        <button type="submit" class="btn btn-primary btn-block btn-large">Let me in.</button>
+        <a class="btn btn-primary btn-block btn-large" href="./pages/registration.jsp">Registration </a>
+        <span style="color:red">${errorMessage}</span>
+    </form>
+    <br>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- animation social -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-9155049400353686"
+         data-ad-slot="2205382250"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
     <!-- todo: add localization -->
-    <form method="POST" action="Controller">
+    <%--<form method="POST" action="Controller">
         <fieldset>
             <legend>Вход в систему</legend>
             <input type="hidden" name="command" value="login">
@@ -31,6 +60,6 @@
             <br/>
             <span style="color:red">${errorMessage}</span>
         </fieldset>
-    </form>
+    </form>--%>
 </body>
 </html>

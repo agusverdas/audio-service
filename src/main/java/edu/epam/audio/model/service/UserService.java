@@ -11,6 +11,7 @@ import edu.epam.audio.model.exception.LogicLayerException;
 import edu.epam.audio.model.util.PagePath;
 import edu.epam.audio.model.util.ParamsValidator;
 import edu.epam.audio.model.util.WebValuesNames;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,15 +40,18 @@ public class UserService {
         String email = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_EMAIL);
         String password = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_PASSWORD);
 
+        String encryptedPassword = DigestUtils.md5Hex(password);
+
         User potentialUser = new UserBuilder()
                 .addEmail(email)
                 .build();
 
         try {
             Optional<User> userFromDb = userDao.findUserByEmail(potentialUser);
-
+            System.out.println("Password from db : " + userFromDb.get().getPassword());
+            System.out.println("Encrypted : " + encryptedPassword);
             if (userFromDb.isPresent()) {
-                if (userFromDb.get().getPassword().equals(password)) {
+                if (userFromDb.get().getPassword().equals(encryptedPassword)) {
                     wrapper.setSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER, userFromDb.get());
                     wrapper.removeRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR);
                 } else {
@@ -63,6 +67,7 @@ public class UserService {
 
     public void logoutUser(WebParamWrapper wrapper) {
         wrapper.removeSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER);
+        System.out.println(wrapper.getSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER));
     }
 
     public void registerUser(WebParamWrapper wrapper) throws LogicLayerException {
@@ -85,6 +90,8 @@ public class UserService {
                     if (ParamsValidator.validateName(name)) {
                         userFormDb = userDao.findUserByName(user);
                         if (!userFormDb.isPresent()){
+                            String encryptedPassword = DigestUtils.md5Hex(password);
+                            user.setPassword(encryptedPassword);
                             userDao.create(user);
                             wrapper.setSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER, user);
                             wrapper.removeRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR);
@@ -155,10 +162,8 @@ public class UserService {
         } catch (CloneNotSupportedException e) {
             throw new LogicLayerException("Exception in cloning user.", e);
         } catch (IOException e) {
-            e.printStackTrace();
             throw new LogicLayerException("Exception in writing photo.", e);
         } catch (DaoException e) {
-            e.printStackTrace();
             throw new LogicLayerException("Exception in getting user from db.", e);
         }
     }

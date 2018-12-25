@@ -66,7 +66,7 @@ public class WebParamWrapper {
     public Part getRequestPart(String key) { return requestPartMap.get(key); }
 
     public void removeSessionAttribute(String key) {
-        sessionAttributesMap.remove(key);
+        sessionAttributesMap.put(key, null);
     }
 
     public void removeRequestAttribute(String key) { requestAttributesMap.remove(key); }
