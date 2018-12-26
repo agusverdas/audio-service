@@ -11,11 +11,10 @@
 <html>
 <head>
     <title>Admin panel</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link href="../css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link href="../css/styles.css" rel="stylesheet">
-    <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery-3.3.1.min.js"></script>
 </head>
 <body>
 <%@include file="header.jsp" %>
@@ -45,7 +44,7 @@
                             </label>
                             <br>
                             <label> Song cost: <br>
-                                <input type="number" name="cost" required="required" maxlength="6">
+                                <input type="text" name="cost" required="required" maxlength="6">
                             </label>
                             <br>
                             <label> Song: <br>

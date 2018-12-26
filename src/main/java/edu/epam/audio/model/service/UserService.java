@@ -1,27 +1,24 @@
 package edu.epam.audio.model.service;
 
-import edu.epam.audio.controller.WebParamWrapper;
-import edu.epam.audio.model.dao.UserDao;
+import edu.epam.audio.controller.RequestContent;
 import edu.epam.audio.model.dao.impl.UserDaoImpl;
 import edu.epam.audio.model.entity.User;
 import edu.epam.audio.model.entity.builder.impl.UserBuilder;
-import edu.epam.audio.model.exception.CommandException;
 import edu.epam.audio.model.exception.DaoException;
 import edu.epam.audio.model.exception.LogicLayerException;
-import edu.epam.audio.model.util.PagePath;
 import edu.epam.audio.model.util.ParamsValidator;
 import edu.epam.audio.model.util.WebValuesNames;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.Part;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 
-//todo: encrypt passwords
+import static edu.epam.audio.model.util.WebValuesNames.*;
+
 public class UserService {
     private static final String INCORRECT_EMAIL_LOG = "There is no user with such email";
     private static final String INCORRECT_EMAIL_REG = "There is user with such email";
@@ -34,7 +31,7 @@ public class UserService {
     private static final String INCORRECT_NAME_MES = "Incorrect name, name should be at least 6 characters length, " +
             "all the characters should be letters";
 
-    public void loginUser(WebParamWrapper wrapper) throws LogicLayerException {
+    public void loginUser(RequestContent wrapper) throws LogicLayerException {
         UserDaoImpl userDao = UserDaoImpl.getInstance();
 
         String email = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_EMAIL);
@@ -63,21 +60,21 @@ public class UserService {
         }
     }
 
-    public void logoutUser(WebParamWrapper wrapper) {
+    public void logoutUser(RequestContent wrapper) {
         wrapper.removeSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER);
         System.out.println(wrapper.getSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER));
     }
 
-    public void registerUser(WebParamWrapper wrapper) throws LogicLayerException {
+    public void registerUser(RequestContent wrapper) throws LogicLayerException {
         String email = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_EMAIL);
         String password = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_PASSWORD);
         String name = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_NICK);
 
         User user = new UserBuilder()
-                        .addEmail(email)
-                        .addPassword(password)
-                        .addName(name)
-                        .build();
+                .addEmail(email)
+                .addPassword(password)
+                .addName(name)
+                .build();
 
         UserDaoImpl userDao = UserDaoImpl.getInstance();
 
@@ -110,7 +107,7 @@ public class UserService {
         }
     }
 
-    public void updateProfile(WebParamWrapper wrapper) throws LogicLayerException {
+    public void updateProfile(RequestContent wrapper) throws LogicLayerException {
         User user = (User) wrapper.getSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER);
         UserDaoImpl userDao = UserDaoImpl.getInstance();
 

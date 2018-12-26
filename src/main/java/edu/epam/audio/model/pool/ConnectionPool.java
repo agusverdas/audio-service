@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+//todo: init/destroy to listeners
 //todo: add dynamic creation connections
 public final class ConnectionPool {
     private static Logger logger = LogManager.getLogger();

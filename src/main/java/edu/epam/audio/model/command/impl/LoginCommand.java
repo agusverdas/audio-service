@@ -1,27 +1,21 @@
 package edu.epam.audio.model.command.impl;
 
-import edu.epam.audio.controller.WebParamWrapper;
+import edu.epam.audio.controller.RequestContent;
 import edu.epam.audio.model.command.Command;
 import edu.epam.audio.model.service.UserService;
-import edu.epam.audio.model.entity.User;
 import edu.epam.audio.model.exception.CommandException;
 import edu.epam.audio.model.exception.LogicLayerException;
 import edu.epam.audio.model.util.PagePath;
 import edu.epam.audio.model.util.WebValuesNames;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.Optional;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+
 
 public class LoginCommand implements Command {
     private UserService userService = new UserService();
 
     public String execute(HttpServletRequest request) throws CommandException {
-        WebParamWrapper valuesWrapper = new WebParamWrapper();
+        RequestContent valuesWrapper = new RequestContent();
         valuesWrapper.init(request);
 
         try{

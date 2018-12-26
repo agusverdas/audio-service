@@ -1,15 +1,13 @@
 package edu.epam.audio.model.command;
 
-import edu.epam.audio.model.command.impl.LoginCommand;
-import edu.epam.audio.model.command.impl.LogoutCommand;
-import edu.epam.audio.model.command.impl.EditProfileCommand;
-import edu.epam.audio.model.command.impl.RegistrationCommand;
+import edu.epam.audio.model.command.impl.*;
 
 public enum CommandEnum {
     LOGIN(new LoginCommand()),
     LOGOUT(new LogoutCommand()),
     REGISTRATION(new RegistrationCommand()),
-    EDIT_PROFILE(new EditProfileCommand());
+    EDIT_PROFILE(new EditProfileCommand()),
+    ADD_SONG(new AddSongCommand());
 
     private Command command;
 

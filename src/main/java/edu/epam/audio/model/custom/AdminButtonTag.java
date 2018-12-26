@@ -14,7 +14,6 @@ public class AdminButtonTag extends TagSupport {
     @Override
     public int doStartTag() throws JspException {
         try{
-            System.out.println("Tag worked");
             HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
             HttpSession session = request.getSession();
             String requestPath = request.getContextPath();
@@ -26,8 +25,7 @@ public class AdminButtonTag extends TagSupport {
                 pageContext.getOut().write(button);
             }
         } catch (IOException e) {
-            //todo: ask Название custom exception
-            e.printStackTrace();
+            throw new JspException("Exception in custom tag.", e);
         }
         return SKIP_BODY;
     }

@@ -17,6 +17,7 @@ public final class DBMetaInfo {
     public static final String ALBUM_ID = "album_id";
     public static final String SONG_COST = "song_cost";
 
+    public static final String AUTHOR_ID = "author_id";
     public static final String AUTHOR_NAME = "author_name";
 
     public static final String ALBUM_TITLE = "album_title";

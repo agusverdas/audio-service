@@ -5,22 +5,6 @@
   Time: 12:19
   To change this template use File | Settings | File Templates.
 --%>
-<%--<%@ page contentType="text/html;charset=UTF-8" errorPage="error.jsp" %>
-<html>
-<head>
-    <title>Profile</title>
-</head>
-<body>
-    Name:    ${sessionScope.user.name}<br/>
-    E-mail:  ${sessionScope.user.email}<br/>
-    Photo:   ${sessionScope.user.photo}<br/>
-    Role:    ${sessionScope.user.role}<br/>
-    Bonus:   ${sessionScope.user.bonus}<br/>
-    <a href="Controller?command=logout">Logout</a><br/>
-    <a href="edit_profile.jsp">Edit profie</a>
-</body>
-</html>--%>
-
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ctg" uri="/WEB-INF/tld/custom.tld" %>
@@ -36,18 +20,23 @@
 <body>
 <%@include file="header.jsp" %>
 <br>
-<div class="container">
+<div style="border: 2px solid #000;
+border-radius: 15px;
+-moz-border-radius: 15px;" class="container">
     <div class="row">
-        <div class="col-md-3 img">
+        <div class="col-md-5 img">
             <img style="max-height: 100%; max-width: 100%" class="img-rounded" src=${user.photo}  />
         </div>
-        <div class="col-md-3 details">
+        <div class="col-md-5 details">
             <blockquote>
                 <h5>${user.name}</h5>
             </blockquote>
             <p>
-                ${user.email} <br>
-                    <a href="edit_profile.jsp" class="btn btn-primary btn-block btn-large">Edit profile</a>
+                E-mail: ${user.email}<br/>
+                Role: ${user.role}<br/>
+                Money: ${user.money}<br/>
+                Bonus: ${user.bonus}<br/>
+                <a href="edit_profile.jsp" class="btn btn-primary btn-block btn-large">Edit profile</a>
             </p>
         </div>
     </div>

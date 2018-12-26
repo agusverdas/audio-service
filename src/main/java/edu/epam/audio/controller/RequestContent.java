@@ -5,7 +5,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.util.*;
 
-public class WebParamWrapper {
+public class RequestContent {
     private HashMap<String, String[]> requestParamsMap = new HashMap<>();
     private HashMap<String, Object> requestAttributesMap = new HashMap<>();
     private HashMap<String, Object> sessionAttributesMap = new HashMap<>();

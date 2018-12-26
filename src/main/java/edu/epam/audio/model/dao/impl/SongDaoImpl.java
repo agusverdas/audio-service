@@ -24,13 +24,17 @@ public final class SongDaoImpl implements SongDao {
     private static SongDaoImpl instance = new SongDaoImpl();
 
     private static final String INSERT_SONG = "insert into SONG(" + DBMetaInfo.SONG_TITLE + ", " + DBMetaInfo.PATH + ", "
-            + DBMetaInfo.ALBUM_ID + ", " + DBMetaInfo.SONG_COST + ") values(?, ?, ?, ?)";
+            + DBMetaInfo.SONG_COST + ") values(?, ?, ?)";
+    private static final String INSERT_SONG_AUTHOR = "insert into SONG_AUTHOR(" + DBMetaInfo.SONG_ID + ", " + DBMetaInfo.AUTHOR_ID
+            + ") values(?,?)";
+
     private static final String SELECT_ALL_SONGS = "select * from SONG";
     private static final String SELECT_SONG_BY_ID = "select * from SONG where " + DBMetaInfo.SONG_ID + "=?";
     private static final String SELECT_SONGS_BY_AUTHOR = "select * from SONG natural join SONG_AUTHOR natural join AUTHOR where "
             + DBMetaInfo.AUTHOR_NAME + "=?";
     private static final String SELECT_SONGS_BY_ALBUM = "select * from SONG where " + DBMetaInfo.ALBUM_ID + "=?";
     private static final String SELECT_ALL_USER_SONGS = "select * from USER natural join USER_SONG natural join SONG where " + DBMetaInfo.USER_ID + "=?";
+    private static final String SELECT_SONG_BY_PATH = "select * from SONG where " + DBMetaInfo.PATH + "=?";
     private static final String UPDATE_SONG = "update SONG set " + DBMetaInfo.SONG_TITLE + "=?, "
             + DBMetaInfo.PATH + "=?, " + DBMetaInfo.ALBUM_ID + "=?, " + DBMetaInfo.SONG_COST + "=? where "
             + DBMetaInfo.SONG_ID + "=?";
@@ -49,8 +53,23 @@ public final class SongDaoImpl implements SongDao {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SONG)){
             preparedStatement.setString(1, song.getTitle());
             preparedStatement.setString(2, song.getPath());
-            preparedStatement.setLong(3, song.getAlbumId());
-            preparedStatement.setDouble(4, song.getCost());
+            preparedStatement.setDouble(3, song.getCost());
+
+            preparedStatement.executeUpdate();
+        } catch (InterruptedException e) {
+            throw new DaoException("Exception while getting connection from connection pool.", e);
+        } catch (SQLException e) {
+            throw new DaoException("Exception while executing statement.", e);
+        }
+    }
+
+    public void mergeSongAuthor(Song song, Author author) throws DaoException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+
+        try(ProxyConnection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SONG_AUTHOR)){
+            preparedStatement.setLong(1, song.getSongId());
+            preparedStatement.setLong(2, author.getAuthorId());
 
             preparedStatement.executeUpdate();
         } catch (InterruptedException e) {
@@ -186,6 +205,34 @@ public final class SongDaoImpl implements SongDao {
         }
     }
 
+    public Optional<Song> findSongByPath(Song entity) throws DaoException {
+        Optional<Song> song = Optional.empty();
+        ConnectionPool pool = ConnectionPool.getInstance();
+
+        try(ProxyConnection connection = pool.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SONG_BY_PATH)){
+            preparedStatement.setString(1, entity.getPath());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                Song songObject = new SongBuilder()
+                        .addId(resultSet.getLong(DBMetaInfo.SONG_ID))
+                        .addTitle(resultSet.getString(DBMetaInfo.SONG_TITLE))
+                        .addPath(resultSet.getString(DBMetaInfo.PATH))
+                        .addAlbumId(resultSet.getLong(DBMetaInfo.ALBUM_ID))
+                        .addCost(resultSet.getDouble(DBMetaInfo.SONG_COST))
+                        .build();
+
+                song = Optional.of(songObject);
+            }
+            return song;
+        } catch (InterruptedException e) {
+            throw new DaoException("Exception while getting connection from connection pool.", e);
+        } catch (SQLException e) {
+            throw new DaoException("Exception while executing statement.", e);
+        }
+    }
+
     @Override
     public void update(Song entity) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -210,4 +257,6 @@ public final class SongDaoImpl implements SongDao {
     public boolean delete(Song entity) throws DaoException {
         return false;
     }
+
+
 }

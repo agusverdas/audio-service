@@ -16,10 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+//todo: only mp3 files to upload as music, only jpg as photo
+//todo: fmt set locale
+//todo: * for main fields
 @WebServlet("/Controller")
-@MultipartConfig( fileSizeThreshold = 1024 * 1024,
-        maxFileSize = 1024 * 1024 * 5,
-        maxRequestSize = 1024 * 1024 * 5 * 5)
+@MultipartConfig
 public class Controller extends HttpServlet {
     private static Logger logger = LogManager.getLogger();
 
@@ -50,7 +51,11 @@ public class Controller extends HttpServlet {
             dispatcher = getServletContext().getRequestDispatcher(page);
             dispatcher.forward(req,resp);
         } catch (CommandException e) {
+            e.printStackTrace();
             throw new ServletException(e.getMessage(), e);
+        }
+        catch (Throwable e){
+            e.printStackTrace();
         }
     }
 }
