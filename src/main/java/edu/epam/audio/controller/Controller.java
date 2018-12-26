@@ -19,6 +19,8 @@ import java.io.IOException;
 //todo: only mp3 files to upload as music, only jpg as photo
 //todo: fmt set locale
 //todo: * for main fields
+
+//for the push
 @WebServlet("/Controller")
 @MultipartConfig
 public class Controller extends HttpServlet {
