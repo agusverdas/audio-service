@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-//todo: change field names in db
 public final class SongDaoImpl implements SongDao {
     private static SongDaoImpl instance = new SongDaoImpl();
 

@@ -11,6 +11,8 @@ import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 
 public class AdminButtonTag extends TagSupport {
+    //todo: ask Ситуация такая: Проверка на null нужна для разлогина с обоих вкладок, но фильтр кидает исключение, если не проверить на null,
+    //todo: получается, что в любом случае, сначала работает jsp, а после фильтр на нее? Можно ли изменить порядок?
     @Override
     public int doStartTag() throws JspException {
         try{
@@ -21,7 +23,8 @@ public class AdminButtonTag extends TagSupport {
             String button = "<a class=\"nav-item nav-link\" href=\"" + requestPath + "/pages/admin_panel.jsp\">Admin panel</a>";
 
             User user = (User) session.getAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER);
-            if(user.getRole() == Privileges.ADMIN) {
+
+            if (user != null && user.getRole() == Privileges.ADMIN) {
                 pageContext.getOut().write(button);
             }
         } catch (IOException e) {

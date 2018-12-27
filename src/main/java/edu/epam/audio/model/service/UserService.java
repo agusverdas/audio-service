@@ -20,7 +20,7 @@ import java.util.Optional;
 import static edu.epam.audio.model.util.WebValuesNames.*;
 
 public class UserService {
-    private static final String INCORRECT_EMAIL_LOG = "There is no user with such email";
+    private static final String INCORRECT_LOGIN = "Wrong email or password.";
     private static final String INCORRECT_EMAIL_REG = "There is user with such email";
 
     private static final String INCORRECT_NAME_REG = "There is user with this name";
@@ -45,15 +45,12 @@ public class UserService {
 
         try {
             Optional<User> userFromDb = userDao.findUserByEmail(potentialUser);
-            if (userFromDb.isPresent()) {
-                if (userFromDb.get().getPassword().equals(encryptedPassword)) {
+            if (userFromDb.isPresent() && userFromDb.get().getPassword().equals(encryptedPassword)) {
                     wrapper.setSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER, userFromDb.get());
                     wrapper.removeRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR);
-                } else {
                     wrapper.setRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR, INCORRECT_PASSWORD_MES);
-                }
             } else {
-                wrapper.setRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR, INCORRECT_EMAIL_LOG);
+                wrapper.setRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR, INCORRECT_LOGIN);
             }
         } catch (DaoException e) {
             throw new LogicLayerException("Exception while logging into app.", e);

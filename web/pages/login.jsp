@@ -9,6 +9,7 @@
 <html>
 <head>
     <title>Login</title>
+    <meta charset="UTF-8">
     <link href="../css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link href="../css/styles.css" rel="stylesheet">
     <script src="../js/bootstrap.min.js"></script>

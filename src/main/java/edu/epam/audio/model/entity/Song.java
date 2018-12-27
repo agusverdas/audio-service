@@ -1,11 +1,19 @@
 package edu.epam.audio.model.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Song extends Entity{
     private long songId;
     private String title;
     private String path;
     private long albumId;
     private double cost;
+    private List<Author> authorList;
+
+    public Song(){
+        authorList = new ArrayList<>();
+    }
 
     public long getSongId() {
         return songId;
@@ -47,6 +55,14 @@ public class Song extends Entity{
         this.cost = cost;
     }
 
+    public List<Author> getAuthorList() {
+        return authorList;
+    }
+
+    public void setAuthorList(List<Author> authorList) {
+        this.authorList = authorList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,7 +74,8 @@ public class Song extends Entity{
         if (albumId != song.albumId) return false;
         if (Double.compare(song.cost, cost) != 0) return false;
         if (title != null ? !title.equals(song.title) : song.title != null) return false;
-        return path != null ? path.equals(song.path) : song.path == null;
+        if (path != null ? !path.equals(song.path) : song.path != null) return false;
+        return authorList != null ? authorList.equals(song.authorList) : song.authorList == null;
     }
 
     @Override
@@ -71,6 +88,7 @@ public class Song extends Entity{
         result = 31 * result + (int) (albumId ^ (albumId >>> 32));
         temp = Double.doubleToLongBits(cost);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (authorList != null ? authorList.hashCode() : 0);
         return result;
     }
 
@@ -82,6 +100,7 @@ public class Song extends Entity{
                 ", path='" + path + '\'' +
                 ", albumId=" + albumId +
                 ", cost=" + cost +
+                ", authorList=" + authorList +
                 '}';
     }
 }

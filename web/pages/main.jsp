@@ -11,14 +11,41 @@
 <html>
 <head>
     <title>Main page</title>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link href="../css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
 </head>
 <body>
     <%@include file="header.jsp" %>
+    <br>
+    <div class="container">
+    <table class="table table-sm">
+        <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Author</th>
+            <th scope="col">Song</th>
+            <th scope="col">Cost</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="elem" items="${ songs }" varStatus="status">
+            <tr>
+                <th style="vertical-align : middle;" scope="row">${elem.title}</th>
+                <th style="vertical-align : middle;" scope="row">${elem.title}</th>
+                <th style="vertical-align : middle;">
+                    <audio controls>
+                        <source src=${elem.path} type="audio/mpeg">
+                    </audio>
+                </th>
+                <th style="vertical-align : middle;" scope="row">${elem.cost}</th>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+    </div>
     <%@include file="footer.jsp" %>
 </body>
 </html>

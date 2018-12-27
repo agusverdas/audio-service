@@ -8,22 +8,25 @@ import edu.epam.audio.model.entity.Song;
 import edu.epam.audio.model.entity.builder.impl.SongBuilder;
 import edu.epam.audio.model.exception.DaoException;
 import edu.epam.audio.model.exception.LogicLayerException;
-import edu.epam.audio.model.util.WebValuesNames;
 
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
+import static edu.epam.audio.model.util.WebValuesNames.*;
 
 public class SongService {
     public void addSong(RequestContent wrapper) throws LogicLayerException {
-        String title = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_TITLE);
-        String author  = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_AUTHOR);
+        String title = wrapper.getRequestParam(PARAM_NAME_TITLE);
+        String author  = wrapper.getRequestParam(PARAM_NAME_AUTHOR);
         Author authorObject = new Author();
         authorObject.setName(author);
 
-        String cost = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_COST);
-        String path = (String) wrapper.getRequestAttribute(WebValuesNames.PARAM_NAME_PATH);
+        String cost = wrapper.getRequestParam(PARAM_NAME_COST);
+        String path = (String) wrapper.getRequestAttribute(PARAM_NAME_PATH);
 
         //todo: validation
         AuthorDaoImpl authorDao = AuthorDaoImpl.getInstance();
@@ -48,14 +51,15 @@ public class SongService {
             }
 
             String formedPath;
-            Part part = wrapper.getRequestPart(WebValuesNames.PARAM_NAME_SONG);
+            Part part = wrapper.getRequestPart(PARAM_NAME_SONG);
 
+            //todo: WHAT SYMBOLS EXCEPT SPACES CAN BE BAD THERE
             if (part.getSubmittedFileName() != null && !part.getSubmittedFileName().isEmpty()) {
                 formedPath = path + File.separator + part.getSubmittedFileName();
-                part.write(formedPath);
-                String pathToLoad = WebValuesNames.PATH_TO_SAVE + WebValuesNames.UPLOAD_SONGS_DIR
-                        + WebValuesNames.PATH_DELIMITER + part.getSubmittedFileName();
-                song.setPath(pathToLoad);
+                part.write(formedPath.replaceAll(SYMBOL_TO_REPLACE, PATH_REPLACEMENT));
+                String pathToLoad = PATH_TO_SAVE + UPLOAD_SONGS_DIR
+                        + PATH_DELIMITER + part.getSubmittedFileName();
+                song.setPath(pathToLoad.replaceAll(SYMBOL_TO_REPLACE, PATH_REPLACEMENT));
             }
 
             songDao.create(song);
@@ -67,6 +71,18 @@ public class SongService {
             throw new LogicLayerException("Exception in getting objects from db.", e);
         } catch (IOException e) {
             throw new LogicLayerException("Exception in writing song.", e);
+        }
+    }
+
+    public List<Song> loadAllSongs() throws LogicLayerException {
+        SongDaoImpl songDao = SongDaoImpl.getInstance();
+
+        try {
+            List<Song> songs = songDao.findAll();
+
+            return songDao.findAll();
+        } catch (DaoException e) {
+            throw new LogicLayerException("Exception while loading songs.");
         }
     }
 }

@@ -13,6 +13,7 @@ public final class WebValuesNames {
 
     public static final String SESSION_ATTRIBUTE_USER = "user";
 
+    public static final String SONGS = "songs";
     public static final String ATTRIBUTE_NAME_ERROR = "errorMessage";
 
     public static final String UPLOAD_PHOTOS_DIR = "photos";
@@ -20,6 +21,8 @@ public final class WebValuesNames {
 
     public static final String PATH_TO_SAVE = "http://localhost:8080/";
     public static final String PATH_DELIMITER = "/";
+    public static final String SYMBOL_TO_REPLACE = " ";
+    public static final String PATH_REPLACEMENT = "_";
 
     private WebValuesNames() {}
 }
