@@ -12,15 +12,15 @@
     <title>Error jsp</title>
 </head>
 <body>
-    Request from ${pageContext.errorData.requestURI} is failed
-    <br/>
-    Exception: ${pageContext.exception}
-    <br/>
-    Message from exception: ${pageContext.exception.message}
-    <br/>
-    <c:forEach items="${pageContext.exception.stackTrace}" var="element">
-        <c:out value="${element}" />
-    </c:forEach>
-    <a href="../index.jsp">Go Back</a>
+Request from ${pageContext.errorData.requestURI} is failed
+<br/>
+Exception: ${pageContext.exception}
+<br/>
+Message from exception: ${pageContext.exception.message}
+<br/>
+<c:forEach items="${pageContext.exception.stackTrace}" var="element">
+    <c:out value="${element}"/>
+</c:forEach>
+<a href="../index.jsp">Go Back</a>
 </body>
 </html>

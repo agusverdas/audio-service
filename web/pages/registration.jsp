@@ -11,8 +11,8 @@
     <title>Registration</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link href="../css/styles.css" rel="stylesheet">
-    <script src="../js/bootstrap.min.js"></script>
     <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="login">

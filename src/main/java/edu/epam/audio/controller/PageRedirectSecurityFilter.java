@@ -16,15 +16,18 @@ import java.io.IOException;
         },
         urlPatterns = {"/pages/*"},
         initParams = { @WebInitParam(name = "INDEX_PATH", value = "index.jsp"),
-                        @WebInitParam(name = "LOGIN_PATH", value = "/pages/login.jsp")})
+                        @WebInitParam(name = "LOGIN_PATH", value = "/pages/login.jsp"),
+                        @WebInitParam(name = "REGISTRATION_PATH", value = "/pages/registration.jsp")})
 public class PageRedirectSecurityFilter implements Filter {
     private String indexPath;
     private String loginPath;
+    private String regPath;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         indexPath = filterConfig.getInitParameter("INDEX_PATH");
         loginPath = filterConfig.getInitParameter("LOGIN_PATH");
+        regPath = filterConfig.getInitParameter("REGISTRATION_PATH");
     }
 
     @Override
@@ -33,6 +36,7 @@ public class PageRedirectSecurityFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
 
         if(!httpRequest.getRequestURI().equalsIgnoreCase(loginPath) &&
+                !httpRequest.getRequestURI().equalsIgnoreCase(regPath) &&
                 httpRequest.getSession().getAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER) == null) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + indexPath);
         }

@@ -6,12 +6,14 @@
   To change this template use File | Settings | File Templates.
 --%>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="${pageContext.request.contextPath}/pages/main.jsp">Home<span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link active" href="${pageContext.request.contextPath}/pages/main.jsp">Home<span
+                    class="sr-only">(current)</span></a>
             <a class="nav-item nav-link" href="${pageContext.request.contextPath}/pages/profile.jsp">To profile</a>
             <a class="nav-item nav-link" href="${pageContext.request.contextPath}/Controller?command=logout">Log out</a>
             <ctg:admin-button/>

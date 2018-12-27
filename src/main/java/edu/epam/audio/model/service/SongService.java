@@ -76,11 +76,15 @@ public class SongService {
 
     public List<Song> loadAllSongs() throws LogicLayerException {
         SongDaoImpl songDao = SongDaoImpl.getInstance();
+        AuthorDaoImpl authorDao = AuthorDaoImpl.getInstance();
 
         try {
             List<Song> songs = songDao.findAll();
-
-            return songDao.findAll();
+            for (Song s: songs) {
+                List<Author> authors = authorDao.findAuthorsBySongId(s);
+                s.setAuthorList(authors);
+            }
+            return songs;
         } catch (DaoException e) {
             throw new LogicLayerException("Exception while loading songs.");
         }
