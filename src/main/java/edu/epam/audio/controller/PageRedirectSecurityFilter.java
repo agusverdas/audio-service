@@ -15,13 +15,16 @@ import java.io.IOException;
         DispatcherType.INCLUDE
         },
         urlPatterns = {"/pages/*"},
-        initParams = { @WebInitParam(name = "LOGIN_PATH", value = "/pages/login.jsp")})
+        initParams = { @WebInitParam(name = "INDEX_PATH", value = "index.jsp"),
+                        @WebInitParam(name = "LOGIN_PATH", value = "/pages/login.jsp")})
 public class PageRedirectSecurityFilter implements Filter {
     private String indexPath;
+    private String loginPath;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        indexPath = filterConfig.getInitParameter("LOGIN_PATH");
+        indexPath = filterConfig.getInitParameter("INDEX_PATH");
+        loginPath = filterConfig.getInitParameter("LOGIN_PATH");
     }
 
     @Override
@@ -29,11 +32,8 @@ public class PageRedirectSecurityFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
 
-        System.out.println("Filter for security : " + httpRequest.getRequestURI());
-
-        if(!httpRequest.getRequestURI().equalsIgnoreCase(indexPath) &&
+        if(!httpRequest.getRequestURI().equalsIgnoreCase(loginPath) &&
                 httpRequest.getSession().getAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER) == null) {
-            System.out.println("Came here");
             httpResponse.sendRedirect(httpRequest.getContextPath() + indexPath);
         }
         filterChain.doFilter(servletRequest, servletResponse);
@@ -42,5 +42,6 @@ public class PageRedirectSecurityFilter implements Filter {
     @Override
     public void destroy() {
         indexPath = null;
+        loginPath = null;
     }
 }
