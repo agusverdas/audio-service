@@ -58,8 +58,9 @@
                                         </c:forEach>
                                     </th>
                                     <th style="vertical-align : middle;">
-                                        <audio controls>
-                                            <source src=${elem.path} type="audio/mpeg">
+                                        <audio controls controlsList="nodownload">
+                                            <source src="${elem.path}" type="audio/ogg" >
+                                            <source src="${elem.path}" type="audio/mp3" >
                                         </audio>
                                     </th>
                                     <th style="vertical-align : middle;" scope="row">${elem.cost}</th>
@@ -103,5 +104,11 @@
 </section>
 <br>
 <%@include file="footer.jsp" %>
+<script>
+    var audios = $('audio');
+    audios.bind('timeupdate', function () {
+        if (this.currentTime >= 30) this.pause();
+    });
+</script>
 </body>
 </html>

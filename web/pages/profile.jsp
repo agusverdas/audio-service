@@ -25,7 +25,7 @@ border-radius: 15px;
 -moz-border-radius: 15px;" class="container">
     <div class="row">
         <div class="col-md-5 img">
-            <img style="max-height: 100%; max-width: 100%" class="img-rounded" src=${user.photo}/>
+            <img style="max-height: 100%; max-width: 100%" class="img-rounded" src="${user.photo}"/>
         </div>
         <div class="col-md-5 details">
             <blockquote>

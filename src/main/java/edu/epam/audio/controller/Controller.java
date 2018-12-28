@@ -19,6 +19,9 @@ import java.io.IOException;
 //todo: only mp3 files to upload as music, only jpg as photo
 //todo: fmt set locale
 //todo: * for main fields
+//todo: make filter loading info to main page, checking in js availability song for user
+//todo: Secure F5
+//todo: Why i cant just redirect all the post requests?
 
 @WebServlet("/Controller")
 @MultipartConfig
@@ -37,7 +40,21 @@ public class Controller extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        processRequest(req, resp);
+        CommandFactory commandFactory = new CommandFactory();
+        Command command;
+        logger.debug("POST Request came.");
+        try {
+            command = commandFactory.defineCommand(req);
+            String page = command.execute(req);
+
+            resp.sendRedirect(req.getContextPath() + page);
+        } catch (CommandException e) {
+            e.printStackTrace();
+            throw new ServletException(e.getMessage(), e);
+        }
+        catch (Throwable e){
+            e.printStackTrace();
+        }
     }
 
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{

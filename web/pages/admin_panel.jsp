@@ -26,19 +26,19 @@
             <div class="col-md-12">
                 <nav>
                     <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="nav-songs-tab" data-toggle="tab" href="#nav-songs"
-                           role="tab" aria-controls="nav-songs" aria-selected="true">Songs</a>
-                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile"
-                           role="tab" aria-controls="nav-profile" aria-selected="false">Profile</a>
+                        <a class="nav-item nav-link active" id="nav-add-tab" data-toggle="tab" href="#nav-add"
+                           role="tab" aria-controls="nav-add" aria-selected="true">Add Song</a>
+                        <a class="nav-item nav-link" id="nav-adda-tab" data-toggle="tab" href="#nav-adda"
+                           role="tab" aria-controls="nav-adda" aria-selected="false">Add album</a>
                         <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact"
-                           role="tab" aria-controls="nav-contact" aria-selected="false">Contact</a>
+                           role="tab" aria-controls="nav-contact" aria-selected="false">See users</a>
                         <a class="nav-item nav-link" id="nav-about-tab" data-toggle="tab" href="#nav-about" role="tab"
                            aria-controls="nav-about" aria-selected="false">About</a>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="nav-songs" role="tabpanel"
-                         aria-labelledby="nav-songs-tab">
+                    <div class="tab-pane fade show active" id="nav-add" role="tabpanel"
+                         aria-labelledby="nav-add-tab">
                         <form style="text-align: center;" method="post"
                               action="${pageContext.request.contextPath}/Controller" enctype="multipart/form-data">
                             <input type="hidden" name="command" value="add-song">
@@ -62,7 +62,7 @@
                             <span style="color:red">${errorMessage}</span>
                         </form>
                     </div>
-                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <div class="tab-pane fade" id="nav-adda" role="tabpanel" aria-labelledby="nav-adda-tab">
                         Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim
                         occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur veniam sunt est aute sit
                         dolor anim. Velit non irure adipisicing aliqua ullamco irure incididunt irure non esse
