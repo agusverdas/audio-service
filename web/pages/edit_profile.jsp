@@ -7,9 +7,13 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="ctg" uri="/WEB-INF/tld/custom.tld" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:setBundle basename="pagecontent" var="rb"/>
 <html>
 <head>
-    <title>Edit profile</title>
+    <meta charset="UTF-8">
+    <title><fmt:message key="label.title.edit" bundle="${rb}"/></title>
     <link href="../css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link href="../css/styles.css" rel="stylesheet">
     <script src="../js/jquery-3.3.1.min.js"></script>
@@ -23,7 +27,7 @@
         <input type="hidden" name="command" value="post-edit-profile">
         <input type="text" value="${user.name}" name="nick" required="required" maxlength="10">
         <input type="email" value="${user.email}" name="e-mail" required="required" maxlength="32">
-        <input type="file" name="photo">
+        <input type="file" name="photo" accept="image/jpeg, image/png">
         <button type="submit" class="btn btn-primary btn-block btn-large">OK</button>
         <span style="color:red">${errorMessage}</span>
     </form>

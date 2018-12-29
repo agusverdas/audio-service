@@ -7,4 +7,5 @@ public final class PagePath {
     public static final String MAIN_PAGE = "/pages/main.jsp";
     public static final String PROFILE_PAGE = "/pages/profile.jsp";
     public static final String REGISTRATION_PAGE = "/pages/registration.jsp";
+    private PagePath(){}
 }

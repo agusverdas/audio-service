@@ -7,11 +7,14 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ctg" uri="/WEB-INF/tld/custom.tld" %>
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:setBundle basename="pagecontent" var="rb"/>
 <html>
 <head>
-    <title>Admin panel</title>
     <meta charset="UTF-8">
+    <title><fmt:message key="label.title.admin" bundle="${rb}"/></title>
     <link rel="stylesheet" href="../css/bootstrap.min.css" id="bootstrap-css">
     <link rel="stylesheet" href="../css/styles.css">
     <script src="../js/jquery-3.3.1.min.js"></script>
@@ -55,7 +58,7 @@
                             </label>
                             <br>
                             <label> Song: <br>
-                                <input style="width:200px" type="file" name="song">
+                                <input style="width:200px" type="file" name="song" accept="audio/mpeg3">
                             </label>
                             <br>
                             <button type="submit" class="btn btn-primary btn-large">Add song</button>

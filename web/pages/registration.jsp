@@ -6,9 +6,13 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" errorPage="error.jsp" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:setBundle basename="pagecontent" var="rb"/>
 <html>
 <head>
-    <title>Registration</title>
+    <meta charset="utf-8">
+    <title><fmt:message key="label.title.registration" bundle="${rb}"/></title>
     <link href="../css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link href="../css/styles.css" rel="stylesheet">
     <script src="../js/jquery-3.3.1.min.js"></script>
@@ -18,7 +22,7 @@
 <div class="login">
     <h1>Registration</h1>
     <form method="post" action="${pageContext.request.contextPath}/Controller">
-        <input type="hidden" name="command" value="registration">
+        <input type="hidden" name="command" value="post-registration">
         <input type="email" name="e-mail" placeholder="E-mail" required="required" maxlength="32"/>
         <input type="text" name="nick" placeholder="Nickname" required="required" maxlength="10"/>
         <input type="password" name="password" placeholder="Password" required="required" minlength="6" maxlength="10"/>

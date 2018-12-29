@@ -7,11 +7,14 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ctg" uri="/WEB-INF/tld/custom.tld" %>
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:setBundle basename="pagecontent" var="rb"/>
 <html>
 <head>
-    <title>Main page</title>
     <meta charset="utf-8">
+    <title><fmt:message key="label.title.profile" bundle="${rb}"/></title>
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link href="../css/styles.css" rel="stylesheet">
     <script src="../js/jquery-3.3.1.min.js"></script>
@@ -36,7 +39,8 @@ border-radius: 15px;
                 Role: ${user.role}<br/>
                 Money: ${user.money}<br/>
                 Bonus: ${user.bonus}<br/>
-                <a href="${pageContext.request.contextPath}/Controller?command=get-edit" class="btn btn-primary btn-block btn-large">Edit profile</a>
+                <a href="${pageContext.request.contextPath}/Controller?command=get-edit"
+                   class="btn btn-primary btn-block btn-large">Edit profile</a>
             </p>
         </div>
     </div>

@@ -7,9 +7,13 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" isErrorPage="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:setBundle basename="pagecontent" var="rb"/>
 <html>
 <head>
-    <title>Error jsp</title>
+    <meta charset="UTF-8">
+    <title><fmt:message key="label.title.error" bundle="${rb}"/></title>
 </head>
 <body>
 Request from ${pageContext.errorData.requestURI} is failed
