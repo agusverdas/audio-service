@@ -14,16 +14,13 @@ public class CommandFactory {
     private static final String UNDERSCORE = "_";
 
     public Command defineCommand(HttpServletRequest request) throws CommandException {
-        System.out.println(request.getParameter(PARAMETER_NAME));
         String action = request.getParameter(PARAMETER_NAME);
-
-        logger.debug("Action : " + action);
+        logger.debug(PARAMETER_NAME + " : value :" + action);
 
         if (action == null || action.isEmpty()){
             throw new CommandException("Exception in command value.");
         }
-
-        logger.info("Command " + action + " came to server.");
+;
         CommandEnum currentEnum = CommandEnum.valueOf(action.toUpperCase().replaceAll(DASH, UNDERSCORE));
         return currentEnum.getCommand();
     }

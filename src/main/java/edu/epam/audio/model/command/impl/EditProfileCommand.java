@@ -2,6 +2,7 @@ package edu.epam.audio.model.command.impl;
 
 import edu.epam.audio.controller.RequestContent;
 import edu.epam.audio.model.command.Command;
+import edu.epam.audio.model.command.CommandEnum;
 import edu.epam.audio.model.exception.CommandException;
 import edu.epam.audio.model.exception.LogicLayerException;
 import edu.epam.audio.model.service.UserService;
@@ -30,9 +31,9 @@ public class EditProfileCommand implements Command {
             wrapper.extractValues(request);
 
             if (wrapper.getSessionAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR) == null){
-                return PagePath.MAIN_PAGE;
+                return CommandEnum.GET_MAIN.name();
             } else {
-                return PagePath.EDIT_PAGE;
+                return CommandEnum.GET_EDIT.name();
             }
         } catch (IOException | ServletException e) {
             throw new CommandException("Exception in reading params from request.", e);

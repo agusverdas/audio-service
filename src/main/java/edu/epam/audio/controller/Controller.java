@@ -4,6 +4,7 @@ import edu.epam.audio.model.command.Command;
 import edu.epam.audio.model.command.CommandFactory;
 import edu.epam.audio.model.exception.CommandException;
 import edu.epam.audio.model.pool.ConnectionPool;
+import edu.epam.audio.model.util.WebValuesNames;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,9 +20,7 @@ import java.io.IOException;
 //todo: only mp3 files to upload as music, only jpg as photo
 //todo: fmt set locale
 //todo: * for main fields
-//todo: make filter loading info to main page, checking in js availability song for user
-//todo: Secure F5
-//todo: Why i cant just redirect all the post requests?
+//todo: checking in js availability song for user
 
 @WebServlet("/Controller")
 @MultipartConfig
@@ -35,45 +34,31 @@ public class Controller extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        processRequest(req, resp);
+        String path = commandExecute(req);
+
+        System.out.println("ERROR: " + req.getParameter(WebValuesNames.ATTRIBUTE_NAME_ERROR));
+        String error = req.getParameter(WebValuesNames.ATTRIBUTE_NAME_ERROR);
+        req.setAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR, error);
+
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(path);
+        dispatcher.forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        CommandFactory commandFactory = new CommandFactory();
-        Command command;
-        logger.debug("POST Request came.");
-        try {
-            command = commandFactory.defineCommand(req);
-            String page = command.execute(req);
-
-            resp.sendRedirect(req.getContextPath() + page);
-        } catch (CommandException e) {
-            e.printStackTrace();
-            throw new ServletException(e.getMessage(), e);
-        }
-        catch (Throwable e){
-            e.printStackTrace();
-        }
+        String getCommand = commandExecute(req);
+        //todo: change path
+        resp.sendRedirect("/Controller?command=" + getCommand + "&" + WebValuesNames.ATTRIBUTE_NAME_ERROR + "=" + req.getAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR));
     }
 
-    private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+    private String commandExecute(HttpServletRequest request) throws ServletException {
         CommandFactory commandFactory = new CommandFactory();
         Command command;
-        RequestDispatcher dispatcher;
-        logger.debug("Request came.");
         try {
-            command = commandFactory.defineCommand(req);
-            String page = command.execute(req);
-
-            dispatcher = getServletContext().getRequestDispatcher(page);
-            dispatcher.forward(req,resp);
+            command = commandFactory.defineCommand(request);
+            return command.execute(request);
         } catch (CommandException e) {
-            e.printStackTrace();
             throw new ServletException(e.getMessage(), e);
-        }
-        catch (Throwable e){
-            e.printStackTrace();
         }
     }
 }

@@ -20,11 +20,11 @@
 <div class="login">
     <h1>Login</h1>
     <form method="post" action="Controller">
-        <input type="hidden" name="command" value="login">
+        <input type="hidden" name="command" value="post-login">
         <input type="email" name="e-mail" placeholder="E-mail" required="required" maxlength="32"/>
         <input type="password" name="password" placeholder="Password" required="required" minlength="6" maxlength="10"/>
         <button type="submit" class="btn btn-primary btn-block btn-large">Let me in.</button>
-        <a class="btn btn-primary btn-block btn-large" href="${pageContext.request.contextPath}/pages/registration.jsp">Registration </a>
+        <a class="btn btn-primary btn-block btn-large" href="${pageContext.request.contextPath}/Controller?command=get-registration">Registration </a>
         <span style="color:red">${errorMessage}</span>
     </form>
     <br>

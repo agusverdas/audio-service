@@ -2,6 +2,7 @@ package edu.epam.audio.model.command.impl;
 
 import edu.epam.audio.controller.RequestContent;
 import edu.epam.audio.model.command.Command;
+import edu.epam.audio.model.command.CommandEnum;
 import edu.epam.audio.model.exception.CommandException;
 import edu.epam.audio.model.exception.LogicLayerException;
 import edu.epam.audio.model.service.UserService;
@@ -22,9 +23,9 @@ public class RegistrationCommand implements Command {
             userService.registerUser(valuesWrapper);
             valuesWrapper.extractValues(request);
             if (request.getSession().getAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER) != null){
-                return PagePath.MAIN_PAGE;
+                return CommandEnum.GET_MAIN.name();
             } else {
-                return PagePath.REGISTRATION_PAGE;
+                return CommandEnum.GET_REGISTRATION.name();
             }
         } catch (LogicLayerException e) {
             throw new CommandException("Exception in registration.", e);

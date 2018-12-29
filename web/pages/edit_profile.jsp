@@ -20,7 +20,7 @@
 <div class="login">
     <h1>Edit profile</h1>
     <form method="post" action="${pageContext.request.contextPath}/Controller" enctype="multipart/form-data">
-        <input type="hidden" name="command" value="edit-profile">
+        <input type="hidden" name="command" value="post-edit-profile">
         <input type="text" value="${user.name}" name="nick" required="required" maxlength="10">
         <input type="email" value="${user.email}" name="e-mail" required="required" maxlength="32">
         <input type="file" name="photo">

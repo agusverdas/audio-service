@@ -41,7 +41,7 @@
                          aria-labelledby="nav-add-tab">
                         <form style="text-align: center;" method="post"
                               action="${pageContext.request.contextPath}/Controller" enctype="multipart/form-data">
-                            <input type="hidden" name="command" value="add-song">
+                            <input type="hidden" name="command" value="post-add-song">
                             <label> Song title: <br>
                                 <input type="text" name="title" required="required" maxlength="50">
                             </label>

@@ -36,7 +36,7 @@ border-radius: 15px;
                 Role: ${user.role}<br/>
                 Money: ${user.money}<br/>
                 Bonus: ${user.bonus}<br/>
-                <a href="edit_profile.jsp" class="btn btn-primary btn-block btn-large">Edit profile</a>
+                <a href="${pageContext.request.contextPath}/Controller?command=get-edit" class="btn btn-primary btn-block btn-large">Edit profile</a>
             </p>
         </div>
     </div>

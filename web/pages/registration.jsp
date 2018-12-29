@@ -17,7 +17,7 @@
 <body>
 <div class="login">
     <h1>Registration</h1>
-    <form method="post" action="/Controller">
+    <form method="post" action="${pageContext.request.contextPath}/Controller">
         <input type="hidden" name="command" value="registration">
         <input type="email" name="e-mail" placeholder="E-mail" required="required" maxlength="32"/>
         <input type="text" name="nick" placeholder="Nickname" required="required" maxlength="10"/>

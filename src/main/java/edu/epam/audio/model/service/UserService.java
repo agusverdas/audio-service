@@ -48,7 +48,6 @@ public class UserService {
             if (userFromDb.isPresent() && userFromDb.get().getPassword().equals(encryptedPassword)) {
                     wrapper.setSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER, userFromDb.get());
                     wrapper.removeRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR);
-                    wrapper.setRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR, INCORRECT_PASSWORD_MES);
             } else {
                 wrapper.setRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR, INCORRECT_LOGIN);
             }
