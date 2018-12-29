@@ -6,8 +6,9 @@ import edu.epam.audio.model.command.CommandEnum;
 import edu.epam.audio.model.exception.CommandException;
 import edu.epam.audio.model.exception.LogicLayerException;
 import edu.epam.audio.model.service.UserService;
-import edu.epam.audio.model.util.PagePath;
-import edu.epam.audio.model.util.WebValuesNames;
+import edu.epam.audio.model.util.RequestAttributes;
+import edu.epam.audio.model.util.RequestParams;
+import edu.epam.audio.model.util.UploadPath;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,15 +23,15 @@ public class EditProfileCommand implements Command {
         wrapper.init(request);
 
         String applicationPath = request.getServletContext().getRealPath("");
-        String uploadFilePath = applicationPath + WebValuesNames.UPLOAD_PHOTOS_DIR;
+        String uploadFilePath = applicationPath + UploadPath.UPLOAD_PHOTOS_DIR;
 
-        wrapper.setRequestAttribute(WebValuesNames.PARAM_NAME_PATH, uploadFilePath);
+        wrapper.setRequestAttribute(RequestParams.PARAM_NAME_PATH, uploadFilePath);
         try {
-            wrapper.setRequestPart(WebValuesNames.PARAM_NAME_PHOTO, request.getPart(WebValuesNames.PARAM_NAME_PHOTO));
+            wrapper.setRequestPart(RequestParams.PARAM_NAME_PHOTO, request.getPart(RequestParams.PARAM_NAME_PHOTO));
             userService.updateProfile(wrapper);
             wrapper.extractValues(request);
 
-            if (wrapper.getSessionAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR) == null){
+            if (wrapper.getSessionAttribute(RequestAttributes.ATTRIBUTE_NAME_ERROR) == null){
                 return CommandEnum.GET_MAIN.name();
             } else {
                 return CommandEnum.GET_EDIT.name();

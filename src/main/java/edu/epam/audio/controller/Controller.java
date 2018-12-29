@@ -4,7 +4,7 @@ import edu.epam.audio.model.command.Command;
 import edu.epam.audio.model.command.CommandFactory;
 import edu.epam.audio.model.exception.CommandException;
 import edu.epam.audio.model.pool.ConnectionPool;
-import edu.epam.audio.model.util.WebValuesNames;
+import edu.epam.audio.model.util.RequestAttributes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,9 +36,8 @@ public class Controller extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = commandExecute(req);
 
-        System.out.println("ERROR: " + req.getParameter(WebValuesNames.ATTRIBUTE_NAME_ERROR));
-        String error = req.getParameter(WebValuesNames.ATTRIBUTE_NAME_ERROR);
-        req.setAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR, error);
+        String error = req.getParameter(RequestAttributes.ATTRIBUTE_NAME_ERROR);
+        req.setAttribute(RequestAttributes.ATTRIBUTE_NAME_ERROR, error);
 
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(path);
         dispatcher.forward(req, resp);
@@ -48,7 +47,8 @@ public class Controller extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String getCommand = commandExecute(req);
         //todo: change path
-        resp.sendRedirect("/Controller?command=" + getCommand + "&" + WebValuesNames.ATTRIBUTE_NAME_ERROR + "=" + req.getAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR));
+        resp.sendRedirect("/Controller?command=" + getCommand + "&" + RequestAttributes.ATTRIBUTE_NAME_ERROR +
+                "=" + req.getAttribute(RequestAttributes.ATTRIBUTE_NAME_ERROR));
     }
 
     private String commandExecute(HttpServletRequest request) throws ServletException {

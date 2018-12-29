@@ -1,6 +1,6 @@
 package edu.epam.audio.controller;
 
-import edu.epam.audio.model.util.WebValuesNames;
+import edu.epam.audio.model.util.SessionAttributes;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -37,7 +37,7 @@ public class PageRedirectSecurityFilter implements Filter {
 
         if(!httpRequest.getRequestURI().equalsIgnoreCase(loginPath) &&
                 !httpRequest.getRequestURI().equalsIgnoreCase(regPath) &&
-                httpRequest.getSession().getAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER) == null) {
+                httpRequest.getSession().getAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER) == null) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + indexPath);
         }
         filterChain.doFilter(servletRequest, servletResponse);

@@ -12,11 +12,11 @@ import edu.epam.audio.model.exception.LogicLayerException;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static edu.epam.audio.model.util.WebValuesNames.*;
+import static edu.epam.audio.model.util.RequestParams.*;
+import static edu.epam.audio.model.util.UploadPath.*;
 
 public class SongService {
     public void addSong(RequestContent wrapper) throws LogicLayerException {

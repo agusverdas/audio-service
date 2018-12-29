@@ -2,7 +2,6 @@ package edu.epam.audio.model.custom;
 
 import edu.epam.audio.model.entity.Privileges;
 import edu.epam.audio.model.entity.User;
-import edu.epam.audio.model.util.WebValuesNames;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

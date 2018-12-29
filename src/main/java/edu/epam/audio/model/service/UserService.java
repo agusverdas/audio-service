@@ -6,18 +6,17 @@ import edu.epam.audio.model.entity.User;
 import edu.epam.audio.model.entity.builder.impl.UserBuilder;
 import edu.epam.audio.model.exception.DaoException;
 import edu.epam.audio.model.exception.LogicLayerException;
-import edu.epam.audio.model.util.ParamsValidator;
-import edu.epam.audio.model.util.WebValuesNames;
+import edu.epam.audio.model.util.*;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.servlet.http.Part;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Optional;
 
-import static edu.epam.audio.model.util.WebValuesNames.*;
+import static edu.epam.audio.model.util.RequestAttributes.*;
+import static edu.epam.audio.model.util.RequestParams.*;
+import static edu.epam.audio.model.util.UploadPath.*;
 
 public class UserService {
     private static final String INCORRECT_LOGIN = "Wrong email or password.";
@@ -25,7 +24,6 @@ public class UserService {
 
     private static final String INCORRECT_NAME_REG = "There is user with this name";
 
-    private static final String INCORRECT_PASSWORD_MES = "Incorrect password";
     private static final String INCORRECT_PASSWORD_REGEX_MES = "Incorrect password, password should be 8 characters " +
             "length at least one letter and one number";
     private static final String INCORRECT_NAME_MES = "Incorrect name, name should be at least 6 characters length, " +
@@ -34,8 +32,8 @@ public class UserService {
     public void loginUser(RequestContent wrapper) throws LogicLayerException {
         UserDaoImpl userDao = UserDaoImpl.getInstance();
 
-        String email = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_EMAIL);
-        String password = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_PASSWORD);
+        String email = wrapper.getRequestParam(PARAM_NAME_EMAIL);
+        String password = wrapper.getRequestParam(PARAM_NAME_PASSWORD);
 
         String encryptedPassword = DigestUtils.md5Hex(password);
 
@@ -46,10 +44,10 @@ public class UserService {
         try {
             Optional<User> userFromDb = userDao.findUserByEmail(potentialUser);
             if (userFromDb.isPresent() && userFromDb.get().getPassword().equals(encryptedPassword)) {
-                    wrapper.setSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER, userFromDb.get());
-                    wrapper.removeRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR);
+                    wrapper.setSessionAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER, userFromDb.get());
+                    wrapper.removeRequestAttribute(ATTRIBUTE_NAME_ERROR);
             } else {
-                wrapper.setRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR, INCORRECT_LOGIN);
+                wrapper.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_LOGIN);
             }
         } catch (DaoException e) {
             throw new LogicLayerException("Exception while logging into app.", e);
@@ -57,14 +55,14 @@ public class UserService {
     }
 
     public void logoutUser(RequestContent wrapper) {
-        wrapper.removeSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER);
-        System.out.println(wrapper.getSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER));
+        wrapper.removeSessionAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER);
+        System.out.println(wrapper.getSessionAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER));
     }
 
     public void registerUser(RequestContent wrapper) throws LogicLayerException {
-        String email = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_EMAIL);
-        String password = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_PASSWORD);
-        String name = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_NICK);
+        String email = wrapper.getRequestParam(PARAM_NAME_EMAIL);
+        String password = wrapper.getRequestParam(PARAM_NAME_PASSWORD);
+        String name = wrapper.getRequestParam(PARAM_NAME_NICK);
 
         User user = new UserBuilder()
                 .addEmail(email)
@@ -84,19 +82,19 @@ public class UserService {
                             String encryptedPassword = DigestUtils.md5Hex(password);
                             user.setPassword(encryptedPassword);
                             userDao.create(user);
-                            wrapper.setSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER, user);
-                            wrapper.removeRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR);
+                            wrapper.setSessionAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER, user);
+                            wrapper.removeRequestAttribute(ATTRIBUTE_NAME_ERROR);
                         } else {
-                            wrapper.setRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR, INCORRECT_NAME_REG);
+                            wrapper.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_NAME_REG);
                         }
                     } else {
-                        wrapper.setRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR, INCORRECT_NAME_MES);
+                        wrapper.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_NAME_MES);
                     }
                 } else{
-                    wrapper.setRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR, INCORRECT_PASSWORD_REGEX_MES);
+                    wrapper.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_PASSWORD_REGEX_MES);
                 }
             } else {
-                wrapper.setRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR, INCORRECT_EMAIL_REG);
+                wrapper.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_EMAIL_REG);
             }
         } catch (DaoException e) {
             throw new LogicLayerException("Exception while register into the app.", e);
@@ -104,12 +102,12 @@ public class UserService {
     }
 
     public void updateProfile(RequestContent wrapper) throws LogicLayerException {
-        User user = (User) wrapper.getSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER);
+        User user = (User) wrapper.getSessionAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER);
         UserDaoImpl userDao = UserDaoImpl.getInstance();
 
-        String email = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_EMAIL);
-        String name = wrapper.getRequestParam(WebValuesNames.PARAM_NAME_NICK);
-        String path = (String) wrapper.getRequestAttribute(WebValuesNames.PARAM_NAME_PATH);
+        String email = wrapper.getRequestParam(PARAM_NAME_EMAIL);
+        String name = wrapper.getRequestParam(PARAM_NAME_NICK);
+        String path = (String) wrapper.getRequestAttribute(PARAM_NAME_PATH);
 
         try {
             User updatedUser = user.clone();
@@ -126,27 +124,27 @@ public class UserService {
                     }
 
                     String formedPath;
-                    Part part = wrapper.getRequestPart(WebValuesNames.PARAM_NAME_PHOTO);
+                    Part part = wrapper.getRequestPart(PARAM_NAME_PHOTO);
 
                     if (part.getSubmittedFileName() != null && !part.getSubmittedFileName().isEmpty()) {
                         formedPath = path + File.separator + part.getSubmittedFileName();
                         part.write(formedPath);
-                        String pathToLoad = WebValuesNames.PATH_TO_SAVE + WebValuesNames.UPLOAD_PHOTOS_DIR
-                                + WebValuesNames.PATH_DELIMITER + part.getSubmittedFileName();
+                        String pathToLoad = PATH_TO_SAVE + UPLOAD_PHOTOS_DIR
+                                + PATH_DELIMITER + part.getSubmittedFileName();
                         updatedUser.setPhoto(pathToLoad);
                     }
 
                     userDao.update(updatedUser);
-                    wrapper.setSessionAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER, updatedUser);
+                    wrapper.setSessionAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER, updatedUser);
 
-                    wrapper.removeRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR);
+                    wrapper.removeRequestAttribute(ATTRIBUTE_NAME_ERROR);
                 }
                 else {
-                    wrapper.setRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR, INCORRECT_NAME_REG);
+                    wrapper.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_NAME_REG);
                 }
             }
             else {
-                wrapper.setRequestAttribute(WebValuesNames.ATTRIBUTE_NAME_ERROR, INCORRECT_EMAIL_REG);
+                wrapper.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_EMAIL_REG);
             }
         } catch (CloneNotSupportedException e) {
             throw new LogicLayerException("Exception in cloning user.", e);
