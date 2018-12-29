@@ -2,6 +2,7 @@ package edu.epam.audio.model.custom;
 
 import edu.epam.audio.model.entity.Privileges;
 import edu.epam.audio.model.entity.User;
+import edu.epam.audio.model.util.SessionAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,7 +20,7 @@ public class AdminButtonTag extends TagSupport {
 
             String button = "<a class=\"nav-item nav-link\" href=\"" + requestPath + "/Controller?command=get-admin\">Admin panel</a>";
 
-            User user = (User) session.getAttribute(WebValuesNames.SESSION_ATTRIBUTE_USER);
+            User user = (User) session.getAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER);
 
             if (user != null && user.getRole() == Privileges.ADMIN) {
                 pageContext.getOut().write(button);

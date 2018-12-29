@@ -34,7 +34,7 @@ public class Controller extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path = commandExecute(req);
+        String path = commandExecute(req, resp);
 
         String error = req.getParameter(RequestAttributes.ATTRIBUTE_NAME_ERROR);
         req.setAttribute(RequestAttributes.ATTRIBUTE_NAME_ERROR, error);
@@ -45,13 +45,17 @@ public class Controller extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String getCommand = commandExecute(req);
+        String getCommand = commandExecute(req, resp);
         //todo: change path
         resp.sendRedirect("/Controller?command=" + getCommand + "&" + RequestAttributes.ATTRIBUTE_NAME_ERROR +
                 "=" + req.getAttribute(RequestAttributes.ATTRIBUTE_NAME_ERROR));
     }
 
-    private String commandExecute(HttpServletRequest request) throws ServletException {
+    private String commandExecute(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        response.setHeader("Cache-Control","no-cache");
+        response.setHeader("Cache-Control","no-store");
+        response.setDateHeader("Expires", 0);
+
         CommandFactory commandFactory = new CommandFactory();
         Command command;
         try {
