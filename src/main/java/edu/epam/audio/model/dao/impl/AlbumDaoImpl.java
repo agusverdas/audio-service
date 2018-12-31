@@ -18,7 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class AlbumDaoImpl implements AlbumDao {
+public final class AlbumDaoImpl implements AlbumDao {
+    private static final AlbumDaoImpl instance = new AlbumDaoImpl();
+
+    private static final String MAX_ALBUM_ID = "select MAX(" + DBMetaInfo.ALBUM_ID + ") from ALBUM";
     private static final String INSERT_ALBUM = "insert into ALBUM(" + DBMetaInfo.ALBUM_TITLE +
             ", " + DBMetaInfo.ALBUM_AUTHOR_ID + ", " + DBMetaInfo.ALBUM_PHOTO + ", " + DBMetaInfo.ALBUM_COST + ") values(?, ?, ?, ?)";
 
@@ -32,8 +35,14 @@ public class AlbumDaoImpl implements AlbumDao {
     private static final String UPDATE_ALBUM = "update ALBUM set " + DBMetaInfo.ALBUM_TITLE + "=?, " + DBMetaInfo.ALBUM_AUTHOR_ID +
             "=?, " + DBMetaInfo.ALBUM_PHOTO + "=?, " + DBMetaInfo.ALBUM_COST + "=? where " + DBMetaInfo.ALBUM_ID + "=?";
 
+    private AlbumDaoImpl(){}
+
+    public static AlbumDaoImpl getInstance(){
+        return instance;
+    }
+
     @Override
-    public void create(Album entity) throws DaoException {
+    public long create(Album entity) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
 
         try(ProxyConnection connection = pool.getConnection();
@@ -44,6 +53,7 @@ public class AlbumDaoImpl implements AlbumDao {
             preparedStatement.setDouble(4, entity.getCost());
 
             preparedStatement.executeUpdate();
+            return maxId(MAX_ALBUM_ID);
         } catch (InterruptedException e) {
             throw new DaoException("Exception while getting connection from connection pool.", e);
         } catch (SQLException e) {

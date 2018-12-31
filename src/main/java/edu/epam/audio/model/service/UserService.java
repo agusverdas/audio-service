@@ -1,6 +1,7 @@
 package edu.epam.audio.model.service;
 
 import edu.epam.audio.controller.RequestContent;
+import edu.epam.audio.model.dao.UserDao;
 import edu.epam.audio.model.dao.impl.UserDaoImpl;
 import edu.epam.audio.model.entity.User;
 import edu.epam.audio.model.entity.builder.impl.UserBuilder;
@@ -12,6 +13,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import static edu.epam.audio.model.util.RequestAttributes.*;
@@ -30,7 +32,7 @@ public class UserService {
             "all the characters should be letters";
 
     public void loginUser(RequestContent wrapper) throws LogicLayerException {
-        UserDaoImpl userDao = UserDaoImpl.getInstance();
+        UserDao userDao = UserDaoImpl.getInstance();
 
         String email = wrapper.getRequestParam(PARAM_NAME_EMAIL);
         String password = wrapper.getRequestParam(PARAM_NAME_PASSWORD);
@@ -54,11 +56,6 @@ public class UserService {
         }
     }
 
-    public void logoutUser(RequestContent wrapper) {
-        wrapper.removeSessionAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER);
-        System.out.println(wrapper.getSessionAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER));
-    }
-
     public void registerUser(RequestContent wrapper) throws LogicLayerException {
         String email = wrapper.getRequestParam(PARAM_NAME_EMAIL);
         String password = wrapper.getRequestParam(PARAM_NAME_PASSWORD);
@@ -70,7 +67,7 @@ public class UserService {
                 .addName(name)
                 .build();
 
-        UserDaoImpl userDao = UserDaoImpl.getInstance();
+        UserDao userDao = UserDaoImpl.getInstance();
 
         try {
             Optional<User> userFormDb = userDao.findUserByEmail(user);
@@ -103,7 +100,7 @@ public class UserService {
 
     public void updateProfile(RequestContent wrapper) throws LogicLayerException {
         User user = (User) wrapper.getSessionAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER);
-        UserDaoImpl userDao = UserDaoImpl.getInstance();
+        UserDao userDao = UserDaoImpl.getInstance();
 
         String email = wrapper.getRequestParam(PARAM_NAME_EMAIL);
         String name = wrapper.getRequestParam(PARAM_NAME_NICK);
@@ -152,6 +149,18 @@ public class UserService {
             throw new LogicLayerException("Exception in writing photo.", e);
         } catch (DaoException e) {
             throw new LogicLayerException("Exception in getting user from db.", e);
+        }
+    }
+
+    public List<User> loadAllUsers() throws LogicLayerException {
+        UserDao userDao = UserDaoImpl.getInstance();
+        List<User> users;
+
+        try {
+            users = userDao.findAll();
+            return users;
+        } catch (DaoException e) {
+            throw new LogicLayerException("Exception in gtting users from db.", e);
         }
     }
 }

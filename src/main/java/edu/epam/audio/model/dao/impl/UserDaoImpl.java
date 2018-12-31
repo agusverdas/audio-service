@@ -20,6 +20,7 @@ import java.util.Optional;
 public final class UserDaoImpl implements UserDao {
     private static UserDaoImpl instance = new UserDaoImpl();
 
+    private static final String MAX_USER_ID = "select MAX(" + DBMetaInfo.USER_ID + ") from USER";
     private static final String INSERT_USER = "insert into USER(" + DBMetaInfo.EMAIL +
             ", " + DBMetaInfo.PASSWORD + ", " + DBMetaInfo.USER_NAME + ", " + DBMetaInfo.PHOTO + ", " + DBMetaInfo.ROLE +
             ", " + DBMetaInfo.MONEY + ", " + DBMetaInfo.BONUS +") values(?, ?, ?, ?, 'USER', ?, ?)";
@@ -43,7 +44,7 @@ public final class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void create(User user) throws DaoException {
+    public long create(User user) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
 
         try(ProxyConnection connection = pool.getConnection();
@@ -56,6 +57,7 @@ public final class UserDaoImpl implements UserDao {
             preparedStatement.setDouble(6, user.getBonus());
 
             preparedStatement.executeUpdate();
+            return maxId(MAX_USER_ID);
         } catch (InterruptedException e) {
             throw new DaoException("Exception while getting connection from connection pool.", e);
         } catch (SQLException e) {

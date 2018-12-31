@@ -1,13 +1,17 @@
 package edu.epam.audio.model.service;
 
 import edu.epam.audio.controller.RequestContent;
+import edu.epam.audio.model.dao.AuthorDao;
+import edu.epam.audio.model.dao.SongDao;
 import edu.epam.audio.model.dao.impl.AuthorDaoImpl;
 import edu.epam.audio.model.dao.impl.SongDaoImpl;
 import edu.epam.audio.model.entity.Author;
 import edu.epam.audio.model.entity.Song;
+import edu.epam.audio.model.entity.User;
 import edu.epam.audio.model.entity.builder.impl.SongBuilder;
 import edu.epam.audio.model.exception.DaoException;
 import edu.epam.audio.model.exception.LogicLayerException;
+import edu.epam.audio.model.util.SessionAttributes;
 
 import javax.servlet.http.Part;
 import java.io.File;
@@ -29,8 +33,8 @@ public class SongService {
         String path = (String) wrapper.getRequestAttribute(PARAM_NAME_PATH);
 
         //todo: validation
-        AuthorDaoImpl authorDao = AuthorDaoImpl.getInstance();
-        SongDaoImpl songDao = SongDaoImpl.getInstance();
+        AuthorDao authorDao = AuthorDaoImpl.getInstance();
+        SongDao songDao = SongDaoImpl.getInstance();
 
         try {
             Optional<Author> authorOptional = authorDao.findAuthorByName(authorObject);
@@ -62,8 +66,8 @@ public class SongService {
                 song.setPath(pathToLoad.replaceAll(SYMBOL_TO_REPLACE, PATH_REPLACEMENT));
             }
 
-            songDao.create(song);
-            Optional<Song> songFromDb = songDao.findSongByPath(song);
+            long id = songDao.create(song);
+            Optional<Song> songFromDb = songDao.findEntityById(id);
             song = songFromDb.get();
 
             songDao.mergeSongAuthor(song, authorObject);
@@ -75,8 +79,8 @@ public class SongService {
     }
 
     public List<Song> loadAllSongs() throws LogicLayerException {
-        SongDaoImpl songDao = SongDaoImpl.getInstance();
-        AuthorDaoImpl authorDao = AuthorDaoImpl.getInstance();
+        SongDao songDao = SongDaoImpl.getInstance();
+        AuthorDao authorDao = AuthorDaoImpl.getInstance();
 
         try {
             List<Song> songs = songDao.findAll();
@@ -86,7 +90,17 @@ public class SongService {
             }
             return songs;
         } catch (DaoException e) {
-            throw new LogicLayerException("Exception while loading songs.");
+            throw new LogicLayerException("Exception while loading songs.", e);
+        }
+    }
+
+    public List<Song> findUserSongs(RequestContent content) throws LogicLayerException {
+        User user = (User) content.getSessionAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER);
+        SongDao songDao = SongDaoImpl.getInstance();
+        try {
+            return songDao.findUserSongs(user);
+        } catch (DaoException e) {
+            throw new LogicLayerException("Exception while loading songs.", e);
         }
     }
 }

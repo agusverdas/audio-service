@@ -18,8 +18,11 @@ public class AdminButtonTag extends TagSupport {
             HttpSession session = request.getSession();
             String requestPath = request.getContextPath();
 
+            /*String button = "<a class=\"nav-item nav-link\" href=\"" + requestPath + "/Controller?command=get-admin\">" +
+                    "<fmt:message key=\"label.navbar.profile\" bundle=\"${rb}\"/></a>";*/
+
             String button = "<a class=\"nav-item nav-link\" href=\"" + requestPath + "/Controller?command=get-admin\">" +
-                    "<fmt:message key=\"label.navbar.admin\" bundle=\"${rb}\"/></a>";
+                    "Admin</a>";
 
             User user = (User) session.getAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER);
 

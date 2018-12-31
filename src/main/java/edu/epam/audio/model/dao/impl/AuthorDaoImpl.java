@@ -11,6 +11,7 @@ import edu.epam.audio.model.pool.ProxyConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import java.util.Optional;
 public final class AuthorDaoImpl implements AuthorDao {
     private static AuthorDaoImpl instance = new AuthorDaoImpl();
 
+    private static final String MAX_AUTHOR_ID = "select MAX(" + DBMetaInfo.AUTHOR_ID + ") from AUTHOR";
     private static final String INSERT_AUTHOR = "insert into AUTHOR(" + DBMetaInfo.AUTHOR_NAME + ") values(?)";
     private static final String SELECT_BY_NAME = "select * from AUTHOR where "+ DBMetaInfo.AUTHOR_NAME + "=?";
     private static final String SELECT_BY_SONG = "select * from AUTHOR natural join SONG_AUTHOR natural join SONG where " + DBMetaInfo.SONG_ID + "=?";
@@ -29,7 +31,7 @@ public final class AuthorDaoImpl implements AuthorDao {
     }
 
     @Override
-    public void create(Author entity) throws DaoException {
+    public long create(Author entity) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
 
         try(ProxyConnection connection = pool.getConnection();
@@ -37,6 +39,7 @@ public final class AuthorDaoImpl implements AuthorDao {
             preparedStatement.setString(1, entity.getName());
 
             preparedStatement.executeUpdate();
+            return maxId(MAX_AUTHOR_ID);
         } catch (InterruptedException e) {
             throw new DaoException("Exception while getting connection from connection pool.", e);
         } catch (SQLException e) {
@@ -54,6 +57,7 @@ public final class AuthorDaoImpl implements AuthorDao {
         return Optional.empty();
     }
 
+    @Override
     public Optional<Author> findAuthorByName(Author entity) throws DaoException {
         Optional<Author> author = Optional.empty();
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -78,6 +82,7 @@ public final class AuthorDaoImpl implements AuthorDao {
         }
     }
 
+    @Override
     public List<Author> findAuthorsBySongId(Song entity) throws DaoException {
         List<Author> authorList = new ArrayList<>();
         ConnectionPool pool = ConnectionPool.getInstance();

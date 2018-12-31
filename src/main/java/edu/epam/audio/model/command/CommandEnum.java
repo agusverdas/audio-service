@@ -7,6 +7,7 @@ public enum CommandEnum {
     POST_REGISTRATION(new RegistrationCommand()),
     POST_EDIT_PROFILE(new EditProfileCommand()),
     POST_ADD_SONG(new AddSongCommand()),
+    POST_ADD_ALBUM(new AddAlbumCommand()),
 
     GET_LOGIN(new LoginPageCommand()),
     GET_REGISTRATION(new RegistrationPageCommand()),

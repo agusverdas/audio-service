@@ -66,13 +66,25 @@
                         </form>
                     </div>
                     <div class="tab-pane fade" id="nav-adda" role="tabpanel" aria-labelledby="nav-adda-tab">
-                        Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim
-                        occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur veniam sunt est aute sit
-                        dolor anim. Velit non irure adipisicing aliqua ullamco irure incididunt irure non esse
-                        consectetur nostrud minim non minim occaecat. Amet duis do nisi duis veniam non est eiusmod
-                        tempor incididunt tempor dolor ipsum in qui sit. Exercitation mollit sit culpa nisi culpa non
-                        adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis occaecat
-                        ex.
+                        <form style="text-align: center;" method="post"
+                              action="${pageContext.request.contextPath}/Controller" enctype="multipart/form-data">
+                            <input type="hidden" name="command" value="post-add-album">
+                            <label> Album title: <br>
+                                <input type="text" name="title" required="required" maxlength="50">
+                            </label>
+                            <br>
+                            <label> Author name: <br>
+                                <input type="text" name="author" required="required" maxlength="50">
+                            </label>
+                            <br>
+                            <label> Album photo: <br>
+                                <input type="file" name="photo" required="required" maxlength="6">
+                            </label>
+                            <br>
+                            <br>
+                            <button type="submit" class="btn btn-primary btn-large">Add album</button>
+                            <span style="color:red">${errorMessage}</span>
+                        </form>
                     </div>
                     <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
                         Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim

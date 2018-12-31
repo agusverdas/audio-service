@@ -22,6 +22,7 @@ import java.util.Optional;
 public final class SongDaoImpl implements SongDao {
     private static SongDaoImpl instance = new SongDaoImpl();
 
+    private static final String MAX_SONG_ID = "select MAX(" + DBMetaInfo.SONG_ID + ") from SONG";
     private static final String INSERT_SONG = "insert into SONG(" + DBMetaInfo.SONG_TITLE + ", " + DBMetaInfo.PATH + ", "
             + DBMetaInfo.SONG_COST + ") values(?, ?, ?)";
     private static final String INSERT_SONG_AUTHOR = "insert into SONG_AUTHOR(" + DBMetaInfo.SONG_ID + ", " + DBMetaInfo.AUTHOR_ID
@@ -45,7 +46,7 @@ public final class SongDaoImpl implements SongDao {
     }
 
     @Override
-    public void create(Song song) throws DaoException {
+    public long create(Song song) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
 
         try(ProxyConnection connection = pool.getConnection();
@@ -55,6 +56,7 @@ public final class SongDaoImpl implements SongDao {
             preparedStatement.setDouble(3, song.getCost());
 
             preparedStatement.executeUpdate();
+            return maxId(MAX_SONG_ID);
         } catch (InterruptedException e) {
             throw new DaoException("Exception while getting connection from connection pool.", e);
         } catch (SQLException e) {
@@ -62,6 +64,7 @@ public final class SongDaoImpl implements SongDao {
         }
     }
 
+    @Override
     public void mergeSongAuthor(Song song, Author author) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
 
@@ -204,6 +207,7 @@ public final class SongDaoImpl implements SongDao {
         }
     }
 
+    @Override
     public Optional<Song> findSongByPath(Song entity) throws DaoException {
         Optional<Song> song = Optional.empty();
         ConnectionPool pool = ConnectionPool.getInstance();
