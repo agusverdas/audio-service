@@ -14,12 +14,12 @@ public class LoginCommand implements Command {
     private UserService userService = new UserService();
 
     public String execute(HttpServletRequest request) throws CommandException {
-        RequestContent valuesWrapper = new RequestContent();
-        valuesWrapper.init(request);
+        RequestContent content = new RequestContent();
+        content.init(request);
 
         try{
-            userService.loginUser(valuesWrapper);
-            valuesWrapper.extractValues(request);
+            userService.loginUser(content);
+            content.extractValues(request);
             if (request.getSession().getAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER) != null){
                 return CommandEnum.GET_MAIN.name();
             }

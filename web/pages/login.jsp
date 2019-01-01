@@ -21,7 +21,7 @@
 
 <div class="login">
     <h1><fmt:message key="label.button.login" bundle="${rb}"/></h1>
-    <form method="post" action="Controller">
+    <form method="post" action="${pageContext.request.contextPath}/Controller">
         <input type="hidden" name="command" value="post-login">
         <input type="email" name="e-mail" placeholder=
         <fmt:message key="label.placeholder.email" bundle="${rb}"/> required="required" maxlength="32"/>

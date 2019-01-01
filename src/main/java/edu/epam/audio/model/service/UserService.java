@@ -27,16 +27,15 @@ public class UserService {
 
     private static final String INCORRECT_NAME_REG = "There is user with this name";
 
-    private static final String INCORRECT_PASSWORD_REGEX_MES = "Incorrect password, password should be 8 characters " +
+    private static final String INCORRECT_PASSWORD_REGEX_MES = "Incorrect password, password should be 6-10 characters " +
             "length at least one letter and one number";
     private static final String INCORRECT_NAME_MES = "Incorrect name, name should be at least 6 characters length, " +
-            "all the characters should be letters";
+            "all the characters should be letters. Name is unique.";
 
-    public void loginUser(RequestContent wrapper) throws LogicLayerException {
+    public void loginUser(RequestContent content) throws LogicLayerException {
         UserDao userDao = UserDaoImpl.getInstance();
-
-        String email = wrapper.getRequestParam(PARAM_NAME_EMAIL);
-        String password = wrapper.getRequestParam(PARAM_NAME_PASSWORD);
+        String email = content.getRequestParam(PARAM_NAME_EMAIL);
+        String password = content.getRequestParam(PARAM_NAME_PASSWORD);
 
         String encryptedPassword = DigestUtils.md5Hex(password);
 
@@ -47,10 +46,10 @@ public class UserService {
         try {
             Optional<User> userFromDb = userDao.findUserByEmail(potentialUser);
             if (userFromDb.isPresent() && userFromDb.get().getPassword().equals(encryptedPassword)) {
-                    wrapper.setSessionAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER, userFromDb.get());
-                    wrapper.removeRequestAttribute(ATTRIBUTE_NAME_ERROR);
+                content.setSessionAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER, userFromDb.get());
+                content.removeRequestAttribute(ATTRIBUTE_NAME_ERROR);
             } else {
-                wrapper.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_LOGIN);
+                content.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_LOGIN);
             }
         } catch (DaoException e) {
             throw new LogicLayerException("Exception while logging into app.", e);
@@ -72,11 +71,11 @@ public class UserService {
 
         try {
             Optional<User> userFormDb = userDao.findUserByEmail(user);
-            if (!userFormDb.isPresent()){
-                if(ParamsValidator.validatePassword(password)){
+            if (!userFormDb.isPresent()) {
+                if (ParamsValidator.validatePassword(password)) {
                     if (ParamsValidator.validateName(name)) {
                         userFormDb = userDao.findUserByName(user);
-                        if (!userFormDb.isPresent()){
+                        if (!userFormDb.isPresent()) {
                             String encryptedPassword = DigestUtils.md5Hex(password);
                             user.setPassword(encryptedPassword);
                             userDao.create(user);
@@ -88,7 +87,7 @@ public class UserService {
                     } else {
                         wrapper.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_NAME_MES);
                     }
-                } else{
+                } else {
                     wrapper.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_PASSWORD_REGEX_MES);
                 }
             } else {
@@ -113,11 +112,11 @@ public class UserService {
             updatedUser.setName(name);
 
             Optional<User> userByEmail = userDao.findUserByEmail(updatedUser);
-            if (!userByEmail.isPresent() || userByEmail.get().getUserId() == updatedUser.getUserId()){
+            if (!userByEmail.isPresent() || userByEmail.get().getUserId() == updatedUser.getUserId()) {
                 Optional<User> userByName = userDao.findUserByName(updatedUser);
-                if(!userByName.isPresent() || userByName.get().getUserId() == user.getUserId()){
+                if (!userByName.isPresent() || userByName.get().getUserId() == user.getUserId()) {
                     File fileSaveDir = new File(path);
-                    if(!fileSaveDir.exists()){
+                    if (!fileSaveDir.exists()) {
                         fileSaveDir.mkdirs();
                     }
 
@@ -136,12 +135,10 @@ public class UserService {
                     wrapper.setSessionAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER, updatedUser);
 
                     wrapper.removeRequestAttribute(ATTRIBUTE_NAME_ERROR);
-                }
-                else {
+                } else {
                     wrapper.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_NAME_REG);
                 }
-            }
-            else {
+            } else {
                 wrapper.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_EMAIL_REG);
             }
         } catch (CloneNotSupportedException e) {
@@ -162,7 +159,7 @@ public class UserService {
         UserDao userDao = UserDaoImpl.getInstance();
         try {
             Optional<User> user = userDao.findEntityById(id);
-            if (user.isPresent()){
+            if (user.isPresent()) {
                 User userObj = user.get();
                 userObj.setBonus(bonus);
                 userDao.update(userObj);

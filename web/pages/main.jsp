@@ -17,8 +17,15 @@
     <title><fmt:message key="label.title.main" bundle="${rb}"/></title>
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/datatables.min.css">
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/datatables.min.js"></script>
+    <style>
+        body {
+            overflow:scroll;
+        }
+    </style>
 </head>
 <body>
 <%@include file="header.jsp" %>
@@ -40,7 +47,7 @@
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-songs" role="tabpanel"
                          aria-labelledby="nav-songs-tab">
-                        <table class="table table-sm">
+                        <table id="example" class="table table-sm" style="width:100%">
                             <thead>
                             <tr>
                                 <th style="text-align: center" scope="col"><fmt:message key="label.placeholder.title" bundle="${rb}"/></th>
@@ -116,6 +123,15 @@
     audios.bind('timeupdate', function () {
         if (this.currentTime >= 30) this.pause();
     });
+
+    $(document).ready(function() {
+        $('#example').DataTable({
+            pageLength : 10,
+            lengthChange: false,
+            searching: false,
+            ordering: false
+        });
+    } );
 </script>
 </body>
 </html>

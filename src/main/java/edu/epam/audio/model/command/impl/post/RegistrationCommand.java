@@ -15,12 +15,12 @@ public class RegistrationCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) throws CommandException {
-        RequestContent valuesWrapper = new RequestContent();
-        valuesWrapper.init(request);
+        RequestContent content = new RequestContent();
+        content.init(request);
 
         try {
-            userService.registerUser(valuesWrapper);
-            valuesWrapper.extractValues(request);
+            userService.registerUser(content);
+            content.extractValues(request);
             if (request.getSession().getAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER) != null){
                 return CommandEnum.GET_MAIN.name();
             } else {

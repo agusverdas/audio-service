@@ -20,12 +20,16 @@
 </head>
 <body>
 <div class="login">
-    <h1>Registration</h1>
+    <h1><fmt:message key="label.button.registration" bundle="${rb}"/></h1>
     <form method="post" action="${pageContext.request.contextPath}/Controller">
         <input type="hidden" name="command" value="post-registration">
-        <input type="email" name="e-mail" placeholder="E-mail" required="required" maxlength="32"/>
-        <input type="text" name="nick" placeholder="Nickname" required="required" maxlength="10"/>
-        <input type="password" name="password" placeholder="Password" required="required" minlength="6" maxlength="10"/>
+        <input type="email" name="e-mail" placeholder="<fmt:message key="label.registration.email" bundle="${rb}"/>"
+               required="required" maxlength="32"/>
+        <input type="text" name="nick" placeholder="<fmt:message key="label.registration.name" bundle="${rb}"/>"
+               required="required" minlength="6" maxlength="16"/>
+        <input type="password" name="password"
+               placeholder="<fmt:message key="label.registration.password" bundle="${rb}"/>" required="required"
+               minlength="6" maxlength="10"/>
         <button type="submit" class="btn btn-primary btn-block btn-large">OK</button>
         <span style="color:red">${errorMessage}</span>
     </form>

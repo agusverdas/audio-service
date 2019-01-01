@@ -1,8 +1,8 @@
 package edu.epam.audio.model.util;
 
 public final class ParamsValidator {
-    private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8}$";
-    private static final String NAME_REGEX = "\\w{6,}";
+    private static final String PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,10}$";
+    private static final String NAME_REGEX = "\\w{6,16}";
 
     private ParamsValidator(){}
 
