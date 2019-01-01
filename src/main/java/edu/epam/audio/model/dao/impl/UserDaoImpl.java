@@ -109,6 +109,7 @@ public final class UserDaoImpl implements UserDao {
                 User userObject = new UserBuilder()
                         .addId(resultSet.getLong(DBMetaInfo.USER_ID))
                         .addEmail(resultSet.getString(DBMetaInfo.EMAIL))
+                        .addPassword(resultSet.getString(DBMetaInfo.PASSWORD))
                         .addName(resultSet.getString(DBMetaInfo.USER_NAME))
                         .addPhoto(resultSet.getString(DBMetaInfo.PHOTO))
                         .addRole(Privileges.valueOf(resultSet.getString(DBMetaInfo.ROLE)))

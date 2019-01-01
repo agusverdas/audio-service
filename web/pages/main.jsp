@@ -5,7 +5,7 @@
   Time: 12:18
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" errorPage="error.jsp"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ctg" uri="/WEB-INF/tld/custom.tld" %>
@@ -43,10 +43,10 @@
                         <table class="table table-sm">
                             <thead>
                             <tr>
-                                <th scope="col"><fmt:message key="label.placeholder.songtitle" bundle="${rb}"/></th>
-                                <th scope="col"><fmt:message key="label.placeholder.author" bundle="${rb}"/></th>
-                                <th scope="col"><fmt:message key="label.placeholder.song" bundle="${rb}"/></th>
-                                <th scope="col"><fmt:message key="label.placeholder.cost" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="label.placeholder.title" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="label.placeholder.author" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="label.placeholder.song" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="label.placeholder.buysong" bundle="${rb}"/></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -64,20 +64,45 @@
                                             <source src="${elem.path}" type="audio/mp3">
                                         </audio>
                                     </th>
-                                    <th style="vertical-align : middle;" scope="row">${elem.cost}</th>
+                                    <th style="vertical-align : middle;" scope="row">
+                                        <a class="btn btn-primary btn-block btn-large"
+                                           href="${pageContext.request.contextPath}/Controller?command=get-buy-song&id=${elem.songId}">
+                                            <fmt:message key="label.placeholder.buysong" bundle="${rb}"/> ${elem.cost}$</a>
+                                    </th>
                                 </tr>
                             </c:forEach>
                             </tbody>
                         </table>
                     </div>
                     <div class="tab-pane fade" id="nav-albums" role="tabpanel" aria-labelledby="nav-albums-tab">
-                        Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim
-                        occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur veniam sunt est aute sit
-                        dolor anim. Velit non irure adipisicing aliqua ullamco irure incididunt irure non esse
-                        consectetur nostrud minim non minim occaecat. Amet duis do nisi duis veniam non est eiusmod
-                        tempor incididunt tempor dolor ipsum in qui sit. Exercitation mollit sit culpa nisi culpa non
-                        adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis occaecat
-                        ex.
+                        <table class="table table-sm">
+                            <thead>
+                            <tr>
+                                <th style="text-align: center" scope="col"><fmt:message key="label.placeholder.title" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="label.placeholder.author" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="label.title.photo" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="label.placeholder.buyalbum" bundle="${rb}"/></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="elem" items="${ albums }">
+                                <tr>
+                                    <th style="vertical-align : middle;" scope="row">${elem.albumTitle}</th>
+                                    <th style="vertical-align : middle;" scope="row">
+                                        HERE WILL BE AUTHORS
+                                    </th>
+                                    <th style="vertical-align : middle;">
+                                        <img src="${elem.photo}" class="img-fluid">
+                                    </th>
+                                    <th style="vertical-align : middle;" scope="row">
+                                        <a class="btn btn-primary btn-block btn-large"
+                                           href="${pageContext.request.contextPath}/Controller?command=get-buy-album&id=${elem.albumId}">
+                                            <fmt:message key="label.placeholder.buyalbum" bundle="${rb}"/> ${elem.cost}$</a>
+                                    </th>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

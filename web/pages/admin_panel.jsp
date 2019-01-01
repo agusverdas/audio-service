@@ -5,7 +5,7 @@
   Time: 11:01
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" errorPage="error.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ctg" uri="/WEB-INF/tld/custom.tld" %>
@@ -30,13 +30,20 @@
                 <nav>
                     <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link active" id="nav-add-tab" data-toggle="tab" href="#nav-add"
-                           role="tab" aria-controls="nav-add" aria-selected="true">Add Song</a>
+                           role="tab" aria-controls="nav-add" aria-selected="true">
+                            <fmt:message key="label.button.addsong" bundle="${rb}"/></a>
                         <a class="nav-item nav-link" id="nav-adda-tab" data-toggle="tab" href="#nav-adda"
-                           role="tab" aria-controls="nav-adda" aria-selected="false">Add album</a>
-                        <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact"
-                           role="tab" aria-controls="nav-contact" aria-selected="false">See users</a>
-                        <a class="nav-item nav-link" id="nav-about-tab" data-toggle="tab" href="#nav-about" role="tab"
-                           aria-controls="nav-about" aria-selected="false">About</a>
+                           role="tab" aria-controls="nav-adda" aria-selected="false">
+                            <fmt:message key="label.button.addalbum" bundle="${rb}"/></a>
+                        <a class="nav-item nav-link" id="nav-users-tab" data-toggle="tab" href="#nav-users"
+                           role="tab" aria-controls="nav-users" aria-selected="false">
+                            <fmt:message key="label.button.allusers" bundle="${rb}"/></a>
+                        <a class="nav-item nav-link" id="nav-editsongs-tab" data-toggle="tab" href="#nav-editsongs"
+                           role="tab" aria-controls="nav-editsongs" aria-selected="false">
+                            <fmt:message key="label.title.editsongs" bundle="${rb}"/></a>
+                        <a class="nav-item nav-link" id="nav-editalbums-tab" data-toggle="tab" href="#nav-editalbums"
+                           role="tab" aria-controls="nav-editalbums" aria-selected="false">
+                            <fmt:message key="label.title.editalbums" bundle="${rb}"/></a>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
@@ -45,23 +52,19 @@
                         <form style="text-align: center;" method="post"
                               action="${pageContext.request.contextPath}/Controller" enctype="multipart/form-data">
                             <input type="hidden" name="command" value="post-add-song">
-                            <label> Song title: <br>
-                                <input type="text" name="title" required="required" maxlength="50">
-                            </label>
+                            <input type="text" name="title" placeholder=
+                            <fmt:message key="label.placeholder.title" bundle="${rb}"/> required="required"
+                                   maxlength="50"><br>
+                            <input type="text" name="author" placeholder=
+                            <fmt:message key="label.placeholder.author" bundle="${rb}"/> required="required"
+                                   maxlength="255"><br>
+                            <input type="text" name="cost" placeholder=
+                            <fmt:message key="label.placeholder.cost" bundle="${rb}"/> required="required"
+                                   maxlength="8"><br>
+                            <input type="file" name="song" required="required" accept="audio/mpeg3"><br>
+                            <button type="submit" class="btn btn-primary btn-block btn-large">
+                                <fmt:message key="label.navtab.addsong" bundle="${rb}"/></button>
                             <br>
-                            <label> Author name: <br>
-                                <input type="text" name="author" required="required" maxlength="50">
-                            </label>
-                            <br>
-                            <label> Song cost: <br>
-                                <input type="text" name="cost" required="required" maxlength="6">
-                            </label>
-                            <br>
-                            <label> Song: <br>
-                                <input style="width:200px" type="file" name="song" accept="audio/mpeg3">
-                            </label>
-                            <br>
-                            <button type="submit" class="btn btn-primary btn-large">Add song</button>
                             <span style="color:red">${errorMessage}</span>
                         </form>
                     </div>
@@ -69,43 +72,117 @@
                         <form style="text-align: center;" method="post"
                               action="${pageContext.request.contextPath}/Controller" enctype="multipart/form-data">
                             <input type="hidden" name="command" value="post-add-album">
-                            <label> Album title: <br>
-                                <input type="text" name="title" required="required" maxlength="50">
-                            </label>
+                            <input type="text" name="title" placeholder=
+                            <fmt:message key="label.placeholder.title" bundle="${rb}"/> required="required"
+                                   maxlength="50"><br>
+                            <input type="text" name="author" placeholder=
+                            <fmt:message key="label.placeholder.author" bundle="${rb}"/> required="required"
+                                   maxlength="50"><br>
+                            <input type="file" name="photo" required="required" accept="image/jpeg, image/png"><br>
+                            <button type="submit" class="btn btn-primary btn-block btn-large">
+                                <fmt:message key="label.navtab.addalbum" bundle="${rb}"/></button>
                             <br>
-                            <label> Author name: <br>
-                                <input type="text" name="author" required="required" maxlength="50">
-                            </label>
-                            <br>
-                            <label> Album photo: <br>
-                                <input type="file" name="photo" required="required" maxlength="6">
-                            </label>
-                            <br>
-                            <br>
-                            <button type="submit" class="btn btn-primary btn-large">Add album</button>
                             <span style="color:red">${errorMessage}</span>
                         </form>
                     </div>
-                    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-                        Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim
-                        occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur veniam sunt est aute sit
-                        dolor anim. Velit non irure adipisicing aliqua ullamco irure incididunt irure non esse
-                        consectetur nostrud minim non minim occaecat. Amet duis do nisi duis veniam non est eiusmod
-                        tempor incididunt tempor dolor ipsum in qui sit. Exercitation mollit sit culpa nisi culpa non
-                        adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis occaecat
-                        ex.
+                    <div class="tab-pane fade" id="nav-users" role="tabpanel" aria-labelledby="nav-users-tab">
+                        <table class="table table-sm">
+                            <thead>
+                            <tr>
+                                <th scope="col"><fmt:message key="label.placeholder.email" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="label.placeholder.name" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="label.placeholder.role" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="label.placeholder.money" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="label.placeholder.bonus" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="label.placeholder.editbonus" bundle="${rb}"/></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="elem" items="${ users }">
+                                <tr>
+                                    <th style="vertical-align : middle;" scope="row">${elem.email}</th>
+                                    <th style="vertical-align : middle;" scope="row">${elem.name}</th>
+                                    <th style="vertical-align : middle;" scope="row">${elem.role}</th>
+                                    <th style="vertical-align : middle;" scope="row">${elem.money}</th>
+                                    <th style="vertical-align : middle;" scope="row">${elem.bonus}</th>
+                                    <th style="vertical-align : middle;" scope="row">
+                                        <a class="btn btn-primary btn-block btn-large"
+                                           href="${pageContext.request.contextPath}/Controller?command=get-edit-bonus&entityId=${elem.userId}">
+                                            <fmt:message key="label.placeholder.editbonus" bundle="${rb}"/></a>
+                                    </th>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="tab-pane fade" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
-                        Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim
-                        occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur veniam sunt est aute sit
-                        dolor anim. Velit non irure adipisicing aliqua ullamco irure incididunt irure non esse
-                        consectetur nostrud minim non minim occaecat. Amet duis do nisi duis veniam non est eiusmod
-                        tempor incididunt tempor dolor ipsum in qui sit. Exercitation mollit sit culpa nisi culpa non
-                        adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis occaecat
-                        ex.
+                    <div class="tab-pane fade" id="nav-editsongs" role="tabpanel" aria-labelledby="nav-editsongs-tab">
+                        <table class="table table-sm">
+                            <thead>
+                            <tr>
+                                <th scope="col"><fmt:message key="label.placeholder.title" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="label.placeholder.author" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="label.placeholder.song" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="label.placeholder.cost" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="label.title.editsongs" bundle="${rb}"/></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="elem" items="${ songs }">
+                                <tr>
+                                    <th style="vertical-align : middle;" scope="row">${elem.title}</th>
+                                    <th style="vertical-align : middle;" scope="row">
+                                        <c:forEach var="author" items="${ elem.authorList }">
+                                            <c:out value="${author.name} "/>
+                                        </c:forEach>
+                                    </th>
+                                    <th style="vertical-align : middle;">
+                                        <audio controls controlsList="nodownload">
+                                            <source src="${elem.path}" type="audio/ogg">
+                                            <source src="${elem.path}" type="audio/mp3">
+                                        </audio>
+                                    </th>
+                                    <th style="vertical-align : middle;" scope="row">${elem.cost}</th>
+                                    <th style="vertical-align : middle;" scope="row">
+                                        <a class="btn btn-primary btn-block btn-large"
+                                           href="${pageContext.request.contextPath}/Controller?command=get-edit-song&entityId=${elem.songId}">
+                                            <fmt:message key="label.title.editsongs" bundle="${rb}"/></a>
+                                    </th>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="nav-editalbums" role="tabpanel" aria-labelledby="nav-editalbums-tab">
+                        <table class="table table-sm">
+                            <thead>
+                            <tr>
+                                <th scope="col"><fmt:message key="label.placeholder.title" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="label.placeholder.author" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="label.title.photo" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="label.title.editalbums" bundle="${rb}"/></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="elem" items="${ albums }">
+                                <tr>
+                                    <th style="vertical-align : middle;" scope="row">${elem.albumTitle}</th>
+                                    <th style="vertical-align : middle;" scope="row">
+                                        HERE WILL BE AUTHORS
+                                    </th>
+                                    <th style="vertical-align : middle;">
+                                        <img src="${elem.photo}" class="img-fluid">
+                                    </th>
+                                    <th style="vertical-align : middle;" scope="row">
+                                        <a class="btn btn-primary btn-block btn-large"
+                                           href="${pageContext.request.contextPath}/Controller?command=get-edit-album&entityId=${elem.albumId}">
+                                            <fmt:message key="label.title.editalbums" bundle="${rb}"/></a>
+                                    </th>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

@@ -5,6 +5,7 @@ import edu.epam.audio.model.command.CommandFactory;
 import edu.epam.audio.model.exception.CommandException;
 import edu.epam.audio.model.pool.ConnectionPool;
 import edu.epam.audio.model.util.RequestAttributes;
+import edu.epam.audio.model.util.RequestParams;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,10 +18,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static edu.epam.audio.model.util.RequestAttributes.*;
+import static edu.epam.audio.model.util.RequestParams.*;
+
 //todo: only mp3 files to upload as music, only jpg as photo
 //todo: fmt set locale
 //todo: * for main fields
 //todo: checking in js availability song for user
+//todo: edition of entities by admin. validation
 
 @WebServlet("/Controller")
 @MultipartConfig
@@ -36,8 +41,10 @@ public class Controller extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = commandExecute(req, resp);
 
-        String error = req.getParameter(RequestAttributes.ATTRIBUTE_NAME_ERROR);
-        req.setAttribute(RequestAttributes.ATTRIBUTE_NAME_ERROR, error);
+        String error = req.getParameter(ATTRIBUTE_NAME_ERROR);
+        if (error != null) {
+            req.setAttribute(ATTRIBUTE_NAME_ERROR, error);
+        }
 
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(path);
         dispatcher.forward(req, resp);
@@ -46,9 +53,13 @@ public class Controller extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String getCommand = commandExecute(req, resp);
-        //todo: change path
-        resp.sendRedirect("/Controller?command=" + getCommand + "&" + RequestAttributes.ATTRIBUTE_NAME_ERROR +
-                "=" + req.getAttribute(RequestAttributes.ATTRIBUTE_NAME_ERROR));
+        String pathToRedirect = req.getServletPath() + QUESTION_MARK + PARAM_NAME_COMMAND + EQUALS_SIGN + getCommand;
+        Object error = req.getAttribute(ATTRIBUTE_NAME_ERROR);
+        if (error != null) {
+            pathToRedirect += AMPERSAND + ATTRIBUTE_NAME_ERROR +
+                    EQUALS_SIGN + req.getAttribute(ATTRIBUTE_NAME_ERROR);
+        }
+        resp.sendRedirect(pathToRedirect);
     }
 
     private String commandExecute(HttpServletRequest request, HttpServletResponse response) throws ServletException {

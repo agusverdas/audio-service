@@ -36,8 +36,7 @@ public final class SongDaoImpl implements SongDao {
     private static final String SELECT_ALL_USER_SONGS = "select * from USER natural join USER_SONG natural join SONG where " + DBMetaInfo.USER_ID + "=?";
     private static final String SELECT_SONG_BY_PATH = "select * from SONG where " + DBMetaInfo.PATH + "=?";
     private static final String UPDATE_SONG = "update SONG set " + DBMetaInfo.SONG_TITLE + "=?, "
-            + DBMetaInfo.PATH + "=?, " + DBMetaInfo.ALBUM_ID + "=?, " + DBMetaInfo.SONG_COST + "=? where "
-            + DBMetaInfo.SONG_ID + "=?";
+            + DBMetaInfo.PATH + "=?, " + DBMetaInfo.SONG_COST + "=? where " + DBMetaInfo.SONG_ID + "=?";
 
     private SongDaoImpl(){}
 
@@ -244,9 +243,8 @@ public final class SongDaoImpl implements SongDao {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SONG)){
             preparedStatement.setString(1, entity.getTitle());
             preparedStatement.setString(2, entity.getPath());
-            preparedStatement.setLong(3, entity.getAlbumId());
-            preparedStatement.setDouble(4, entity.getCost());
-            preparedStatement.setDouble(5, entity.getSongId());
+            preparedStatement.setDouble(3, entity.getCost());
+            preparedStatement.setDouble(4, entity.getSongId());
 
             preparedStatement.executeUpdate();
         } catch (InterruptedException e) {

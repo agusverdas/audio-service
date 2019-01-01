@@ -1,4 +1,4 @@
-package edu.epam.audio.model.command.impl;
+package edu.epam.audio.model.command.impl.get;
 
 import edu.epam.audio.model.command.Command;
 import edu.epam.audio.model.exception.CommandException;

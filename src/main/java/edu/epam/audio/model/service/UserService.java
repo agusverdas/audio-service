@@ -23,6 +23,7 @@ import static edu.epam.audio.model.util.UploadPath.*;
 public class UserService {
     private static final String INCORRECT_LOGIN = "Wrong email or password.";
     private static final String INCORRECT_EMAIL_REG = "There is user with such email";
+    private static final String NO_SUCH_USER = "There is no such user";
 
     private static final String INCORRECT_NAME_REG = "There is user with this name";
 
@@ -147,6 +148,27 @@ public class UserService {
             throw new LogicLayerException("Exception in cloning user.", e);
         } catch (IOException e) {
             throw new LogicLayerException("Exception in writing photo.", e);
+        } catch (DaoException e) {
+            throw new LogicLayerException("Exception in getting user from db.", e);
+        }
+    }
+
+    public void updateBonus(RequestContent content) throws LogicLayerException {
+        long id = Long.parseLong(content.getRequestParam(PARAM_NAME_ID));
+        String strBonus = content.getRequestParam(PARAM_NAME_BONUS);
+        //todo: add validation
+        double bonus = Double.parseDouble(strBonus);
+
+        UserDao userDao = UserDaoImpl.getInstance();
+        try {
+            Optional<User> user = userDao.findEntityById(id);
+            if (user.isPresent()){
+                User userObj = user.get();
+                userObj.setBonus(bonus);
+                userDao.update(userObj);
+            } else {
+                content.setRequestAttribute(ATTRIBUTE_NAME_ERROR, NO_SUCH_USER);
+            }
         } catch (DaoException e) {
             throw new LogicLayerException("Exception in getting user from db.", e);
         }

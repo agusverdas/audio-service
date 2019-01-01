@@ -12,17 +12,19 @@ import edu.epam.audio.model.entity.builder.impl.SongBuilder;
 import edu.epam.audio.model.exception.DaoException;
 import edu.epam.audio.model.exception.LogicLayerException;
 import edu.epam.audio.model.util.SessionAttributes;
+import edu.epam.audio.model.util.UploadPath;
 
 import javax.servlet.http.Part;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import static edu.epam.audio.model.util.RequestAttributes.ATTRIBUTE_NAME_ERROR;
 import static edu.epam.audio.model.util.RequestParams.*;
-import static edu.epam.audio.model.util.UploadPath.*;
 
 public class SongService {
+    private static final String INCORRECT_COST = "Cost should be decimal";
+
     public void addSong(RequestContent wrapper) throws LogicLayerException {
         String title = wrapper.getRequestParam(PARAM_NAME_TITLE);
         String author  = wrapper.getRequestParam(PARAM_NAME_AUTHOR);
@@ -54,16 +56,11 @@ public class SongService {
                 fileSaveDir.mkdirs();
             }
 
-            String formedPath;
             Part part = wrapper.getRequestPart(PARAM_NAME_SONG);
 
-            //todo: WHAT SYMBOLS EXCEPT SPACES CAN BE BAD THERE
-            if (part.getSubmittedFileName() != null && !part.getSubmittedFileName().isEmpty()) {
-                formedPath = path + File.separator + part.getSubmittedFileName();
-                part.write(formedPath.replaceAll(SYMBOL_TO_REPLACE, PATH_REPLACEMENT));
-                String pathToLoad = PATH_TO_SAVE + UPLOAD_SONGS_DIR
-                        + PATH_DELIMITER + part.getSubmittedFileName();
-                song.setPath(pathToLoad.replaceAll(SYMBOL_TO_REPLACE, PATH_REPLACEMENT));
+            String loadPath = UploadPath.uploadSong(path, part);
+            if (loadPath != null) {
+                song.setPath(loadPath);
             }
 
             long id = songDao.create(song);
@@ -73,8 +70,6 @@ public class SongService {
             songDao.mergeSongAuthor(song, authorObject);
         } catch (DaoException e) {
             throw new LogicLayerException("Exception in getting objects from db.", e);
-        } catch (IOException e) {
-            throw new LogicLayerException("Exception in writing song.", e);
         }
     }
 
@@ -101,6 +96,34 @@ public class SongService {
             return songDao.findUserSongs(user);
         } catch (DaoException e) {
             throw new LogicLayerException("Exception while loading songs.", e);
+        }
+    }
+
+    public void updateSong(RequestContent content) throws LogicLayerException {
+        SongDao songDao = SongDaoImpl.getInstance();
+        long id = Long.parseLong(content.getRequestParam(PARAM_NAME_ID));
+
+        try {
+            Optional<Song> songOptional = songDao.findEntityById(id);
+            Song song = songOptional.get();
+
+            String costStr = content.getRequestParam(PARAM_NAME_COST);
+            if (costStr != null && !costStr.isEmpty()){
+                double cost = Double.parseDouble(content.getRequestParam(PARAM_NAME_COST));
+                song.setCost(cost);
+            }
+            String path = (String) content.getRequestAttribute(PARAM_NAME_PATH);
+            Part part = content.getRequestPart(PARAM_NAME_SONG);
+
+            String loadPath = UploadPath.uploadSong(path, part);
+            if (loadPath != null) {
+                song.setPath(loadPath);
+            }
+            songDao.update(song);
+        } catch (DaoException e) {
+            throw new LogicLayerException("Exception in getting song from db.", e);
+        } catch (NumberFormatException e){
+            content.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_COST);
         }
     }
 }

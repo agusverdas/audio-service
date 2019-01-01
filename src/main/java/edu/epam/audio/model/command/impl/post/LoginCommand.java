@@ -1,4 +1,4 @@
-package edu.epam.audio.model.command.impl;
+package edu.epam.audio.model.command.impl.post;
 
 import edu.epam.audio.controller.RequestContent;
 import edu.epam.audio.model.command.Command;
