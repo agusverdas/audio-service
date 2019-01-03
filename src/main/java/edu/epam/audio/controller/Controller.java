@@ -4,8 +4,6 @@ import edu.epam.audio.model.command.Command;
 import edu.epam.audio.model.command.CommandFactory;
 import edu.epam.audio.model.exception.CommandException;
 import edu.epam.audio.model.pool.ConnectionPool;
-import edu.epam.audio.model.util.RequestAttributes;
-import edu.epam.audio.model.util.RequestParams;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,12 +19,12 @@ import java.io.IOException;
 import static edu.epam.audio.model.util.RequestAttributes.*;
 import static edu.epam.audio.model.util.RequestParams.*;
 
-//todo: only mp3 files to upload as music, only jpg as photo
-//todo: fmt set locale
-//todo: * for main fields
 //todo: checking in js availability song for user
 //todo: edition of entities by admin. validation
 //todo: . and ,
+//todo: ask Нужно ли пополнение на один счет делать как транзакцию?
+//todo: ask Что делать с загрузкой одного и того же трека дважды?
+//todo: ask Это неправильная пагинация?
 
 @WebServlet("/Controller")
 @MultipartConfig
@@ -63,6 +61,7 @@ public class Controller extends HttpServlet {
         resp.sendRedirect(pathToRedirect);
     }
 
+    //todo: ask Нужно ли в константы?
     private String commandExecute(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         response.setHeader("Cache-Control","no-cache");
         response.setHeader("Cache-Control","no-store");

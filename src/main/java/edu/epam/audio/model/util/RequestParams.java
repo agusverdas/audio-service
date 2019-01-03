@@ -14,6 +14,11 @@ public final class RequestParams {
     public static final String PARAM_NAME_ENTITY_ID = "entityId";
     public static final String PARAM_NAME_ID = "id";
     public static final String PARAM_NAME_BONUS = "bonus";
+    public static final String PARAM_NAME_MONEY = "money";
+    public static final String PARAM_NAME_PAYMENT = "payment";
+
+    public static final String PARAM_VALUE_POCKET = "pocket";
+    public static final String PARAM_VALUE_BONUS = "bonus";
 
     public static final String QUESTION_MARK = "?";
     public static final String AMPERSAND = "&";

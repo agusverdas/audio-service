@@ -20,7 +20,7 @@
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
 </head>
-<body>
+<body style="overflow-y: scroll;">
 <%@include file="header.jsp" %>
 <br>
 <div style="border: 2px solid #000;
@@ -40,15 +40,18 @@ border-radius: 15px;
                 <fmt:message key="label.placeholder.money" bundle="${rb}"/>: ${user.money}<br/>
                 <fmt:message key="label.placeholder.bonus" bundle="${rb}"/>: ${user.bonus}<br/><br/>
                 <a href="${pageContext.request.contextPath}/Controller?command=get-edit"
-                   class="btn btn-primary btn-block btn-large"><fmt:message key="label.title.edit"
+                   class="btn btn-primary btn-block btn-large"><fmt:message key="label.title.edit.profile"
                                                                             bundle="${rb}"/></a><br>
                 <a href="${pageContext.request.contextPath}/Controller?command=get-add-money"
-                   class="btn btn-primary btn-block btn-large"><fmt:message key="label.title.addmoney"
+                   class="btn btn-primary btn-block btn-large"><fmt:message key="label.title.add.money"
                                                                             bundle="${rb}"/></a>
             </p>
         </div>
     </div>
 </div>
-<%@include file="footer.jsp" %>
+<footer class="fixed-bottom page-footer font-small">
+    <div class="footer-copyright text-center py-3">&copy; 2018 Copyright: alexandergusakovsky@gmail.com
+    </div>
+</footer>
 </body>
 </html>

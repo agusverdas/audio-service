@@ -31,7 +31,7 @@ public class EditSongCommand implements Command {
             songService.updateSong(content);
             content.extractValues(request);
 
-            if (content.getRequestAttribute(RequestAttributes.ATTRIBUTE_NAME_ERROR) == null){
+            if (request.getAttribute(RequestAttributes.ATTRIBUTE_NAME_ERROR) == null){
                 return CommandEnum.GET_ADMIN.name();
             } else {
                 return CommandEnum.GET_EDIT_BONUS.name();

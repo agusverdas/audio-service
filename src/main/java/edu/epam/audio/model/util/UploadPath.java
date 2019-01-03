@@ -34,7 +34,19 @@ public final class UploadPath {
         return null;
     }
 
-    public static String uploadPhoto(Part part){
+    public static String uploadPhoto(String path, Part part) throws LogicLayerException {
+        String formedPath;
+        try {
+            if (part.getSubmittedFileName() != null && !part.getSubmittedFileName().isEmpty()) {
+                formedPath = path + File.separator + part.getSubmittedFileName();
+                part.write(formedPath);
+                String pathToLoad = PATH_TO_SAVE + UPLOAD_PHOTOS_DIR
+                        + PATH_DELIMITER + part.getSubmittedFileName();
+                return pathToLoad.replaceAll(SYMBOL_TO_REPLACE, PATH_REPLACEMENT);
+            }
+        } catch (IOException e) {
+            throw new LogicLayerException("Exception in photo uploading.", e);
+        }
         return null;
     }
 }

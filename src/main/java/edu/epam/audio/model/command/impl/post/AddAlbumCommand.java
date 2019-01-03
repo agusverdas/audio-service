@@ -18,18 +18,18 @@ public class AddAlbumCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) throws CommandException {
-        RequestContent wrapper = new RequestContent();
-        wrapper.init(request);
+        RequestContent content = new RequestContent();
+        content.init(request);
 
         String applicationPath = request.getServletContext().getRealPath("");
         String uploadFilePath = applicationPath + UploadPath.UPLOAD_PHOTOS_DIR;
 
-        wrapper.setRequestAttribute(RequestParams.PARAM_NAME_PATH, uploadFilePath);
+        content.setRequestAttribute(RequestParams.PARAM_NAME_PATH, uploadFilePath);
         try {
             //todo: check error
-            wrapper.setRequestPart(RequestParams.PARAM_NAME_PHOTO, request.getPart(RequestParams.PARAM_NAME_PHOTO));
-            albumService.addAlbum(wrapper);
-            wrapper.extractValues(request);
+            content.setRequestPart(RequestParams.PARAM_NAME_PHOTO, request.getPart(RequestParams.PARAM_NAME_PHOTO));
+            albumService.addAlbum(content);
+            content.extractValues(request);
 
             return CommandEnum.GET_MAIN.name();
         } catch (LogicLayerException e) {

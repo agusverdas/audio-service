@@ -21,13 +21,8 @@
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/datatables.min.js"></script>
-    <style>
-        body {
-            overflow:scroll;
-        }
-    </style>
 </head>
-<body>
+<body style="overflow-y: scroll;">
 <%@include file="header.jsp" %>
 <br>
 <section id="tabs">
@@ -71,9 +66,10 @@
                                             <source src="${elem.path}" type="audio/mp3">
                                         </audio>
                                     </th>
+                                    <!--todo: change label -->
                                     <th style="vertical-align : middle;" scope="row">
                                         <a class="btn btn-primary btn-block btn-large"
-                                           href="${pageContext.request.contextPath}/Controller?command=get-buy-song&id=${elem.songId}">
+                                           href="${pageContext.request.contextPath}/Controller?command=get-info-song&entityId=${elem.songId}">
                                             <fmt:message key="label.placeholder.buysong" bundle="${rb}"/> ${elem.cost}$</a>
                                     </th>
                                 </tr>

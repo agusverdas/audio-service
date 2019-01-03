@@ -19,19 +19,19 @@ public class EditProfileCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) throws CommandException {
-        RequestContent wrapper = new RequestContent();
-        wrapper.init(request);
+        RequestContent content = new RequestContent();
+        content.init(request);
 
         String applicationPath = request.getServletContext().getRealPath("");
         String uploadFilePath = applicationPath + UploadPath.UPLOAD_PHOTOS_DIR;
 
-        wrapper.setRequestAttribute(RequestParams.PARAM_NAME_PATH, uploadFilePath);
+        content.setRequestAttribute(RequestParams.PARAM_NAME_PATH, uploadFilePath);
         try {
-            wrapper.setRequestPart(RequestParams.PARAM_NAME_PHOTO, request.getPart(RequestParams.PARAM_NAME_PHOTO));
-            userService.updateProfile(wrapper);
-            wrapper.extractValues(request);
+            content.setRequestPart(RequestParams.PARAM_NAME_PHOTO, request.getPart(RequestParams.PARAM_NAME_PHOTO));
+            userService.updateProfile(content);
+            content.extractValues(request);
 
-            if (wrapper.getSessionAttribute(RequestAttributes.ATTRIBUTE_NAME_ERROR) == null){
+            if (request.getAttribute(RequestAttributes.ATTRIBUTE_NAME_ERROR) == null){
                 return CommandEnum.GET_MAIN.name();
             } else {
                 return CommandEnum.GET_EDIT.name();

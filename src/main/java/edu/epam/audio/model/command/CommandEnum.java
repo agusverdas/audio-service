@@ -12,6 +12,8 @@ public enum CommandEnum {
     POST_EDIT_BONUS(new EditBonusCommand()),
     POST_EDIT_SONG(new EditSongCommand()),
     POST_EDIT_ALBUM(new EditAlbumCommand()),
+    POST_ADD_MONEY(new AddMoneyCommand()),
+    POST_BUY_SONG(new BuySongCommand()),
 
     GET_LOGIN(new LoginPageCommand()),
     GET_REGISTRATION(new RegistrationPageCommand()),
@@ -22,7 +24,10 @@ public enum CommandEnum {
     GET_EDIT(new EditPageCommand()),
     GET_EDIT_BONUS(new EditBonusPageCommand()),
     GET_EDIT_SONG(new EditSongPageCommand()),
-    GET_EDIT_ALBUM(new EditAlbumPageCommand());
+    GET_EDIT_ALBUM(new EditAlbumPageCommand()),
+    GET_ADD_MONEY(new AddMoneyPageCommand()),
+    GET_INFO_SONG(new SongInfoPageCommand()),
+    GET_BUY_SONG(new SongPaymentPageCommand());
 
     private Command command;
 

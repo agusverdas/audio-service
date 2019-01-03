@@ -1,5 +1,6 @@
 package edu.epam.audio.model.dao;
 
+import edu.epam.audio.model.entity.Song;
 import edu.epam.audio.model.entity.User;
 import edu.epam.audio.model.exception.DaoException;
 
@@ -11,4 +12,6 @@ public interface UserDao extends BaseDao<User> {
     Optional<User> findUserByName(User user) throws DaoException;
 
     String findPasswordByEmail(User user) throws DaoException;
+
+    void songPay(User user, Song song) throws DaoException;
 }

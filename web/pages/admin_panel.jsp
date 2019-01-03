@@ -19,8 +19,18 @@
     <link rel="stylesheet" href="../css/styles.css">
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
+    <style>
+        input[type='number'] {
+            -moz-appearance:textfield;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+    </style>
 </head>
-<body>
+<body style="overflow-y: scroll;">
 <%@include file="header.jsp" %>
 <br>
 <section id="tabs">
@@ -40,10 +50,10 @@
                             <fmt:message key="label.button.allusers" bundle="${rb}"/></a>
                         <a class="nav-item nav-link" id="nav-editsongs-tab" data-toggle="tab" href="#nav-editsongs"
                            role="tab" aria-controls="nav-editsongs" aria-selected="false">
-                            <fmt:message key="label.title.editsongs" bundle="${rb}"/></a>
+                            <fmt:message key="label.title.edit.songs" bundle="${rb}"/></a>
                         <a class="nav-item nav-link" id="nav-editalbums-tab" data-toggle="tab" href="#nav-editalbums"
                            role="tab" aria-controls="nav-editalbums" aria-selected="false">
-                            <fmt:message key="label.title.editalbums" bundle="${rb}"/></a>
+                            <fmt:message key="label.title.edit.albums" bundle="${rb}"/></a>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
@@ -58,7 +68,7 @@
                             <input type="text" name="author" placeholder=
                             <fmt:message key="label.placeholder.author" bundle="${rb}"/> required="required"
                                    maxlength="255"><br>
-                            <input type="text" name="cost" placeholder=
+                            <input type="number" min="0" step=".01" name="cost" placeholder=
                             <fmt:message key="label.placeholder.cost" bundle="${rb}"/> required="required"
                                    maxlength="8"><br>
                             <input type="file" name="song" required="required" accept="audio/mpeg3"><br>
@@ -123,7 +133,7 @@
                                 <th scope="col"><fmt:message key="label.placeholder.author" bundle="${rb}"/></th>
                                 <th scope="col"><fmt:message key="label.placeholder.song" bundle="${rb}"/></th>
                                 <th scope="col"><fmt:message key="label.placeholder.cost" bundle="${rb}"/></th>
-                                <th scope="col"><fmt:message key="label.title.editsongs" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="label.title.edit.songs" bundle="${rb}"/></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -145,7 +155,7 @@
                                     <th style="vertical-align : middle;" scope="row">
                                         <a class="btn btn-primary btn-block btn-large"
                                            href="${pageContext.request.contextPath}/Controller?command=get-edit-song&entityId=${elem.songId}">
-                                            <fmt:message key="label.title.editsongs" bundle="${rb}"/></a>
+                                            <fmt:message key="label.title.edit.songs" bundle="${rb}"/></a>
                                     </th>
                                 </tr>
                             </c:forEach>
@@ -159,7 +169,7 @@
                                 <th scope="col"><fmt:message key="label.placeholder.title" bundle="${rb}"/></th>
                                 <th scope="col"><fmt:message key="label.placeholder.author" bundle="${rb}"/></th>
                                 <th scope="col"><fmt:message key="label.title.photo" bundle="${rb}"/></th>
-                                <th scope="col"><fmt:message key="label.title.editalbums" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="label.title.edit.albums" bundle="${rb}"/></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -175,7 +185,7 @@
                                     <th style="vertical-align : middle;" scope="row">
                                         <a class="btn btn-primary btn-block btn-large"
                                            href="${pageContext.request.contextPath}/Controller?command=get-edit-album&entityId=${elem.albumId}">
-                                            <fmt:message key="label.title.editalbums" bundle="${rb}"/></a>
+                                            <fmt:message key="label.title.edit.albums" bundle="${rb}"/></a>
                                     </th>
                                 </tr>
                             </c:forEach>

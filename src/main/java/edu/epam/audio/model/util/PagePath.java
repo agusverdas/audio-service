@@ -10,5 +10,8 @@ public final class PagePath {
     public static final String EDIT_BONUS_PAGE = "/pages/edit_bonus.jsp";
     public static final String EDIT_SONG_PAGE = "/pages/edit_song.jsp";
     public static final String EDIT_ALBUM_PAGE = "/pages/edit_album.jsp";
+    public static final String ADD_MONEY_PAGE = "/pages/add_money.jsp";
+    public static final String INFO_SONG_PAGE = "/pages/info_song.jsp";
+    public static final String PAYMENT_SONG_PAGE = "/pages/payment_song.jsp";
     private PagePath(){}
 }

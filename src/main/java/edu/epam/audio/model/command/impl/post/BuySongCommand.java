@@ -7,10 +7,11 @@ import edu.epam.audio.model.exception.CommandException;
 import edu.epam.audio.model.exception.LogicLayerException;
 import edu.epam.audio.model.service.UserService;
 import edu.epam.audio.model.util.RequestAttributes;
+import edu.epam.audio.model.util.RequestParams;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class EditBonusCommand implements Command {
+public class BuySongCommand implements Command {
     private UserService userService = new UserService();
 
     @Override
@@ -18,17 +19,21 @@ public class EditBonusCommand implements Command {
         RequestContent content = new RequestContent();
         content.init(request);
 
+        Long songId = Long.parseLong(content.getRequestParam(RequestParams.PARAM_NAME_ID));
+
         try {
-            userService.updateBonus(content);
+            userService.buySong(content);
             content.extractValues(request);
 
             if (request.getAttribute(RequestAttributes.ATTRIBUTE_NAME_ERROR) == null){
-                return CommandEnum.GET_ADMIN.name();
+                return CommandEnum.GET_PROFILE.name();
             } else {
-                return CommandEnum.GET_EDIT_BONUS.name();
+                //todo: rewrite
+                return CommandEnum.GET_BUY_SONG.name() + "&entityId=" + songId;
             }
         } catch (LogicLayerException e) {
-            throw new CommandException("Exception in updating user.", e);
+            e.printStackTrace();
+            throw new CommandException("Exception in buying song.", e);
         }
     }
 }

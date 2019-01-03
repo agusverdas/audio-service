@@ -17,7 +17,7 @@
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
 </head>
-<body>
+<body style="overflow-y: scroll;">
 
 <div class="login">
     <h1><fmt:message key="label.button.login" bundle="${rb}"/></h1>

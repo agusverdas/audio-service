@@ -6,5 +6,6 @@ public final class RequestAttributes {
     public static final String ATTRIBUTE_USERS = "users";
     public static final String ATTRIBUTE_ID = "id";
     public static final String ATTRIBUTE_NAME_ERROR = "errorMessage";
+    public static final String ATTRIBUTE_NAME_SONG = "song";
     private RequestAttributes(){}
 }

@@ -22,6 +22,7 @@ import java.util.Optional;
 import static edu.epam.audio.model.util.RequestParams.*;
 import static edu.epam.audio.model.util.UploadPath.*;
 
+//todo: rework
 public class AlbumService {
     public void addAlbum(RequestContent wrapper) throws LogicLayerException {
         String title = wrapper.getRequestParam(PARAM_NAME_TITLE);

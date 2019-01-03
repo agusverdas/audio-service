@@ -1,8 +1,10 @@
 package edu.epam.audio.model.service;
 
 import edu.epam.audio.controller.RequestContent;
+import edu.epam.audio.model.dao.AlbumDao;
 import edu.epam.audio.model.dao.AuthorDao;
 import edu.epam.audio.model.dao.SongDao;
+import edu.epam.audio.model.dao.impl.AlbumDaoImpl;
 import edu.epam.audio.model.dao.impl.AuthorDaoImpl;
 import edu.epam.audio.model.dao.impl.SongDaoImpl;
 import edu.epam.audio.model.entity.Author;
@@ -25,16 +27,15 @@ import static edu.epam.audio.model.util.RequestParams.*;
 public class SongService {
     private static final String INCORRECT_COST = "Cost should be decimal";
 
-    public void addSong(RequestContent wrapper) throws LogicLayerException {
-        String title = wrapper.getRequestParam(PARAM_NAME_TITLE);
-        String author  = wrapper.getRequestParam(PARAM_NAME_AUTHOR);
+    public void addSong(RequestContent content) throws LogicLayerException {
+        String title = content.getRequestParam(PARAM_NAME_TITLE);
+        String author  = content.getRequestParam(PARAM_NAME_AUTHOR);
         Author authorObject = new Author();
         authorObject.setName(author);
 
-        String cost = wrapper.getRequestParam(PARAM_NAME_COST);
-        String path = (String) wrapper.getRequestAttribute(PARAM_NAME_PATH);
+        String cost = content.getRequestParam(PARAM_NAME_COST);
+        String path = (String) content.getRequestAttribute(PARAM_NAME_PATH);
 
-        //todo: validation
         AuthorDao authorDao = AuthorDaoImpl.getInstance();
         SongDao songDao = SongDaoImpl.getInstance();
 
@@ -56,7 +57,7 @@ public class SongService {
                 fileSaveDir.mkdirs();
             }
 
-            Part part = wrapper.getRequestPart(PARAM_NAME_SONG);
+            Part part = content.getRequestPart(PARAM_NAME_SONG);
 
             String loadPath = UploadPath.uploadSong(path, part);
             if (loadPath != null) {
@@ -86,6 +87,22 @@ public class SongService {
             return songs;
         } catch (DaoException e) {
             throw new LogicLayerException("Exception while loading songs.", e);
+        }
+    }
+
+    public Song loadSong(long songId) throws LogicLayerException {
+        SongDao songDao = SongDaoImpl.getInstance();
+        AuthorDao authorDao = AuthorDaoImpl.getInstance();
+
+        try {
+            //todo: change id methods to return objects, not optionals
+            Optional<Song> songOptional = songDao.findEntityById(songId);
+            Song song = songOptional.get();
+            List<Author> authors = authorDao.findAuthorsBySongId(song);
+            song.setAuthorList(authors);
+            return song;
+        } catch (DaoException e) {
+            throw new LogicLayerException("Exception while loading song.", e);
         }
     }
 

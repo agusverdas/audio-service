@@ -10,7 +10,7 @@ import edu.epam.audio.model.util.RequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class EditBonusCommand implements Command {
+public class AddMoneyCommand implements Command {
     private UserService userService = new UserService();
 
     @Override
@@ -19,16 +19,16 @@ public class EditBonusCommand implements Command {
         content.init(request);
 
         try {
-            userService.updateBonus(content);
+            userService.addMoney(content);
             content.extractValues(request);
 
             if (request.getAttribute(RequestAttributes.ATTRIBUTE_NAME_ERROR) == null){
-                return CommandEnum.GET_ADMIN.name();
+                return CommandEnum.GET_PROFILE.name();
             } else {
-                return CommandEnum.GET_EDIT_BONUS.name();
+                return CommandEnum.GET_ADD_MONEY.name();
             }
         } catch (LogicLayerException e) {
-            throw new CommandException("Exception in updating user.", e);
+            throw new CommandException("Exception in creating songs.", e);
         }
     }
 }
