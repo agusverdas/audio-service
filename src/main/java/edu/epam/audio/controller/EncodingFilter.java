@@ -20,7 +20,6 @@ import java.io.IOException;
 public class EncodingFilter implements Filter {
     private String code;
 
-    //todo: ask Можно ли здесь не выносить в константу?
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         code = filterConfig.getInitParameter("encoding");

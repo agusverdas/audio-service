@@ -10,7 +10,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="pagecontent" var="rb"/>
-<html>
+<html lang="${sessionScope.locale.language}">
 <head>
     <meta charset="UTF-8">
     <title><fmt:message key="label.title.edit.bonus" bundle="${rb}"/></title>

@@ -9,16 +9,16 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="pagecontent" var="rb"/>
-<html>
+<html lang="${sessionScope.locale.language}">
 <head>
-    <title><fmt:message key="label.title.login" bundle="${rb}"/></title>
+    <title><fmt:message key="title.song.payment" bundle="${rb}"/></title>
     <link href="../css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link href="../css/styles.css" rel="stylesheet">
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
 </head>
 <body style="overflow-y: scroll;">
-
+<%@include file="header.jsp" %>
 <div class="login">
     <h1>Song cost ${song.cost}$</h1>
     <form method="post" action="${pageContext.request.contextPath}/Controller">
@@ -33,6 +33,6 @@
     </form>
     <br>
 </div>
-
+<%@include file="footer.jsp" %>
 </body>
 </html>

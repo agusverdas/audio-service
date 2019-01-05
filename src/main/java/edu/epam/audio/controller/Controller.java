@@ -1,11 +1,9 @@
 package edu.epam.audio.controller;
 
-import edu.epam.audio.model.command.Command;
-import edu.epam.audio.model.command.CommandFactory;
-import edu.epam.audio.model.exception.CommandException;
-import edu.epam.audio.model.pool.ConnectionPool;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import edu.epam.audio.command.Command;
+import edu.epam.audio.command.CommandFactory;
+import edu.epam.audio.exception.CommandException;
+import edu.epam.audio.pool.ConnectionPool;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,21 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static edu.epam.audio.model.util.RequestAttributes.*;
-import static edu.epam.audio.model.util.RequestParams.*;
-
-//todo: checking in js availability song for user
-//todo: edition of entities by admin. validation
-//todo: . and ,
-//todo: ask Нужно ли пополнение на один счет делать как транзакцию?
-//todo: ask Что делать с загрузкой одного и того же трека дважды?
-//todo: ask Это неправильная пагинация?
+import static edu.epam.audio.util.RequestAttributes.*;
+import static edu.epam.audio.util.RequestParams.*;
 
 @WebServlet("/Controller")
 @MultipartConfig
 public class Controller extends HttpServlet {
-    private static Logger logger = LogManager.getLogger();
-
     @Override
     public void init() throws ServletException {
         ConnectionPool.getInstance();
@@ -61,8 +50,7 @@ public class Controller extends HttpServlet {
         resp.sendRedirect(pathToRedirect);
     }
 
-    //todo: ask Нужно ли в константы?
-    private String commandExecute(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+    private String commandExecute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setHeader("Cache-Control","no-cache");
         response.setHeader("Cache-Control","no-store");
         response.setDateHeader("Expires", 0);
@@ -71,9 +59,23 @@ public class Controller extends HttpServlet {
         Command command;
         try {
             command = commandFactory.defineCommand(request);
-            return command.execute(request);
+            RequestContent content = new RequestContent();
+            content.init(request);
+            String page = command.execute(content);
+            content.extractValues(request);
+            if (content.isLogout()){
+                request.getSession().invalidate();
+            }
+            return page;
         } catch (CommandException e) {
             throw new ServletException(e.getMessage(), e);
+            //response.sendError(1, e.getMessage());
         }
+    }
+
+    @Override
+    public void destroy() {
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        connectionPool.destroy();
     }
 }

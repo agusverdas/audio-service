@@ -9,7 +9,7 @@
     <uri>customtags</uri>
     <tag>
         <name>admin-button</name>
-        <tag-class>edu.epam.audio.model.custom.AdminButtonTag</tag-class>
+        <tag-class>edu.epam.audio.custom.AdminButtonTag</tag-class>
         <body-content>empty</body-content>
     </tag>
 </taglib>

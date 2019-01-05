@@ -1,6 +1,7 @@
 package edu.epam.audio.controller;
 
-import edu.epam.audio.model.util.SessionAttributes;
+import edu.epam.audio.util.PagePath;
+import edu.epam.audio.util.SessionAttributes;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -15,19 +16,13 @@ import java.io.IOException;
         DispatcherType.INCLUDE
         },
         urlPatterns = {"/pages/*"},
-        initParams = { @WebInitParam(name = "INDEX_PATH", value = "index.jsp"),
-                        @WebInitParam(name = "LOGIN_PATH", value = "/pages/login.jsp"),
-                        @WebInitParam(name = "REGISTRATION_PATH", value = "/pages/registration.jsp")})
+        initParams = { @WebInitParam(name = "INDEX_PATH", value = "index.jsp")})
 public class PageRedirectSecurityFilter implements Filter {
     private String indexPath;
-    private String loginPath;
-    private String regPath;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         indexPath = filterConfig.getInitParameter("INDEX_PATH");
-        loginPath = filterConfig.getInitParameter("LOGIN_PATH");
-        regPath = filterConfig.getInitParameter("REGISTRATION_PATH");
     }
 
     @Override
@@ -35,8 +30,8 @@ public class PageRedirectSecurityFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
 
-        if(!httpRequest.getRequestURI().equalsIgnoreCase(loginPath) &&
-                !httpRequest.getRequestURI().equalsIgnoreCase(regPath) &&
+        if(!httpRequest.getRequestURI().equalsIgnoreCase(PagePath.LOGIN_PAGE) &&
+                !httpRequest.getRequestURI().equalsIgnoreCase(PagePath.REGISTRATION_PAGE) &&
                 httpRequest.getSession().getAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER) == null) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + indexPath);
         }
@@ -46,6 +41,5 @@ public class PageRedirectSecurityFilter implements Filter {
     @Override
     public void destroy() {
         indexPath = null;
-        loginPath = null;
     }
 }

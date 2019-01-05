@@ -1,8 +1,10 @@
 package edu.epam.audio.controller;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import java.io.IOException;
 import java.util.*;
 
 public class RequestContent {
@@ -10,8 +12,11 @@ public class RequestContent {
     private HashMap<String, Object> requestAttributesMap = new HashMap<>();
     private HashMap<String, Object> sessionAttributesMap = new HashMap<>();
     private HashMap<String, Part> requestPartMap = new HashMap<>();
+    private boolean logout = false;
+    private String requestPath;
 
-    public void init(HttpServletRequest request){
+    public void init(HttpServletRequest request) throws IOException, ServletException {
+        requestPath = request.getServletContext().getRealPath("");
         requestParamsMap = new HashMap<>(request.getParameterMap());
 
         Enumeration e = request.getAttributeNames();
@@ -30,6 +35,13 @@ public class RequestContent {
             Object value = session.getAttribute(key);
 
             sessionAttributesMap.put(key, value);
+        }
+        if (request.getContentType() != null && request.getContentType().toLowerCase().contains("multipart/form-data")) {
+            Collection<Part> parts = request.getParts();
+            parts.forEach(p -> {
+                String name = p.getName();
+                requestPartMap.put(name, p);
+            });
         }
     }
 
@@ -65,9 +77,21 @@ public class RequestContent {
 
     public Part getRequestPart(String key) { return requestPartMap.get(key); }
 
-    public void removeSessionAttribute(String key) {
-        sessionAttributesMap.put(key, null);
+    public void removeRequestAttribute(String key) { requestAttributesMap.remove(key); }
+
+    public boolean isLogout() {
+        return logout;
     }
 
-    public void removeRequestAttribute(String key) { requestAttributesMap.remove(key); }
+    public void setLogout(boolean logout) {
+        this.logout = logout;
+    }
+
+    public String getRequestPath() {
+        return requestPath;
+    }
+
+    public void setRequestPath(String requestPath) {
+        this.requestPath = requestPath;
+    }
 }

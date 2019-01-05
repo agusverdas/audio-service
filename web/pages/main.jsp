@@ -11,10 +11,10 @@
 <%@ taglib prefix="ctg" uri="/WEB-INF/tld/custom.tld" %>
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="pagecontent" var="rb"/>
-<html>
+<html lang="${sessionScope.locale.language}">
 <head>
     <meta charset="UTF-8">
-    <title><fmt:message key="label.title.main" bundle="${rb}"/></title>
+    <title><fmt:message key="title.main" bundle="${rb}"/></title>
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/datatables.min.css">
@@ -33,10 +33,10 @@
                     <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link active" id="nav-songs-tab" data-toggle="tab" href="#nav-songs"
                            role="tab" aria-controls="nav-songs" aria-selected="true">
-                            <fmt:message key="label.navtab.songs" bundle="${rb}"/></a>
+                            <fmt:message key="tab.songs" bundle="${rb}"/></a>
                         <a class="nav-item nav-link" id="nav-albums-tab" data-toggle="tab" href="#nav-albums"
                            role="tab" aria-controls="nav-albums" aria-selected="false">
-                            <fmt:message key="label.navtab.albums" bundle="${rb}"/></a>
+                            <fmt:message key="tab.albums" bundle="${rb}"/></a>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
@@ -45,10 +45,10 @@
                         <table id="example" class="table table-sm" style="width:100%">
                             <thead>
                             <tr>
-                                <th style="text-align: center" scope="col"><fmt:message key="label.placeholder.title" bundle="${rb}"/></th>
-                                <th style="text-align: center" scope="col"><fmt:message key="label.placeholder.author" bundle="${rb}"/></th>
-                                <th style="text-align: center" scope="col"><fmt:message key="label.placeholder.song" bundle="${rb}"/></th>
-                                <th style="text-align: center" scope="col"><fmt:message key="label.placeholder.buysong" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="thread.title" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="thread.authors" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="thread.song" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="thread.info" bundle="${rb}"/></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -66,11 +66,10 @@
                                             <source src="${elem.path}" type="audio/mp3">
                                         </audio>
                                     </th>
-                                    <!--todo: change label -->
                                     <th style="vertical-align : middle;" scope="row">
                                         <a class="btn btn-primary btn-block btn-large"
                                            href="${pageContext.request.contextPath}/Controller?command=get-info-song&entityId=${elem.songId}">
-                                            <fmt:message key="label.placeholder.buysong" bundle="${rb}"/> ${elem.cost}$</a>
+                                            <fmt:message key="button.info" bundle="${rb}"/></a>
                                     </th>
                                 </tr>
                             </c:forEach>
@@ -81,10 +80,10 @@
                         <table class="table table-sm">
                             <thead>
                             <tr>
-                                <th style="text-align: center" scope="col"><fmt:message key="label.placeholder.title" bundle="${rb}"/></th>
-                                <th style="text-align: center" scope="col"><fmt:message key="label.placeholder.author" bundle="${rb}"/></th>
-                                <th style="text-align: center" scope="col"><fmt:message key="label.title.photo" bundle="${rb}"/></th>
-                                <th style="text-align: center" scope="col"><fmt:message key="label.placeholder.buyalbum" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="thread.title" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="thread.authors" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="thread.authors" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="thread.info" bundle="${rb}"/></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -100,7 +99,7 @@
                                     <th style="vertical-align : middle;" scope="row">
                                         <a class="btn btn-primary btn-block btn-large"
                                            href="${pageContext.request.contextPath}/Controller?command=get-buy-album&id=${elem.albumId}">
-                                            <fmt:message key="label.placeholder.buyalbum" bundle="${rb}"/> ${elem.cost}$</a>
+                                            <fmt:message key="button.info" bundle="${rb}"/></a>
                                     </th>
                                 </tr>
                             </c:forEach>
@@ -114,20 +113,6 @@
 </section>
 <br>
 <%@include file="footer.jsp" %>
-<script>
-    var audios = $('audio');
-    audios.bind('timeupdate', function () {
-        if (this.currentTime >= 30) this.pause();
-    });
-
-    $(document).ready(function() {
-        $('#example').DataTable({
-            pageLength : 10,
-            lengthChange: false,
-            searching: false,
-            ordering: false
-        });
-    } );
-</script>
+<script src="../js/script.js"></script>
 </body>
 </html>

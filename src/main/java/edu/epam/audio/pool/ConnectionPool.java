@@ -1,0 +1,114 @@
+package edu.epam.audio.pool;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.Properties;
+import java.util.Set;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public final class ConnectionPool {
+    private static Logger logger = LogManager.getLogger();
+
+    private static ConnectionPool instance;
+    private BlockingQueue<ProxyConnection> connectionQueue;
+    //todo: read
+    private Set<ProxyConnection> usedConnections;
+
+    private static AtomicBoolean initialized = new AtomicBoolean(false);
+    private static Lock lock = new ReentrantLock();
+
+    public static ConnectionPool getInstance(){
+        if (!initialized.get()){
+            try {
+                lock.lock();
+                if (instance == null) {
+                    instance = new ConnectionPool();
+                    initialized.set(true);
+                }
+            } catch (SQLException e) {
+                logger.fatal("Error while creating connection pool.", e);
+                throw new RuntimeException("Error while creating connection pool.", e);
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        return instance;
+    }
+
+    private ConnectionPool() throws SQLException {
+        DbConfigReader config = DbConfigReader.getInstance();
+        DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+        int poolSize = config.getPoolSize();
+        connectionQueue = new LinkedBlockingQueue<>(poolSize);
+        usedConnections = new ConcurrentSkipListSet<>();
+        init(poolSize);
+    }
+
+    private void init(int size) throws SQLException {
+        DbConfigReader config = DbConfigReader.getInstance();
+        String url = config.getUrl();
+        Properties properties = config.createProperties();
+        for (int i = 0; i < size; i++) {
+            ProxyConnection connection = createConnection(url, properties);
+            connectionQueue.offer(connection);
+        }
+    }
+
+    public ProxyConnection getConnection() {
+        ProxyConnection connection;
+        try {
+            connection = connectionQueue.take();
+            usedConnections.add(connection);
+            return connection;
+        } catch (InterruptedException e) {
+            logger.error("Error while taking connection from pool.", e);
+            throw new RuntimeException("Error while taking connection from pool.", e);
+        }
+    }
+
+    void releaseConnection(ProxyConnection connection){
+        usedConnections.remove(connection);
+        try {
+            connectionQueue.put(connection);
+        } catch (InterruptedException e) {
+            logger.error("Error while placing connection back.", e);
+            throw new RuntimeException("Error while placing connection back.", e);
+        }
+    }
+    
+    private ProxyConnection createConnection(String url, Properties properties) throws SQLException {
+        Connection connection = DriverManager.getConnection(url, properties);
+        return new ProxyConnection(connection);
+    }
+
+    public void destroy() {
+        connectionQueue.forEach(ProxyConnection::destroy);
+        usedConnections.forEach(ProxyConnection::destroy);
+        deregisterDriver();
+    }
+
+    private void deregisterDriver(){
+        Enumeration<Driver> enumDrivers = DriverManager.getDrivers();
+        while (enumDrivers.hasMoreElements()) {
+            Driver driver = enumDrivers.nextElement();
+            try {
+                DriverManager.deregisterDriver(driver);
+            } catch (SQLException e) {
+                logger.error("Error while deregistring drivers.", e);
+                throw new RuntimeException("Error while deregistring drivers.", e);
+            }
+        }
+    }
+}

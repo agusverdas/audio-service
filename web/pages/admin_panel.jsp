@@ -11,17 +11,17 @@
 <%@ taglib prefix="ctg" uri="/WEB-INF/tld/custom.tld" %>
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="pagecontent" var="rb"/>
-<html>
+<html lang="${sessionScope.locale.language}">
 <head>
     <meta charset="UTF-8">
-    <title><fmt:message key="label.title.admin" bundle="${rb}"/></title>
+    <title><fmt:message key="title.admin" bundle="${rb}"/></title>
     <link rel="stylesheet" href="../css/bootstrap.min.css" id="bootstrap-css">
     <link rel="stylesheet" href="../css/styles.css">
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <style>
         input[type='number'] {
-            -moz-appearance:textfield;
+            -moz-appearance: textfield;
         }
 
         input::-webkit-outer-spin-button,
@@ -41,19 +41,19 @@
                     <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link active" id="nav-add-tab" data-toggle="tab" href="#nav-add"
                            role="tab" aria-controls="nav-add" aria-selected="true">
-                            <fmt:message key="label.button.addsong" bundle="${rb}"/></a>
+                            <fmt:message key="tab.add.song" bundle="${rb}"/></a>
                         <a class="nav-item nav-link" id="nav-adda-tab" data-toggle="tab" href="#nav-adda"
                            role="tab" aria-controls="nav-adda" aria-selected="false">
-                            <fmt:message key="label.button.addalbum" bundle="${rb}"/></a>
+                            <fmt:message key="tab.add.album" bundle="${rb}"/></a>
                         <a class="nav-item nav-link" id="nav-users-tab" data-toggle="tab" href="#nav-users"
                            role="tab" aria-controls="nav-users" aria-selected="false">
-                            <fmt:message key="label.button.allusers" bundle="${rb}"/></a>
+                            <fmt:message key="tab.all.users" bundle="${rb}"/></a>
                         <a class="nav-item nav-link" id="nav-editsongs-tab" data-toggle="tab" href="#nav-editsongs"
                            role="tab" aria-controls="nav-editsongs" aria-selected="false">
-                            <fmt:message key="label.title.edit.songs" bundle="${rb}"/></a>
+                            <fmt:message key="tab.edit.song" bundle="${rb}"/></a>
                         <a class="nav-item nav-link" id="nav-editalbums-tab" data-toggle="tab" href="#nav-editalbums"
                            role="tab" aria-controls="nav-editalbums" aria-selected="false">
-                            <fmt:message key="label.title.edit.albums" bundle="${rb}"/></a>
+                            <fmt:message key="tab.edit.album" bundle="${rb}"/></a>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
@@ -63,17 +63,17 @@
                               action="${pageContext.request.contextPath}/Controller" enctype="multipart/form-data">
                             <input type="hidden" name="command" value="post-add-song">
                             <input type="text" name="title" placeholder=
-                            <fmt:message key="label.placeholder.title" bundle="${rb}"/> required="required"
+                            <fmt:message key="placeholder.title" bundle="${rb}"/> required="required"
                                    maxlength="50"><br>
                             <input type="text" name="author" placeholder=
-                            <fmt:message key="label.placeholder.author" bundle="${rb}"/> required="required"
+                            <fmt:message key="placeholder.authors" bundle="${rb}"/> required="required"
                                    maxlength="255"><br>
                             <input type="number" min="0" step=".01" name="cost" placeholder=
-                            <fmt:message key="label.placeholder.cost" bundle="${rb}"/> required="required"
+                            <fmt:message key="placeholder.cost" bundle="${rb}"/> required="required"
                                    maxlength="8"><br>
                             <input type="file" name="song" required="required" accept="audio/mpeg3"><br>
                             <button type="submit" class="btn btn-primary btn-block btn-large">
-                                <fmt:message key="label.navtab.addsong" bundle="${rb}"/></button>
+                                <fmt:message key="button.add.song" bundle="${rb}"/></button>
                             <br>
                             <span style="color:red">${errorMessage}</span>
                         </form>
@@ -83,14 +83,14 @@
                               action="${pageContext.request.contextPath}/Controller" enctype="multipart/form-data">
                             <input type="hidden" name="command" value="post-add-album">
                             <input type="text" name="title" placeholder=
-                            <fmt:message key="label.placeholder.title" bundle="${rb}"/> required="required"
+                            <fmt:message key="placeholder.title" bundle="${rb}"/> required="required"
                                    maxlength="50"><br>
                             <input type="text" name="author" placeholder=
-                            <fmt:message key="label.placeholder.author" bundle="${rb}"/> required="required"
+                            <fmt:message key="placeholder.authors" bundle="${rb}"/> required="required"
                                    maxlength="50"><br>
                             <input type="file" name="photo" required="required" accept="image/jpeg, image/png"><br>
                             <button type="submit" class="btn btn-primary btn-block btn-large">
-                                <fmt:message key="label.navtab.addalbum" bundle="${rb}"/></button>
+                                <fmt:message key="button.add.album" bundle="${rb}"/></button>
                             <br>
                             <span style="color:red">${errorMessage}</span>
                         </form>
@@ -99,12 +99,12 @@
                         <table class="table table-sm">
                             <thead>
                             <tr>
-                                <th scope="col"><fmt:message key="label.placeholder.email" bundle="${rb}"/></th>
-                                <th scope="col"><fmt:message key="label.placeholder.name" bundle="${rb}"/></th>
-                                <th scope="col"><fmt:message key="label.placeholder.role" bundle="${rb}"/></th>
-                                <th scope="col"><fmt:message key="label.placeholder.money" bundle="${rb}"/></th>
-                                <th scope="col"><fmt:message key="label.placeholder.bonus" bundle="${rb}"/></th>
-                                <th scope="col"><fmt:message key="label.placeholder.editbonus" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="thread.email" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="thread.name" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="thread.role" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="thread.money" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="thread.bonus" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="thread.edit.bonus" bundle="${rb}"/></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -118,7 +118,7 @@
                                     <th style="vertical-align : middle;" scope="row">
                                         <a class="btn btn-primary btn-block btn-large"
                                            href="${pageContext.request.contextPath}/Controller?command=get-edit-bonus&entityId=${elem.userId}">
-                                            <fmt:message key="label.placeholder.editbonus" bundle="${rb}"/></a>
+                                            <fmt:message key="button.edit.bonus" bundle="${rb}"/></a>
                                     </th>
                                 </tr>
                             </c:forEach>
@@ -129,11 +129,11 @@
                         <table class="table table-sm">
                             <thead>
                             <tr>
-                                <th scope="col"><fmt:message key="label.placeholder.title" bundle="${rb}"/></th>
-                                <th scope="col"><fmt:message key="label.placeholder.author" bundle="${rb}"/></th>
-                                <th scope="col"><fmt:message key="label.placeholder.song" bundle="${rb}"/></th>
-                                <th scope="col"><fmt:message key="label.placeholder.cost" bundle="${rb}"/></th>
-                                <th scope="col"><fmt:message key="label.title.edit.songs" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="thread.title" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="thread.authors" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="thread.song" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="thread.song" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="thread.edit.song" bundle="${rb}"/></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -155,7 +155,7 @@
                                     <th style="vertical-align : middle;" scope="row">
                                         <a class="btn btn-primary btn-block btn-large"
                                            href="${pageContext.request.contextPath}/Controller?command=get-edit-song&entityId=${elem.songId}">
-                                            <fmt:message key="label.title.edit.songs" bundle="${rb}"/></a>
+                                            <fmt:message key="button.edit.song" bundle="${rb}"/></a>
                                     </th>
                                 </tr>
                             </c:forEach>
@@ -166,10 +166,10 @@
                         <table class="table table-sm">
                             <thead>
                             <tr>
-                                <th scope="col"><fmt:message key="label.placeholder.title" bundle="${rb}"/></th>
-                                <th scope="col"><fmt:message key="label.placeholder.author" bundle="${rb}"/></th>
-                                <th scope="col"><fmt:message key="label.title.photo" bundle="${rb}"/></th>
-                                <th scope="col"><fmt:message key="label.title.edit.albums" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="thread.title" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="thread.authors" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="thread.photo" bundle="${rb}"/></th>
+                                <th scope="col"><fmt:message key="thread.edit.album" bundle="${rb}"/></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -185,7 +185,7 @@
                                     <th style="vertical-align : middle;" scope="row">
                                         <a class="btn btn-primary btn-block btn-large"
                                            href="${pageContext.request.contextPath}/Controller?command=get-edit-album&entityId=${elem.albumId}">
-                                            <fmt:message key="label.title.edit.albums" bundle="${rb}"/></a>
+                                            <fmt:message key="button.edit.album" bundle="${rb}"/></a>
                                     </th>
                                 </tr>
                             </c:forEach>

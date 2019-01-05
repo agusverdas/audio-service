@@ -11,10 +11,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="pagecontent" var="rb"/>
-<html>
+<html lang="${sessionScope.locale.language}">
 <head>
     <meta charset="UTF-8">
-    <title><fmt:message key="label.title.buy.song" bundle="${rb}"/></title>
+    <title><fmt:message key="title.info.song" bundle="${rb}"/></title>
     <link href="../css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link href="../css/styles.css" rel="stylesheet">
     <script src="../js/jquery-3.3.1.min.js"></script>
@@ -52,7 +52,7 @@
                     <br>
                     <a href="${pageContext.request.contextPath}/Controller?command=get-buy-song&entityId=${song.songId}"
                        class="btn btn-primary">
-                        <fmt:message key="label.placeholder.buysong" bundle="${rb}"/> ${song.cost}$
+                        <fmt:message key="button.buy.song" bundle="${rb}"/> ${song.cost}$
                     </a>
                 </div>
             </div>
@@ -81,11 +81,6 @@
     </div>
 </div>
 <%@include file="footer.jsp" %>
-<script>
-    var audios = $('audio');
-    audios.bind('timeupdate', function () {
-        if (this.currentTime >= 30) this.pause();
-    });
-</script>
+<script src="../js/script.js"></script>
 </body>
 </html>

@@ -7,14 +7,13 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!--todo: ask Делать проверку из сессии это хорошая идея?-->
 <html>
   <head>
     <title>Start page</title>
   </head>
   <body>
     <c:if test="${sessionScope.user != null}">
-      <jsp:forward page="pages/main.jsp"/>
+      <jsp:forward page="/Controller?command=get-main"/>
     </c:if>
     <jsp:forward page="pages/login.jsp"/>
   </body>

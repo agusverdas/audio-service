@@ -13,11 +13,11 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
             <a class="nav-item nav-link" href="${pageContext.request.contextPath}/Controller?command=get-main">
-                <fmt:message key="label.navbar.home" bundle="${rb}"/></a>
+                <fmt:message key="navbar.main" bundle="${rb}"/></a>
             <a class="nav-item nav-link" href="${pageContext.request.contextPath}/Controller?command=get-profile">
-                <fmt:message key="label.navbar.profile" bundle="${rb}"/></a>
+                <fmt:message key="navbar.profile" bundle="${rb}"/></a>
             <a class="nav-item nav-link" href="${pageContext.request.contextPath}/Controller?command=get-logout">
-                <fmt:message key="label.navbar.logout" bundle="${rb}"/></a>
+                <fmt:message key="navbar.logout" bundle="${rb}"/></a>
             <ctg:admin-button/>
         </div>
     </div>
