@@ -64,7 +64,7 @@
                             <input type="hidden" name="command" value="post-add-song">
                             <input type="text" name="title" placeholder=
                             <fmt:message key="placeholder.title" bundle="${rb}"/> required="required"
-                                   maxlength="50"><br>
+                                   maxlength="32"><br>
                             <input type="text" name="author" placeholder=
                             <fmt:message key="placeholder.authors" bundle="${rb}"/> required="required"
                                    maxlength="255"><br>
@@ -84,10 +84,10 @@
                             <input type="hidden" name="command" value="post-add-album">
                             <input type="text" name="title" placeholder=
                             <fmt:message key="placeholder.title" bundle="${rb}"/> required="required"
-                                   maxlength="50"><br>
+                                   maxlength="32"><br>
                             <input type="text" name="author" placeholder=
                             <fmt:message key="placeholder.authors" bundle="${rb}"/> required="required"
-                                   maxlength="50"><br>
+                                   maxlength="255"><br>
                             <input type="file" name="photo" required="required" accept="image/jpeg, image/png"><br>
                             <button type="submit" class="btn btn-primary btn-block btn-large">
                                 <fmt:message key="button.add.album" bundle="${rb}"/></button>

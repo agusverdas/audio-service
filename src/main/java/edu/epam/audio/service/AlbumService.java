@@ -3,45 +3,40 @@ package edu.epam.audio.service;
 import edu.epam.audio.controller.RequestContent;
 import edu.epam.audio.dao.AlbumDao;
 import edu.epam.audio.dao.AuthorDao;
+import edu.epam.audio.dao.SongDao;
 import edu.epam.audio.dao.impl.AlbumDaoImpl;
 import edu.epam.audio.dao.impl.AuthorDaoImpl;
+import edu.epam.audio.dao.impl.SongDaoImpl;
 import edu.epam.audio.entity.Album;
 import edu.epam.audio.entity.Author;
+import edu.epam.audio.entity.Song;
 import edu.epam.audio.entity.User;
 import edu.epam.audio.entity.builder.impl.AlbumBuilder;
 import edu.epam.audio.exception.DaoException;
-import edu.epam.audio.exception.LogicLayerException;
-import edu.epam.audio.util.SessionAttributes;
+import edu.epam.audio.exception.ServiceException;
+import edu.epam.audio.util.RequestParams;
+import edu.epam.audio.util.UploadPath;
 
 import javax.servlet.http.Part;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import static edu.epam.audio.util.RequestParams.*;
-import static edu.epam.audio.util.UploadPath.*;
-
-//todo: rework
 public class AlbumService {
-    public void addAlbum(RequestContent wrapper) throws LogicLayerException {
-        String title = wrapper.getRequestParam(PARAM_NAME_TITLE);
-        String author  = wrapper.getRequestParam(PARAM_NAME_AUTHOR);
-        Author authorObject = new Author();
-        authorObject.setName(author);
-
-        String path = (String) wrapper.getRequestAttribute(PARAM_NAME_PATH);
-
-        //todo: validation
+    public void addAlbum(String title, String authorName, String path, Part part) throws ServiceException {
         AuthorDao authorDao = AuthorDaoImpl.getInstance();
         AlbumDao albumDao = AlbumDaoImpl.getInstance();
 
+        Author author = new Author();
+        author.setName(authorName);
         try {
-            Optional<Author> authorOptional = authorDao.findAuthorByName(authorObject);
+            Optional<Author> authorOptional = authorDao.findAuthorByName(author);
             if (!authorOptional.isPresent()){
-                authorDao.create(authorObject);
-                authorOptional = authorDao.findAuthorByName(authorObject);
+                authorDao.create(author);
+                authorOptional = authorDao.findAuthorByName(author);
             }
+            author = authorOptional.get();
 
             Album album = new AlbumBuilder()
                     .addTitle(title)
@@ -52,50 +47,114 @@ public class AlbumService {
                 fileSaveDir.mkdirs();
             }
 
-            String formedPath;
-            Part part = wrapper.getRequestPart(PARAM_NAME_PHOTO);
-
-            if (part.getSubmittedFileName() != null && !part.getSubmittedFileName().isEmpty()) {
-                formedPath = path + File.separator + part.getSubmittedFileName();
-                part.write(formedPath);
-                String pathToLoad = PATH_TO_SAVE + UPLOAD_PHOTOS_DIR
-                        + PATH_DELIMITER + part.getSubmittedFileName();
-                album.setPhoto(pathToLoad);
+            String uploadPath = UploadPath.uploadPhoto(path, part);
+            if (uploadPath != null){
+                album.setPhoto(uploadPath);
             }
 
-            authorObject = authorOptional.get();
-
-            album.setAuthorId(authorObject.getAuthorId());
-            long id = albumDao.create(album);
-            Optional<Album> albumFromDb = albumDao.findEntityById(id);
-            album = albumFromDb.get();
-
-            //todo: add method
-            //songDao.mergeSongAuthor(song, authorObject);*/
+            album.setAuthor(author);
+            albumDao.create(album);
         } catch (DaoException e) {
-            throw new LogicLayerException("Exception in getting objects from db.", e);
-        } catch (IOException e) {
-            throw new LogicLayerException("Exception in writing song.", e);
+            throw new ServiceException("Exception in adding album to db.", e);
         }
     }
 
-    public List<Album> loadAllAlbums() throws LogicLayerException {
-        AlbumDao albumDao = AlbumDaoImpl.getInstance();
-
-        try {
-            return albumDao.findAll();
-        } catch (DaoException e) {
-            throw new LogicLayerException("Exception while loading albums.", e);
+    private void loadAlbumAuthor(Album album) throws DaoException {
+        AuthorDao authorDao = AuthorDaoImpl.getInstance();
+        Optional<Author> authorOptional = authorDao.findEntityById(album.getAuthor().getAuthorId());
+        if (authorOptional.isPresent()){
+            Author author = authorOptional.get();
+            album.setAuthor(author);
         }
     }
 
-    public List<Album> findUserAlbums(RequestContent content) throws LogicLayerException {
-        User user = (User) content.getSessionAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER);
+    private void loadAlbumSongs(Album album) throws DaoException {
+        SongDao songDao = SongDaoImpl.getInstance();
+        AuthorDao authorDao = AuthorDaoImpl.getInstance();
+
+        List<Song> songs = songDao.findSongsByAlbum(album);
+        for (Song song: songs) {
+            List<Author> authors = authorDao.findAuthorsBySong(song);
+            song.setAuthorList(authors);
+        }
+        album.setSongs(songs);
+    }
+
+    public Album loadAlbum(long albumId) throws ServiceException {
+        AlbumDao albumDao = AlbumDaoImpl.getInstance();
+
+        try {
+            Optional<Album> albumOptional = albumDao.findEntityById(albumId);
+            if (albumOptional.isPresent()) {
+                Album album = albumOptional.get();
+                loadAlbumAuthor(album);
+                loadAlbumSongs(album);
+                return album;
+            } else {
+                throw new ServiceException("No such album album.");
+            }
+        } catch (DaoException e) {
+            throw new ServiceException("Exception while loading album.", e);
+        }
+    }
+
+    public List<Album> loadAllAlbums() throws ServiceException {
+        AlbumDao albumDao = AlbumDaoImpl.getInstance();
+
+        try {
+            List<Album> albums = albumDao.findAll();
+            for (Album album: albums) {
+                loadAlbum(album.getAlbumId());
+            }
+            return albums;
+        } catch (DaoException e) {
+            throw new ServiceException("Exception while loading all the albums.", e);
+        }
+    }
+
+    public List<Album> loadUserAlbums(User user) throws ServiceException {
+        AlbumDao albumDao = AlbumDaoImpl.getInstance();
+
+        try {
+            List<Album> albums = albumDao.findUserAlbums(user);
+            for (Album album: albums) {
+                loadAlbum(album.getAlbumId());
+            }
+            return albums;
+        } catch (DaoException e) {
+            throw new ServiceException("Exception while loading all the user's albums.", e);
+        }
+    }
+
+    public void songsToAlbum(RequestContent content) throws ServiceException {
+        Long albumId = Long.parseLong(content.getRequestParam(RequestParams.PARAM_NAME_ID));
+        List<String> values = content.getRequestParams(RequestParams.PARAM_NAME_ROWS);
+        List<Long> songIds = values.stream().map(Long::parseLong).collect(Collectors.toList());
+
+        SongDao songDao = SongDaoImpl.getInstance();
         AlbumDao albumDao = AlbumDaoImpl.getInstance();
         try {
-            return albumDao.findUserAlbums(user);
-        } catch (DaoException e) {
-            throw new LogicLayerException("Exception while loading songs.", e);
+            Optional<Album> albumOptional = albumDao.findEntityById(albumId);
+            if (!albumOptional.isPresent()){
+                throw new ServiceException("No such album in db.");
+            }
+            Album album = albumOptional.get();
+
+            for (Long id : songIds) {
+                Optional<Song> songOptional = songDao.findEntityById(id);
+                if (!songOptional.isPresent()){
+                    throw new ServiceException("No such song in db.");
+                }
+                Song song = songOptional.get();
+                album.getSongs().add(song);
+
+                double cost = album.getCost() + song.getCost();
+                album.setCost(cost);
+            }
+            songDao.mergeSongAlbum(album);
+            albumDao.update(album);
+        } catch (DaoException e){
+            throw new ServiceException("Exception in merging songs with album.", e);
         }
     }
 }

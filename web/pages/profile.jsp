@@ -35,6 +35,9 @@
                         <a class="nav-item nav-link" id="nav-songs-tab" data-toggle="tab" href="#nav-songs"
                            role="tab" aria-controls="nav-adda" aria-selected="false">
                             <fmt:message key="tab.your.songs" bundle="${rb}"/></a>
+                        <a class="nav-item nav-link" id="nav-albums-tab" data-toggle="tab" href="#nav-albums"
+                           role="tab" aria-controls="nav-adda" aria-selected="false">
+                            <fmt:message key="tab.your.songs" bundle="${rb}"/></a>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
@@ -67,7 +70,6 @@
                                 <th style="text-align: center" scope="col"><fmt:message key="thread.title" bundle="${rb}"/></th>
                                 <th style="text-align: center" scope="col"><fmt:message key="thread.authors" bundle="${rb}"/></th>
                                 <th style="text-align: center" scope="col"><fmt:message key="thread.song" bundle="${rb}"/></th>
-                                <th style="text-align: center" scope="col"><fmt:message key="thread.info" bundle="${rb}"/></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -87,6 +89,36 @@
                                     </th>
                                     <th style="vertical-align : middle;" scope="row">
 
+                                    </th>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="nav-albums" role="tabpanel" aria-labelledby="nav-albums-tab">
+                        <table class="table table-sm">
+                            <thead>
+                            <tr>
+                                <th style="text-align: center" scope="col"><fmt:message key="thread.title" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="thread.authors" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="thread.photo" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="thread.info" bundle="${rb}"/></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="elem" items="${ albums }">
+                                <tr>
+                                    <th style="vertical-align : middle;" scope="row">${elem.albumTitle}</th>
+                                    <th style="vertical-align : middle;" scope="row">
+                                        <c:out value="${elem.author.name}"/>
+                                    </th>
+                                    <th style="vertical-align : middle;">
+                                        <img src="${elem.photo}" class="img-fluid">
+                                    </th>
+                                    <th style="vertical-align : middle;" scope="row">
+                                        <a class="btn btn-primary btn-block btn-large"
+                                           href="${pageContext.request.contextPath}/Controller?command=get-info-album&entityId=${elem.albumId}">
+                                            <fmt:message key="button.info" bundle="${rb}"/></a>
                                     </th>
                                 </tr>
                             </c:forEach>

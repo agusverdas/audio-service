@@ -5,7 +5,7 @@ import java.util.List;
 public class Album extends Entity {
     private long albumId;
     private String albumTitle;
-    private long authorId;
+    private Author author;
     private String photo;
     private List<Song> songs;
     private double cost;
@@ -26,12 +26,12 @@ public class Album extends Entity {
         this.albumTitle = albumTitle;
     }
 
-    public long getAuthorId() {
-        return authorId;
+    public Author getAuthor() {
+        return author;
     }
 
-    public void setAuthorId(long authorId) {
-        this.authorId = authorId;
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
     public String getPhoto() {
@@ -66,9 +66,9 @@ public class Album extends Entity {
         Album album = (Album) o;
 
         if (albumId != album.albumId) return false;
-        if (authorId != album.authorId) return false;
         if (Double.compare(album.cost, cost) != 0) return false;
         if (albumTitle != null ? !albumTitle.equals(album.albumTitle) : album.albumTitle != null) return false;
+        if (author != null ? !author.equals(album.author) : album.author != null) return false;
         if (photo != null ? !photo.equals(album.photo) : album.photo != null) return false;
         return songs != null ? songs.equals(album.songs) : album.songs == null;
     }
@@ -79,7 +79,7 @@ public class Album extends Entity {
         long temp;
         result = (int) (albumId ^ (albumId >>> 32));
         result = 31 * result + (albumTitle != null ? albumTitle.hashCode() : 0);
-        result = 31 * result + (int) (authorId ^ (authorId >>> 32));
+        result = 31 * result + (author != null ? author.hashCode() : 0);
         result = 31 * result + (photo != null ? photo.hashCode() : 0);
         result = 31 * result + (songs != null ? songs.hashCode() : 0);
         temp = Double.doubleToLongBits(cost);
@@ -92,8 +92,8 @@ public class Album extends Entity {
         return "Album{" +
                 "albumId=" + albumId +
                 ", albumTitle='" + albumTitle + '\'' +
-                ", authorId=" + authorId +
-                ", photoPath='" + photo + '\'' +
+                ", author=" + author +
+                ", photo='" + photo + '\'' +
                 ", songs=" + songs +
                 ", cost=" + cost +
                 '}';

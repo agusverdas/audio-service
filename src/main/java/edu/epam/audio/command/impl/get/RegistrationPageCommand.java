@@ -5,8 +5,6 @@ import edu.epam.audio.controller.RequestContent;
 import edu.epam.audio.exception.CommandException;
 import edu.epam.audio.util.PagePath;
 
-import javax.servlet.http.HttpServletRequest;
-
 public class RegistrationPageCommand implements Command {
     @Override
     public String execute(RequestContent content) throws CommandException {

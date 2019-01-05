@@ -1,5 +1,6 @@
 package edu.epam.audio.pool;
 
+import com.mysql.cj.jdbc.exceptions.OperationNotSupportedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,11 +27,11 @@ public class ProxyConnection implements Connection, Comparable<ProxyConnection> 
     }
 
     public CallableStatement prepareCall(String sql) throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public String nativeSQL(String sql) throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public void setAutoCommit(boolean autoCommit) throws SQLException {
@@ -38,7 +39,7 @@ public class ProxyConnection implements Connection, Comparable<ProxyConnection> 
     }
 
     public boolean getAutoCommit() throws SQLException {
-        return false;
+        return connection.getAutoCommit();
     }
 
     public void commit() throws SQLException {
@@ -67,179 +68,179 @@ public class ProxyConnection implements Connection, Comparable<ProxyConnection> 
     }
 
     public DatabaseMetaData getMetaData() throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public void setReadOnly(boolean readOnly) throws SQLException {
-
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public boolean isReadOnly() throws SQLException {
-        return false;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public void setCatalog(String catalog) throws SQLException {
-
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public String getCatalog() throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public void setTransactionIsolation(int level) throws SQLException {
-
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public int getTransactionIsolation() throws SQLException {
-        return 0;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public SQLWarning getWarnings() throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public void clearWarnings() throws SQLException {
-
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public Map<String, Class<?>> getTypeMap() throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
-
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public void setHoldability(int holdability) throws SQLException {
-
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public int getHoldability() throws SQLException {
-        return 0;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public Savepoint setSavepoint() throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public Savepoint setSavepoint(String name) throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public void rollback(Savepoint savepoint) throws SQLException {
-
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public void releaseSavepoint(Savepoint savepoint) throws SQLException {
-
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public Clob createClob() throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public Blob createBlob() throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public NClob createNClob() throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public SQLXML createSQLXML() throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public boolean isValid(int timeout) throws SQLException {
-        return false;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public void setClientInfo(String name, String value) throws SQLClientInfoException {
-
+        connection.setClientInfo(name, value);
     }
 
     public void setClientInfo(Properties properties) throws SQLClientInfoException {
-
+        connection.setClientInfo(properties);
     }
 
     public String getClientInfo(String name) throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public Properties getClientInfo() throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public void setSchema(String schema) throws SQLException {
-
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public String getSchema() throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public void abort(Executor executor) throws SQLException {
-
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
-
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public int getNetworkTimeout() throws SQLException {
-        return 0;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        return null;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return false;
+        throw new OperationNotSupportedException("Operation not supported.");
     }
 
     @Override

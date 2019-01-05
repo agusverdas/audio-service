@@ -5,12 +5,12 @@ import edu.epam.audio.command.Command;
 import edu.epam.audio.command.CommandEnum;
 import edu.epam.audio.service.UserService;
 import edu.epam.audio.exception.CommandException;
-import edu.epam.audio.exception.LogicLayerException;
+import edu.epam.audio.exception.ServiceException;
 import edu.epam.audio.util.SessionAttributes;
 
 public class LoginCommand implements Command {
     private UserService userService = new UserService();
-
+    @Override
     public String execute(RequestContent content) throws CommandException {
         try{
             userService.loginUser(content);
@@ -20,7 +20,7 @@ public class LoginCommand implements Command {
             else {
                 return CommandEnum.GET_LOGIN.name();
             }
-        } catch (LogicLayerException e) {
+        } catch (ServiceException e) {
             throw new CommandException("Exception in login command.", e);
         }
     }

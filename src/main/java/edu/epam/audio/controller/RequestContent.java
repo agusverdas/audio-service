@@ -73,8 +73,6 @@ public class RequestContent {
 
     public Object getSessionAttribute(String key) { return sessionAttributesMap.get(key); }
 
-    public void setRequestPart(String key, Part part) { requestPartMap.put(key,part); }
-
     public Part getRequestPart(String key) { return requestPartMap.get(key); }
 
     public void removeRequestAttribute(String key) { requestAttributesMap.remove(key); }
@@ -89,9 +87,5 @@ public class RequestContent {
 
     public String getRequestPath() {
         return requestPath;
-    }
-
-    public void setRequestPath(String requestPath) {
-        this.requestPath = requestPath;
     }
 }

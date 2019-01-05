@@ -1,5 +1,6 @@
 package edu.epam.audio.dao;
 
+import edu.epam.audio.entity.Album;
 import edu.epam.audio.entity.Author;
 import edu.epam.audio.entity.Song;
 import edu.epam.audio.exception.DaoException;
@@ -9,5 +10,6 @@ import java.util.Optional;
 
 public interface AuthorDao extends BaseDao<Author> {
     Optional<Author> findAuthorByName(Author entity) throws DaoException;
-    List<Author> findAuthorsBySongId(Song entity) throws DaoException;
+    List<Author> findAuthorsBySong(Song entity) throws DaoException;
+    Optional<Author> findAuthorByAlbum(Album album) throws DaoException;
 }

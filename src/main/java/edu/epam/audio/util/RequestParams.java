@@ -16,6 +16,7 @@ public class RequestParams {
     public static final String PARAM_NAME_BONUS = "bonus";
     public static final String PARAM_NAME_MONEY = "money";
     public static final String PARAM_NAME_PAYMENT = "payment";
+    public static final String PARAM_NAME_ROWS = "checkedRows";
 
     public static final String PARAM_VALUE_POCKET = "pocket";
     public static final String PARAM_VALUE_BONUS = "bonus";

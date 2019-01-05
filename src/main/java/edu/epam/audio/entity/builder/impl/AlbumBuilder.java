@@ -1,6 +1,7 @@
 package edu.epam.audio.entity.builder.impl;
 
 import edu.epam.audio.entity.Album;
+import edu.epam.audio.entity.Author;
 import edu.epam.audio.entity.Song;
 import edu.epam.audio.entity.builder.Builder;
 
@@ -23,8 +24,8 @@ public class AlbumBuilder implements Builder<Album> {
         return this;
     }
 
-    public AlbumBuilder addAuthorId(long id){
-        album.setAlbumId(id);
+    public AlbumBuilder addAuthor(Author author){
+        album.setAuthor(author);
         return this;
     }
 

@@ -57,7 +57,8 @@
                                     <th style="vertical-align : middle;" scope="row">${elem.title}</th>
                                     <th style="vertical-align : middle;" scope="row">
                                         <c:forEach var="author" items="${ elem.authorList }">
-                                            <c:out value="${author.name} "/>
+                                            <c:out value="${author.name}"/>
+                                            <br/>
                                         </c:forEach>
                                     </th>
                                     <th style="vertical-align : middle;">
@@ -82,7 +83,7 @@
                             <tr>
                                 <th style="text-align: center" scope="col"><fmt:message key="thread.title" bundle="${rb}"/></th>
                                 <th style="text-align: center" scope="col"><fmt:message key="thread.authors" bundle="${rb}"/></th>
-                                <th style="text-align: center" scope="col"><fmt:message key="thread.authors" bundle="${rb}"/></th>
+                                <th style="text-align: center" scope="col"><fmt:message key="thread.photo" bundle="${rb}"/></th>
                                 <th style="text-align: center" scope="col"><fmt:message key="thread.info" bundle="${rb}"/></th>
                             </tr>
                             </thead>
@@ -91,14 +92,14 @@
                                 <tr>
                                     <th style="vertical-align : middle;" scope="row">${elem.albumTitle}</th>
                                     <th style="vertical-align : middle;" scope="row">
-                                        HERE WILL BE AUTHORS
+                                        <c:out value="${elem.author.name}"/>
                                     </th>
                                     <th style="vertical-align : middle;">
                                         <img src="${elem.photo}" class="img-fluid">
                                     </th>
                                     <th style="vertical-align : middle;" scope="row">
                                         <a class="btn btn-primary btn-block btn-large"
-                                           href="${pageContext.request.contextPath}/Controller?command=get-buy-album&id=${elem.albumId}">
+                                           href="${pageContext.request.contextPath}/Controller?command=get-info-album&entityId=${elem.albumId}">
                                             <fmt:message key="button.info" bundle="${rb}"/></a>
                                     </th>
                                 </tr>

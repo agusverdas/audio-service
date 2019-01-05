@@ -1,7 +1,6 @@
 package edu.epam.audio.dao;
 
 import edu.epam.audio.entity.Album;
-import edu.epam.audio.entity.Author;
 import edu.epam.audio.entity.User;
 import edu.epam.audio.exception.DaoException;
 

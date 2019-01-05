@@ -4,13 +4,12 @@ import edu.epam.audio.controller.RequestContent;
 import edu.epam.audio.command.Command;
 import edu.epam.audio.command.CommandEnum;
 import edu.epam.audio.exception.CommandException;
-import edu.epam.audio.exception.LogicLayerException;
+import edu.epam.audio.exception.ServiceException;
 import edu.epam.audio.service.UserService;
 import edu.epam.audio.util.SessionAttributes;
 
 public class RegistrationCommand implements Command {
     private UserService userService = new UserService();
-
     @Override
     public String execute(RequestContent content) throws CommandException {
         try {
@@ -20,7 +19,7 @@ public class RegistrationCommand implements Command {
             } else {
                 return CommandEnum.GET_REGISTRATION.name();
             }
-        } catch (LogicLayerException e) {
+        } catch (ServiceException e) {
             throw new CommandException("Exception in registration.", e);
         }
     }

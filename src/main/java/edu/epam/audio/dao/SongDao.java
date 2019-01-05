@@ -8,9 +8,9 @@ import edu.epam.audio.exception.DaoException;
 
 import java.util.List;
 
-//todo: add buy methods
 public interface SongDao extends BaseDao<Song> {
     List<Song> findSongsByAlbum(Album album) throws DaoException;
     List<Song> findUserSongs(User user) throws DaoException;
-    void mergeSongAuthor(Song song, Author author) throws DaoException;
+    void mergeSongAlbum(Album album) throws DaoException;
+    void mergeSongAuthor(Song song, List<Author> author) throws DaoException;
 }

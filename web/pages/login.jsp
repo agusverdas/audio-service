@@ -9,7 +9,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="pagecontent" var="rb"/>
-<!-- todo: ask Валидация и язык -->
 <html lang="${sessionScope.locale.language}">
 <head>
     <title><fmt:message key="title.login" bundle="${rb}"/></title>

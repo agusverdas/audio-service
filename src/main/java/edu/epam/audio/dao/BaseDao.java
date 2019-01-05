@@ -2,8 +2,6 @@ package edu.epam.audio.dao;
 
 import edu.epam.audio.entity.Entity;
 import edu.epam.audio.exception.DaoException;
-import edu.epam.audio.pool.ConnectionPool;
-import edu.epam.audio.pool.ProxyConnection;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,16 +12,13 @@ import java.util.Optional;
 
 public interface BaseDao<T extends Entity> {
     long create(T entity) throws DaoException;
-
     List<T> findAll() throws DaoException;
     Optional<T> findEntityById(long id) throws DaoException;
-
     void update(T entity) throws DaoException;
-
-    boolean delete(T entity) throws DaoException;
+    void delete(T entity) throws DaoException;
 
     default long maxId(Connection connection, String maxIdSql) throws DaoException {
-        long id = 1;
+        long id = 0;
 
         try(Statement statement = connection.createStatement()){
             ResultSet resultSet = statement.executeQuery(maxIdSql);
