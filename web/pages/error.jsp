@@ -13,18 +13,29 @@
 <html lang="${sessionScope.locale.language}">
 <head>
     <meta charset="UTF-8">
-    <title><fmt:message key="label.title.error" bundle="${rb}"/></title>
+    <title><fmt:message key="title.error" bundle="${rb}"/></title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="../css/styles.css" rel="stylesheet">
+    <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
 </head>
-<body>
-Request from ${pageContext.errorData.requestURI} is failed
+<body style="overflow-y: scroll;">
 <br/>
-Exception: ${pageContext.exception}
-<br/>
-Message from exception: ${pageContext.exception.message}
-<br/>
-<c:forEach items="${pageContext.exception.stackTrace}" var="element">
-    <c:out value="${element}"/>
-</c:forEach>
-<a href="../index.jsp">Go Back</a>
+<h2 style="text-align: center; color: white;">Error page</h2>
+<div class="jumbotron vertical-center">
+<div class="col-lg-12 container">
+    <fmt:message key="text.exception.path" bundle="${rb}"/> ${pageContext.errorData.requestURI}
+    <br/>
+    <fmt:message key="text.exception.type" bundle="${rb}"/> ${pageContext.exception}
+    <br/>
+    <fmt:message key="text.exception.message" bundle="${rb}"/> ${pageContext.exception.message}
+    <br/>
+    <c:forEach items="${pageContext.exception.stackTrace}" var="element">
+        <c:out value="${element}"/><br/>
+    </c:forEach>
+    <a class="btn btn-primary btn-block btn-large" href="../index.jsp"><fmt:message key="navbar.main"
+                                                                                    bundle="${rb}"/></a>
+</div>
+</div>
 </body>
 </html>

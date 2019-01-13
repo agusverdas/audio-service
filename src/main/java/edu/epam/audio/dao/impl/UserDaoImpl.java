@@ -52,7 +52,6 @@ public final class UserDaoImpl implements UserDao {
         return instance;
     }
 
-    //todo: think уровень изоляции транзакции
     @Override
     public long create(User user) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -191,6 +190,7 @@ public final class UserDaoImpl implements UserDao {
 
         try (ProxyConnection connection = pool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER)) {
+            System.out.println("ENTITY : " + entity);
             buildUserUpdate(preparedStatement, entity);
 
             preparedStatement.executeUpdate();

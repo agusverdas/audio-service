@@ -35,7 +35,6 @@ public final class AuthorDaoImpl implements AuthorDao {
         return instance;
     }
 
-    //todo: think уровень изоляции транзакции
     @Override
     public long create(Author entity) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -133,21 +132,6 @@ public final class AuthorDaoImpl implements AuthorDao {
             return buildAuthorList(resultSet);
         } catch (SQLException e) {
             throw new DaoException("Exception while finding authors by song.", e);
-        }
-    }
-
-    @Override
-    public Optional<Author> findAuthorByAlbum(Album album) throws DaoException {
-        ConnectionPool pool = ConnectionPool.getInstance();
-
-        try(ProxyConnection connection = pool.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_AUTHOR_BY_ID)){
-            preparedStatement.setLong(1, album.getAuthor().getAuthorId());
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            return buildAuthor(resultSet);
-        } catch (SQLException e) {
-            throw new DaoException("Exception while finding author by album.", e);
         }
     }
 

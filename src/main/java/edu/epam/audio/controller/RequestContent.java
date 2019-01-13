@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.*;
 
 public class RequestContent {
+    private static final String MULRIPART = "multipart/form-data";
+
     private HashMap<String, String[]> requestParamsMap = new HashMap<>();
     private HashMap<String, Object> requestAttributesMap = new HashMap<>();
     private HashMap<String, Object> sessionAttributesMap = new HashMap<>();
@@ -36,7 +38,7 @@ public class RequestContent {
 
             sessionAttributesMap.put(key, value);
         }
-        if (request.getContentType() != null && request.getContentType().toLowerCase().contains("multipart/form-data")) {
+        if (request.getContentType() != null && request.getContentType().toLowerCase().contains(MULRIPART)) {
             Collection<Part> parts = request.getParts();
             parts.forEach(p -> {
                 String name = p.getName();

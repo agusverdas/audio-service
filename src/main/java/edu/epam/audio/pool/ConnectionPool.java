@@ -49,7 +49,7 @@ public final class ConnectionPool {
 
     private ConnectionPool() throws SQLException {
         DbConfigReader config = DbConfigReader.getInstance();
-        DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+        DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
         int poolSize = config.getPoolSize();
         connectionQueue = new LinkedBlockingQueue<>(poolSize);
         usedConnections = new ConcurrentSkipListSet<>();
@@ -67,15 +67,15 @@ public final class ConnectionPool {
     }
 
     public ProxyConnection getConnection() {
-        ProxyConnection connection;
+        ProxyConnection connection = null;
         try {
             connection = connectionQueue.take();
             usedConnections.add(connection);
-            return connection;
         } catch (InterruptedException e) {
             logger.error("Error while taking connection from pool.", e);
-            throw new RuntimeException("Error while taking connection from pool.", e);
+            Thread.currentThread().interrupt();
         }
+        return connection;
     }
 
     void releaseConnection(ProxyConnection connection){
@@ -84,7 +84,7 @@ public final class ConnectionPool {
             connectionQueue.put(connection);
         } catch (InterruptedException e) {
             logger.error("Error while placing connection back.", e);
-            throw new RuntimeException("Error while placing connection back.", e);
+            Thread.currentThread().interrupt();
         }
     }
     

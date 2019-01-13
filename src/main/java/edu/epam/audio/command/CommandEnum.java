@@ -15,6 +15,7 @@ public enum CommandEnum {
     POST_ADD_MONEY(new AddMoneyCommand()),
     POST_BUY_SONG(new BuySongCommand()),
     POST_BUY_ALBUM(new BuyAlbumCommand()),
+    POST_DELETE_SONG(new DeleteSongCommand()),
 
     GET_LOGIN(new LoginPageCommand()),
     GET_REGISTRATION(new RegistrationPageCommand()),

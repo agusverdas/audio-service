@@ -33,8 +33,10 @@ public final class SongDaoImpl implements SongDao {
     private static final String SELECT_SONG_BY_ID = "select * from SONG where " + SONG_ID + "=? AND "
             + SONG_DELETED + "=0";
     private static final String SELECT_SONGS_BY_ALBUM = "select * from SONG where " + ALBUM_ID + "=? AND " + SONG_DELETED + "=0";
+    private static final String SELECT_SONGS_NOT_IN_ALBUM = "select * from SONG where " + ALBUM_ID + " IS NULL AND " + SONG_DELETED + "=0";
     private static final String SELECT_SONGS_BY_USER = "select * from USER natural join USER_SONG natural join SONG where "
             + USER_ID + "=?";
+    private static final String SELECT_SONG_ALBUM = "select " + ALBUM_ID + " from SONG where " + SONG_ID + "=?";
     private static final String UPDATE_SONG = "update SONG set " + SONG_TITLE + "=?, "
             + PATH + "=?, " + SONG_COST + "=? where " + SONG_ID + "=?";
     private static final String UPDATE_SONG_ALBUM = "update SONG set " + ALBUM_ID + "=? "
@@ -48,7 +50,6 @@ public final class SongDaoImpl implements SongDao {
         return instance;
     }
 
-    //todo: think уровень изоляции транзакции
     @Override
     public long create(Song song) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -129,6 +130,19 @@ public final class SongDaoImpl implements SongDao {
     }
 
     @Override
+    public List<Song> findSongsNotInAlbum() throws DaoException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+
+        try (ProxyConnection connection = pool.getConnection();
+             Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(SELECT_SONGS_NOT_IN_ALBUM);
+            return buildSongList(resultSet);
+        } catch (SQLException e) {
+            throw new DaoException("Exception while finding not in album songs.", e);
+        }
+    }
+
+    @Override
     public Optional<Song> findEntityById(long id) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
 
@@ -169,8 +183,26 @@ public final class SongDaoImpl implements SongDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             return buildSongList(resultSet);
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new DaoException("Exception while finding user songs.", e);
+        }
+    }
+
+    @Override
+    public long findSongAlbum(Song song) throws DaoException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+
+        try (ProxyConnection connection = pool.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SONG_ALBUM)) {
+            preparedStatement.setLong(1, song.getSongId());
+
+            long albumId = 0;
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                albumId = resultSet.getLong(1);
+            }
+            return albumId;
+        } catch (SQLException e) {
+            throw new DaoException("Exception while finding song album.", e);
         }
     }
 

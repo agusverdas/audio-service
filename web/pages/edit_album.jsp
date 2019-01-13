@@ -48,27 +48,28 @@
                                                                                             bundle="${rb}"/></th>
                                     <th style="text-align: center" scope="col"><fmt:message key="thread.song"
                                                                                             bundle="${rb}"/></th>
-                                    <th style="text-align: center" scope="col">CHECKBOX</th>
+                                    <th style="text-align: center" scope="col"><fmt:message key="thread.checkbox"
+                                                                                            bundle="${rb}"/></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="elem" items="${ songs }">
+                                <c:forEach var="song" items="${ songs }">
                                     <tr>
-                                        <th style="vertical-align : middle;" scope="row">${elem.title}</th>
+                                        <th style="vertical-align : middle;" scope="row">${song.title}</th>
                                         <th style="vertical-align : middle;" scope="row">
-                                            <c:forEach var="author" items="${ elem.authorList }">
+                                            <c:forEach var="author" items="${ song.authorList }">
                                                 <c:out value="${author.name}"/>
                                                 <br/>
                                             </c:forEach>
                                         </th>
                                         <th style="vertical-align : middle;">
                                             <audio controls controlsList="nodownload">
-                                                <source src="${elem.path}" type="audio/ogg">
-                                                <source src="${elem.path}" type="audio/mp3">
+                                                <source src="${song.path}" type="audio/ogg">
+                                                <source src="${song.path}" type="audio/mp3">
                                             </audio>
                                         </th>
                                         <th>
-                                            <input type="checkbox" name="checkedRows" value="${elem.songId}">
+                                            <input type="checkbox" name="checkedRows" value="${song.songId}">
                                         </th>
                                     </tr>
                                 </c:forEach>

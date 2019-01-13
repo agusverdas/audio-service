@@ -19,16 +19,6 @@
     <link href="../css/styles.css" rel="stylesheet">
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
-    <style>
-        input[type='number'] {
-            -moz-appearance: textfield;
-        }
-
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-        }
-    </style>
 </head>
 <body style="overflow-y: scroll;">
 <%@include file="header.jsp" %>
@@ -49,19 +39,19 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach var="elem" items="${ album.songs }">
+                        <c:forEach var="song" items="${ album.songs }">
                             <tr>
-                                <th style="vertical-align : middle;" scope="row">${elem.title}</th>
+                                <th style="vertical-align : middle;" scope="row">${song.title}</th>
                                 <th style="vertical-align : middle;" scope="row">
-                                    <c:forEach var="author" items="${ elem.authorList }">
+                                    <c:forEach var="author" items="${ song.authorList }">
                                         <c:out value="${author.name}"/>
                                         <br/>
                                     </c:forEach>
                                 </th>
                                 <th style="vertical-align : middle;">
                                     <audio controls controlsList="nodownload">
-                                        <source src="${elem.path}" type="audio/ogg">
-                                        <source src="${elem.path}" type="audio/mp3">
+                                        <source src="${song.path}" type="audio/ogg">
+                                        <source src="${song.path}" type="audio/mp3">
                                     </audio>
                                 </th>
                             </tr>
@@ -79,6 +69,6 @@
     </div>
 </div>
 <%@include file="footer.jsp" %>
-<script src="../js/script.js"></script>
+<script src="../js/audio.js"></script>
 </body>
 </html>

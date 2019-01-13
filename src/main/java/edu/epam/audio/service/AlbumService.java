@@ -104,7 +104,8 @@ public class AlbumService {
         try {
             List<Album> albums = albumDao.findAll();
             for (Album album: albums) {
-                loadAlbum(album.getAlbumId());
+                loadAlbumAuthor(album);
+                loadAlbumSongs(album);
             }
             return albums;
         } catch (DaoException e) {
@@ -118,7 +119,8 @@ public class AlbumService {
         try {
             List<Album> albums = albumDao.findUserAlbums(user);
             for (Album album: albums) {
-                loadAlbum(album.getAlbumId());
+                loadAlbumAuthor(album);
+                loadAlbumSongs(album);
             }
             return albums;
         } catch (DaoException e) {

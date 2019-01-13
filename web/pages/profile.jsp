@@ -19,14 +19,15 @@
     <link href="../css/styles.css" rel="stylesheet">
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/datatables.min.js"></script>
 </head>
 <body style="overflow-y: scroll;">
 <%@include file="header.jsp" %>
 <br>
 <section id="tabs">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
+    <div class="col-lg-12 container">
+        <div class="col-lg-12 row">
+            <div class="col-lg-12">
                 <nav>
                     <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-profile"
@@ -37,14 +38,14 @@
                             <fmt:message key="tab.your.songs" bundle="${rb}"/></a>
                         <a class="nav-item nav-link" id="nav-albums-tab" data-toggle="tab" href="#nav-albums"
                            role="tab" aria-controls="nav-adda" aria-selected="false">
-                            <fmt:message key="tab.your.songs" bundle="${rb}"/></a>
+                            <fmt:message key="tab.your.albums" bundle="${rb}"/></a>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-profile" role="tabpanel"
                          aria-labelledby="nav-profile-tab">
                         <div style="float: right" class="col-md-4 img">
-                            <img style="max-height: 100%; max-width: 100%" class="img-rounded" src="${user.photo}"/>
+                            <img style="height: auto; max-width: 400px" class="img-rounded" src="${user.photo}"/>
                         </div>
                         <div class="col-md-6 details">
                             <blockquote>
@@ -64,7 +65,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="nav-songs" role="tabpanel" aria-labelledby="nav-songs-tab">
-                        <table id="example" class="table table-sm" style="width:100%">
+                        <table id="songs" class="table table-sm" style="width:100%">
                             <thead>
                             <tr>
                                 <th style="text-align: center" scope="col"><fmt:message key="thread.title" bundle="${rb}"/></th>
@@ -73,22 +74,19 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach var="elem" items="${ songs }">
+                            <c:forEach var="song" items="${ songs }">
                                 <tr>
-                                    <th style="vertical-align : middle;" scope="row">${elem.title}</th>
+                                    <th style="vertical-align : middle;" scope="row">${song.title}</th>
                                     <th style="vertical-align : middle;" scope="row">
-                                        <c:forEach var="author" items="${ elem.authorList }">
+                                        <c:forEach var="author" items="${ song.authorList }">
                                             <c:out value="${author.name} "/>
                                         </c:forEach>
                                     </th>
                                     <th style="vertical-align : middle;">
                                         <audio controls controlsList="nodownload">
-                                            <source src="${elem.path}" type="audio/ogg">
-                                            <source src="${elem.path}" type="audio/mp3">
+                                            <source src="${song.path}" type="audio/ogg">
+                                            <source src="${song.path}" type="audio/mp3">
                                         </audio>
-                                    </th>
-                                    <th style="vertical-align : middle;" scope="row">
-
                                     </th>
                                 </tr>
                             </c:forEach>
@@ -96,7 +94,7 @@
                         </table>
                     </div>
                     <div class="tab-pane fade" id="nav-albums" role="tabpanel" aria-labelledby="nav-albums-tab">
-                        <table class="table table-sm">
+                        <table id="albums" class="table table-sm">
                             <thead>
                             <tr>
                                 <th style="text-align: center" scope="col"><fmt:message key="thread.title" bundle="${rb}"/></th>
@@ -106,19 +104,22 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach var="elem" items="${ albums }">
+                            <c:forEach var="song" items="${ albums }">
                                 <tr>
-                                    <th style="vertical-align : middle;" scope="row">${elem.albumTitle}</th>
-                                    <th style="vertical-align : middle;" scope="row">
-                                        <c:out value="${elem.author.name}"/>
-                                    </th>
+                                    <th style="vertical-align : middle;" scope="row">${song.albumTitle}</th>
+                                    <th style="vertical-align : middle;" scope="row">${song.author.name}</th>
                                     <th style="vertical-align : middle;">
-                                        <img src="${elem.photo}" class="img-fluid">
+                                        <img style="max-width:400px; display: block; margin-left: auto; margin-right: auto;"
+                                             src="${song.photo}" class="img-fluid">
                                     </th>
                                     <th style="vertical-align : middle;" scope="row">
-                                        <a class="btn btn-primary btn-block btn-large"
-                                           href="${pageContext.request.contextPath}/Controller?command=get-info-album&entityId=${elem.albumId}">
-                                            <fmt:message key="button.info" bundle="${rb}"/></a>
+                                        <c:forEach var="song" items="${ song.songs }">
+                                            <h6>${song.title}</h6>
+                                            <audio controls controlsList="nodownload">
+                                                <source src="${song.path}" type="audio/ogg">
+                                                <source src="${song.path}" type="audio/mp3">
+                                            </audio><br>
+                                        </c:forEach>
                                     </th>
                                 </tr>
                             </c:forEach>
@@ -131,5 +132,6 @@
     </div>
 </section>
 <%@include file="footer.jsp" %>
+<script src="../js/pagination.js"></script>
 </body>
 </html>

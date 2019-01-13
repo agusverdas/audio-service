@@ -88,3 +88,8 @@ footer{
     padding-bottom: .75rem;
     width: 100%;
 }
+
+.vertical-center {
+    display: flex;
+    align-items: center;
+}

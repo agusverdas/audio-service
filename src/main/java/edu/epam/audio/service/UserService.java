@@ -28,23 +28,19 @@ import static edu.epam.audio.util.RequestParams.*;
 import static edu.epam.audio.util.SessionAttributes.*;
 
 public class UserService {
-    private static final String INCORRECT_BONUS = "Bonus should be decimal";
-    private static final String INCORRECT_LOGIN = "Wrong email or password";
-    private static final String INCORRECT_EMAIL_REG = "There is user with such email";
-    private static final String NO_SUCH_USER = "There is no such user";
-    private static final String INCORRECT_BONUS_PAYMENT = "You don't have enough bonus to pay for this audio";
-    private static final String INCORRECT_POCKET_PAYMENT = "You don't have enough money to pay for this audio";
-
-    private static final String INCORRECT_NAME_REG = "There is user with this name";
-
-    private static final String INCORRECT_PASSWORD_REGEX_MES = "Incorrect password, password should be 6-10 characters " +
-            "length at least one letter and one number";
-    private static final String INCORRECT_NAME_MES = "Incorrect name, name should be at least 6 characters length, " +
-            "all the characters should be letters. Name is unique.";
-    private static final String INCORRECT_MONEY = "Money should be positive decimal";
-    private static final String INCORRECT_MAX_MONEY = "Money limit was reached.";
-    private static final String YOU_ALREADY_HAVE_SONG = "You already bought this song.";
-    private static final String YOU_ALREADY_HAVE_ALBUM = "You already bought this album.";
+    private static final String INCORRECT_BONUS = "label.error.bonus";
+    private static final String INCORRECT_LOGIN = "label.error.login";
+    private static final String INCORRECT_EMAIL_REG = "label.error.email";
+    private static final String NO_SUCH_USER = "label.error.no.user";
+    private static final String INCORRECT_BONUS_PAYMENT = "label.error.no.bonus";
+    private static final String INCORRECT_POCKET_PAYMENT = "label.error.no.money";
+    private static final String INCORRECT_NAME_REG = "label.error.name";
+    private static final String INCORRECT_PASSWORD_REGEX_MES = "label.error.regex.password";
+    private static final String INCORRECT_NAME_MES = "label.error.regex.name";
+    private static final String INCORRECT_MONEY = "label.error.money";
+    private static final String INCORRECT_MAX_MONEY = "label.error.money.limit";
+    private static final String YOU_ALREADY_HAVE_SONG = "label.repeat.buy.song";
+    private static final String YOU_ALREADY_HAVE_ALBUM = "label.repeat.buy.album";
 
     public void loginUser(RequestContent content) throws ServiceException {
         UserDao userDao = UserDaoImpl.getInstance();
@@ -119,28 +115,32 @@ public class UserService {
         try {
             User updatedUser = user.clone();
             updatedUser.setEmail(email);
-            updatedUser.setName(name);
-            Optional<User> userByEmail = userDao.findUserByEmail(updatedUser);
-            if (!userByEmail.isPresent() || userByEmail.get().getUserId() == updatedUser.getUserId()) {
-                Optional<User> userByName = userDao.findUserByName(updatedUser);
-                if (!userByName.isPresent() || userByName.get().getUserId() == user.getUserId()) {
-                    File fileSaveDir = new File(path);
-                    if (!fileSaveDir.exists()) {
-                        fileSaveDir.mkdirs();
-                    }
+            if (ParamsValidator.validateName(name)) {
+                updatedUser.setName(name);
+                Optional<User> userByEmail = userDao.findUserByEmail(updatedUser);
+                if (!userByEmail.isPresent() || userByEmail.get().getUserId() == updatedUser.getUserId()) {
+                    Optional<User> userByName = userDao.findUserByName(updatedUser);
+                    if (!userByName.isPresent() || userByName.get().getUserId() == user.getUserId()) {
+                        File fileSaveDir = new File(path);
+                        if (!fileSaveDir.exists()) {
+                            fileSaveDir.mkdirs();
+                        }
 
-                    Part part = content.getRequestPart(PARAM_NAME_PHOTO);
-                    String loadPath = UploadPath.uploadPhoto(path, part);
-                    if (loadPath != null) {
-                        updatedUser.setPhoto(loadPath);
+                        Part part = content.getRequestPart(PARAM_NAME_PHOTO);
+                        String loadPath = UploadPath.uploadPhoto(path, part);
+                        if (loadPath != null) {
+                            updatedUser.setPhoto(loadPath);
+                        }
+                        userDao.update(updatedUser);
+                        content.setSessionAttribute(SESSION_ATTRIBUTE_USER, updatedUser);
+                    } else {
+                        content.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_NAME_MES);
                     }
-                    userDao.update(updatedUser);
-                    content.setSessionAttribute(SESSION_ATTRIBUTE_USER, updatedUser);
                 } else {
-                    content.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_NAME_REG);
+                    content.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_EMAIL_REG);
                 }
             } else {
-                content.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_EMAIL_REG);
+                content.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_NAME_REG);
             }
         } catch (CloneNotSupportedException e) {
             throw new ServiceException("Exception in cloning user.", e);
@@ -159,6 +159,7 @@ public class UserService {
                 Optional<User> user = userDao.findEntityById(id);
                 if (user.isPresent()) {
                     User userObj = user.get();
+                    bonus = Math.round(bonus*100)/100;
                     userObj.setBonus(bonus);
                     userDao.update(userObj);
                 } else {
@@ -193,8 +194,9 @@ public class UserService {
             money += user.getMoney();
             if (ParamsValidator.validateMoney(money)) {
                 User clone = user.clone();
+                money = Math.round(money*100)/100;
                 clone.setMoney(money);
-                userDao.update(user);
+                userDao.update(clone);
                 content.setSessionAttribute(SESSION_ATTRIBUTE_USER, clone);
             } else {
                 content.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_MAX_MONEY);
@@ -231,7 +233,7 @@ public class UserService {
                         bonus = user.getBonus();
                         cost = song.getCost();
                         if (bonus >= cost) {
-                            clone.setBonus(bonus - cost);
+                            clone.setBonus(Math.round((bonus - cost)*100)/100);
                             userDao.buySong(clone, song);
                             content.setSessionAttribute(SESSION_ATTRIBUTE_USER, clone);
                         } else {
@@ -242,7 +244,7 @@ public class UserService {
                         money = user.getMoney();
                         cost = song.getCost();
                         if (money >= cost) {
-                            clone.setMoney(money - cost);
+                            clone.setMoney(Math.round((money - cost)*100)/100);
                             userDao.buySong(clone, song);
                             content.setSessionAttribute(SESSION_ATTRIBUTE_USER, clone);
                         } else {
@@ -293,7 +295,7 @@ public class UserService {
                     case PARAM_VALUE_BONUS:
                         bonus = user.getBonus();
                         if (bonus >= cost) {
-                            clone.setBonus(bonus - cost);
+                            clone.setBonus(Math.round((bonus - cost)*100)/100);
                             userDao.buyAlbum(clone, album);
                             content.setSessionAttribute(SESSION_ATTRIBUTE_USER, clone);
                         } else {
@@ -303,7 +305,7 @@ public class UserService {
                     case PARAM_VALUE_POCKET:
                         money = user.getMoney();
                         if (money >= cost) {
-                            clone.setMoney(money - cost);
+                            clone.setMoney(Math.round((money - cost)*100)/100);
                             userDao.buyAlbum(clone, album);
                             content.setSessionAttribute(SESSION_ATTRIBUTE_USER, clone);
                         } else {

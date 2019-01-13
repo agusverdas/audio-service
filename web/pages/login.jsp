@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" errorPage="error.jsp" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="pagecontent" var="rb"/>
@@ -18,7 +19,6 @@
     <script src="../js/bootstrap.min.js"></script>
 </head>
 <body style="overflow-y: scroll;">
-
 <div class="login">
     <h1><fmt:message key="header.login" bundle="${rb}"/></h1>
     <form method="post" action="${pageContext.request.contextPath}/Controller">
@@ -32,10 +32,13 @@
         <a class="btn btn-primary btn-block btn-large"
            href="${pageContext.request.contextPath}/Controller?command=get-registration"><fmt:message
                 key="button.registration" bundle="${rb}"/></a>
-        <span style="color:red">${errorMessage}</span>
+        <c:if test="${ not empty errorMessage }">
+            <span style="color:red">
+                <fmt:message key="${ errorMessage }" bundle="${rb}"/>
+            </span>
+        </c:if>
     </form>
     <br>
 </div>
-
 </body>
 </html>

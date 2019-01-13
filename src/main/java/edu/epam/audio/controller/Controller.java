@@ -69,10 +69,6 @@ public class Controller extends HttpServlet {
             return page;
         } catch (CommandException e) {
             throw new ServletException(e.getMessage(), e);
-            //response.sendError(1, e.getMessage());
-        } catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException();
         }
     }
 

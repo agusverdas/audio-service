@@ -27,7 +27,6 @@ public class AddSongCommand implements Command {
             songService.addSong(title, authors, cost, uploadFilePath, part);
             return CommandEnum.GET_MAIN.name();
         } catch (ServiceException e) {
-            e.printStackTrace();
             throw new CommandException("Exception in creating songs.", e);
         }
     }

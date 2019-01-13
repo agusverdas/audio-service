@@ -18,7 +18,7 @@ public class EditAlbumPageCommand implements Command {
     public String execute(RequestContent content) throws CommandException {
         try {
             Long albumId = Long.parseLong(content.getRequestParam(RequestParams.PARAM_NAME_ENTITY_ID));
-            List<Song> songs = songService.loadAllSongs();
+            List<Song> songs = songService.loadSongsNotInAlbum();
             content.setRequestAttribute(RequestParams.PARAM_NAME_ENTITY_ID, albumId);
             content.setRequestAttribute(RequestAttributes.ATTRIBUTE_SONGS, songs);
         } catch (ServiceException e) {

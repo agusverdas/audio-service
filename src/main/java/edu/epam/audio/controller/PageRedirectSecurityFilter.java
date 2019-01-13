@@ -1,5 +1,7 @@
 package edu.epam.audio.controller;
 
+import edu.epam.audio.entity.Privileges;
+import edu.epam.audio.entity.User;
 import edu.epam.audio.util.PagePath;
 import edu.epam.audio.util.SessionAttributes;
 
@@ -9,6 +11,8 @@ import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static edu.epam.audio.util.PagePath.*;
 
 @WebFilter(dispatcherTypes = {
         DispatcherType.REQUEST,
@@ -29,10 +33,19 @@ public class PageRedirectSecurityFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
+        User user = (User) httpRequest.getSession().getAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER);
 
-        if(!httpRequest.getRequestURI().equalsIgnoreCase(PagePath.LOGIN_PAGE) &&
-                !httpRequest.getRequestURI().equalsIgnoreCase(PagePath.REGISTRATION_PAGE) &&
-                httpRequest.getSession().getAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER) == null) {
+        if(!httpRequest.getRequestURI().equalsIgnoreCase(LOGIN_PAGE) &&
+                !httpRequest.getRequestURI().equalsIgnoreCase(REGISTRATION_PAGE) &&
+                user == null) {
+            httpResponse.sendRedirect(httpRequest.getContextPath() + indexPath);
+        }
+
+        if(     (httpRequest.getRequestURI().equalsIgnoreCase(ADMIN_PAGE) ||
+                httpRequest.getRequestURI().equalsIgnoreCase(EDIT_ALBUM_PAGE) ||
+                httpRequest.getRequestURI().equalsIgnoreCase(EDIT_BONUS_PAGE) ||
+                httpRequest.getRequestURI().equalsIgnoreCase(EDIT_SONG_PAGE)) &&
+                user.getRole() != Privileges.ADMIN) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + indexPath);
         }
         filterChain.doFilter(servletRequest, servletResponse);

@@ -48,7 +48,6 @@ public final class AlbumDaoImpl implements AlbumDao {
         return instance;
     }
 
-    //todo: think уровень изоляции
     @Override
     public long create(Album entity) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();

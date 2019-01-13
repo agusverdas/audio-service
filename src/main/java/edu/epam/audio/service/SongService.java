@@ -1,19 +1,24 @@
 package edu.epam.audio.service;
 
 import edu.epam.audio.controller.RequestContent;
+import edu.epam.audio.dao.AlbumDao;
 import edu.epam.audio.dao.AuthorDao;
 import edu.epam.audio.dao.SongDao;
+import edu.epam.audio.dao.impl.AlbumDaoImpl;
 import edu.epam.audio.dao.impl.AuthorDaoImpl;
 import edu.epam.audio.dao.impl.SongDaoImpl;
+import edu.epam.audio.entity.Album;
 import edu.epam.audio.entity.Author;
 import edu.epam.audio.entity.Song;
 import edu.epam.audio.entity.User;
 import edu.epam.audio.entity.builder.impl.SongBuilder;
 import edu.epam.audio.exception.DaoException;
 import edu.epam.audio.exception.ServiceException;
+import edu.epam.audio.util.RequestParams;
 import edu.epam.audio.util.UploadPath;
 
 import javax.servlet.http.Part;
+import javax.swing.text.html.Option;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +29,7 @@ import static edu.epam.audio.util.RequestAttributes.ATTRIBUTE_NAME_ERROR;
 import static edu.epam.audio.util.RequestParams.*;
 
 public class SongService {
-    private static final String INCORRECT_COST = "Cost should be decimal";
+    private static final String INCORRECT_COST = "label.error.cost";
 
     public void addSong(String title, String[] authorParams, String cost, String path, Part part) throws ServiceException {
         AuthorDao authorDao = AuthorDaoImpl.getInstance();
@@ -64,7 +69,7 @@ public class SongService {
             long id = songDao.create(song);
             Optional<Song> songFromDb = songDao.findEntityById(id);
             if (!songFromDb.isPresent()){
-                throw new DaoException("No such song in db.");
+                throw new ServiceException("No such song in db.");
             }
             song = songFromDb.get();
             songDao.mergeSongAuthor(song, authors);
@@ -108,6 +113,19 @@ public class SongService {
         }
     }
 
+    public List<Song> loadSongsNotInAlbum() throws ServiceException {
+        SongDao songDao = SongDaoImpl.getInstance();
+        try {
+            List<Song> songs = songDao.findSongsNotInAlbum();
+            for (Song song: songs) {
+                loadSongAuthor(song);
+            }
+            return songs;
+        } catch (DaoException e) {
+            throw new ServiceException("Exception while loading songs not in album.", e);
+        }
+    }
+
     public List<Song> loadUserSongs(User user) throws ServiceException {
         SongDao songDao = SongDaoImpl.getInstance();
         try {
@@ -127,7 +145,7 @@ public class SongService {
         try {
             Optional<Song> songOptional = songDao.findEntityById(id);
             if (!songOptional.isPresent()){
-                throw new DaoException("No such song in db.");
+                throw new ServiceException("No such song in db.");
             }
             Song song = songOptional.get();
             String costStr = content.getRequestParam(PARAM_NAME_COST);
@@ -144,6 +162,34 @@ public class SongService {
             songDao.update(song);
         } catch (DaoException e) {
             throw new ServiceException("Exception in updating song from db.", e);
+        } catch (NumberFormatException e){
+            content.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_COST);
+        }
+    }
+
+    public void deleteSong(RequestContent content) throws ServiceException {
+        SongDao songDao = SongDaoImpl.getInstance();
+        AlbumDao albumDao = AlbumDaoImpl.getInstance();
+        long id = Long.parseLong(content.getRequestParam(PARAM_NAME_ENTITY_ID));
+        try {
+            Optional<Song> songOptional = songDao.findEntityById(id);
+            if (!songOptional.isPresent()){
+                throw new ServiceException("No such song in db.");
+            }
+            Song song = songOptional.get();
+            long albumId = songDao.findSongAlbum(song);
+            if(albumId != 0){
+                Optional<Album> albumOptional = albumDao.findEntityById(albumId);
+                if(!albumOptional.isPresent()){
+                    throw new ServiceException("Can't find song's album.");
+                }
+                Album album = albumOptional.get();
+                album.setCost(album.getCost() - song.getCost());
+                albumDao.update(album);
+            }
+            songDao.delete(song);
+        } catch (DaoException e) {
+            throw new ServiceException("Exception in deleting song from db.", e);
         } catch (NumberFormatException e){
             content.setRequestAttribute(ATTRIBUTE_NAME_ERROR, INCORRECT_COST);
         }

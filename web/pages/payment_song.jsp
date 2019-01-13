@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" errorPage="error.jsp" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="pagecontent" var="rb"/>
 <html lang="${sessionScope.locale.language}">
@@ -29,7 +30,11 @@
         <input style="width: auto;" type="radio" name="payment" value="bonus"/>
         <span style="color: white; font-size: 1.25em;"> Bonus (${user.bonus}$)</span><br>
         <button type="submit" class="btn btn-primary btn-block btn-large">Buy</button>
-        <span style="color:red">${errorMessage}</span>
+        <c:if test="${ not empty errorMessage }">
+            <span style="color:red">
+                <fmt:message key="${ errorMessage }" bundle="${rb}"/>
+            </span>
+        </c:if>
     </form>
     <br>
 </div>
