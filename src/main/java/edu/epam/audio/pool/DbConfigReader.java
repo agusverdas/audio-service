@@ -25,21 +25,37 @@ final class DbConfigReader {
         poolSize = Integer.parseInt(bundle.getString(SIZE_PROPERTY));
     }
 
-     static DbConfigReader getInstance(){
+    /**
+     * Получение объекта класса
+     * @return Объект
+     */
+    static DbConfigReader getInstance(){
         if (instance == null){
             instance = new DbConfigReader();
         }
         return instance;
     }
 
+    /**
+     * Получение размера пула
+     * @return Размер
+     */
     int getPoolSize() {
         return poolSize;
     }
 
+    /**
+     * Получение URL к базе данных
+     * @return URL
+     */
     String getUrl() {
         return url;
     }
 
+    /**
+     * Создание настроек подключения
+     * @return Настройки
+     */
     Properties createProperties(){
         ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME);
 

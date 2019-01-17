@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+/**
+ * Прокси-класс соединения
+ */
 public class ProxyConnection implements Connection, Comparable<ProxyConnection> {
     private static Logger logger = LogManager.getLogger();
 
@@ -50,11 +53,18 @@ public class ProxyConnection implements Connection, Comparable<ProxyConnection> 
         connection.rollback();
     }
 
+    /**
+     * Возвращает соединение в пул
+     * @throws SQLException
+     */
     public void close() throws SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         pool.releaseConnection(this);
     }
 
+    /**
+     * Уничтожает соединение
+     */
     void destroy()  {
         try {
             this.close();

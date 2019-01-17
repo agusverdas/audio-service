@@ -52,6 +52,12 @@ public final class UserDaoImpl implements UserDao {
         return instance;
     }
 
+    /**
+     * Создание пользователя
+     * @param user Потльзователь
+     * @return id Пользователя
+     * @throws DaoException
+     */
     @Override
     public long create(User user) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -76,6 +82,12 @@ public final class UserDaoImpl implements UserDao {
         }
     }
 
+    /**
+     * Выборка пользователя на основе ResultSet
+     * @param resultSet Результат запроса
+     * @return Опционал пользователя
+     * @throws SQLException
+     */
     private Optional<User> buildUser(ResultSet resultSet) throws SQLException {
         User user = null;
         if (resultSet.next()){
@@ -94,6 +106,12 @@ public final class UserDaoImpl implements UserDao {
         return Optional.ofNullable(user);
     }
 
+    /**
+     * ВЫборка пользователей на основе ResultSet
+     * @param resultSet Результат запроса
+     * @return Список пользователей
+     * @throws SQLException
+     */
     private List<User> buildUserList(ResultSet resultSet) throws SQLException {
         List<User> users = new ArrayList<>();
 
@@ -114,6 +132,11 @@ public final class UserDaoImpl implements UserDao {
         return users;
     }
 
+    /**
+     * Ыборка всех пользователей
+     * @return Список пользователей
+     * @throws DaoException
+     */
     @Override
     public List<User> findAll() throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -128,6 +151,12 @@ public final class UserDaoImpl implements UserDao {
         }
     }
 
+    /**
+     * Поиск пользователя по id
+     * @param id id Пользователя
+     * @return Опционал пользователя
+     * @throws DaoException
+     */
     @Override
     public Optional<User> findEntityById(long id) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -143,6 +172,12 @@ public final class UserDaoImpl implements UserDao {
         }
     }
 
+    /**
+     * Поиск пользователя по адресу
+     * @param user Пользователь
+     * @return Опционал пользователя
+     * @throws DaoException
+     */
     @Override
     public Optional<User> findUserByEmail(User user) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -158,6 +193,12 @@ public final class UserDaoImpl implements UserDao {
         }
     }
 
+    /**
+     * Поиск пользователя по имени
+     * @param user Пользователь
+     * @return Опционал пользователя
+     * @throws DaoException
+     */
     @Override
     public Optional<User> findUserByName(User user) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -173,6 +214,12 @@ public final class UserDaoImpl implements UserDao {
         }
     }
 
+    /**
+     * Метод для установки значений в PreparedStatement для обновления пользователя
+     * @param preparedStatement Выражение для вставки
+     * @param user Пользователь
+     * @throws SQLException
+     */
     private void buildUserUpdate(PreparedStatement preparedStatement, User user) throws SQLException {
         preparedStatement.setString(1, user.getEmail());
         preparedStatement.setString(2, user.getPassword());
@@ -184,13 +231,17 @@ public final class UserDaoImpl implements UserDao {
         preparedStatement.setDouble(8, user.getUserId());
     }
 
+    /**
+     * Обновление пользователя
+     * @param entity Пользователь
+     * @throws DaoException
+     */
     @Override
     public void update(User entity) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
 
         try (ProxyConnection connection = pool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER)) {
-            System.out.println("ENTITY : " + entity);
             buildUserUpdate(preparedStatement, entity);
 
             preparedStatement.executeUpdate();
@@ -199,6 +250,12 @@ public final class UserDaoImpl implements UserDao {
         }
     }
 
+    /**
+     * Покупка песни
+     * @param user Пользователь
+     * @param song Песня
+     * @throws DaoException
+     */
     @Override
     public void buySong(User user, Song song) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -235,6 +292,12 @@ public final class UserDaoImpl implements UserDao {
         }
     }
 
+    /**
+     * Покупка альбома
+     * @param user Пользователь
+     * @param album Альбом
+     * @throws DaoException
+     */
     @Override
     public void buyAlbum(User user, Album album) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -279,6 +342,11 @@ public final class UserDaoImpl implements UserDao {
         }
     }
 
+    /**
+     * Удаление пользователя
+     * @param entity Полльзователь
+     * @throws DaoException
+     */
     @Override
     public void delete(User entity) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();

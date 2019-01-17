@@ -35,6 +35,12 @@ public final class AuthorDaoImpl implements AuthorDao {
         return instance;
     }
 
+    /**
+     * СОздание альбома
+     * @param entity Альбом
+     * @return id нового альбома
+     * @throws DaoException
+     */
     @Override
     public long create(Author entity) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -54,6 +60,12 @@ public final class AuthorDaoImpl implements AuthorDao {
         }
     }
 
+    /**
+     * Создание автора по ResultSet
+     * @param resultSet Результат запроса
+     * @return Опционал автора
+     * @throws SQLException
+     */
     private Optional<Author> buildAuthor(ResultSet resultSet) throws SQLException {
         Author author = null;
         if(resultSet.next()){
@@ -64,6 +76,12 @@ public final class AuthorDaoImpl implements AuthorDao {
         return Optional.ofNullable(author);
     }
 
+    /**
+     * Создание списка авторов по ResultSet
+     * @param resultSet Результат запроса
+     * @return Список аторов
+     * @throws SQLException
+     */
     private List<Author> buildAuthorList(ResultSet resultSet) throws SQLException {
         List<Author> authors = new ArrayList<>();
         while (resultSet.next()){
@@ -75,6 +93,12 @@ public final class AuthorDaoImpl implements AuthorDao {
         }
         return authors;
     }
+
+    /**
+     * Выбор всех аторов
+     * @return Список аторов
+     * @throws DaoException
+     */
     @Override
     public List<Author> findAll() throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -89,6 +113,12 @@ public final class AuthorDaoImpl implements AuthorDao {
         }
     }
 
+    /**
+     * Выбор автора ао id
+     * @param id id Автора
+     * @return Опционал автора
+     * @throws DaoException
+     */
     @Override
     public Optional<Author> findEntityById(long id) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -104,7 +134,12 @@ public final class AuthorDaoImpl implements AuthorDao {
         }
     }
 
-
+    /**
+     * Выбор автора по имени
+     * @param entity Автор
+     * @return Опционал автора
+     * @throws DaoException
+     */
     @Override
     public Optional<Author> findAuthorByName(Author entity) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -120,6 +155,12 @@ public final class AuthorDaoImpl implements AuthorDao {
         }
     }
 
+    /**
+     * ВЫбор авторов песни
+     * @param entity Песня
+     * @return Авторы
+     * @throws DaoException
+     */
     @Override
     public List<Author> findAuthorsBySong(Song entity) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -135,6 +176,11 @@ public final class AuthorDaoImpl implements AuthorDao {
         }
     }
 
+    /**
+     * Обновление автора
+     * @param entity Автор
+     * @throws DaoException
+     */
     @Override
     public void update(Author entity) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -150,6 +196,11 @@ public final class AuthorDaoImpl implements AuthorDao {
         }
     }
 
+    /**
+     * Удаление автора
+     * @param entity Автор
+     * @throws DaoException
+     */
     @Override
     public void delete(Author entity) throws DaoException {
         throw new UnsupportedOperationException("You can't delete authors.");

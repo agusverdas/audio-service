@@ -17,24 +17,28 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * Пул соединений к базе данных
+ */
 public final class ConnectionPool {
     private static Logger logger = LogManager.getLogger();
 
-    private static ConnectionPool instance;
+    private static volatile ConnectionPool instance;
     private BlockingQueue<ProxyConnection> connectionQueue;
-    //todo: read
     private Set<ProxyConnection> usedConnections;
 
-    private static AtomicBoolean initialized = new AtomicBoolean(false);
     private static Lock lock = new ReentrantLock();
 
+    /**
+     * Получение объекта пула
+     * @return Объект пула
+     */
     public static ConnectionPool getInstance(){
-        if (!initialized.get()){
+        if (instance == null){
             try {
                 lock.lock();
                 if (instance == null) {
                     instance = new ConnectionPool();
-                    initialized.set(true);
                 }
             } catch (SQLException e) {
                 logger.fatal("Error while creating connection pool.", e);
@@ -47,6 +51,10 @@ public final class ConnectionPool {
         return instance;
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     private ConnectionPool() throws SQLException {
         DbConfigReader config = DbConfigReader.getInstance();
         DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
@@ -56,6 +64,11 @@ public final class ConnectionPool {
         init(poolSize);
     }
 
+    /**
+     * Метод инициализации пула
+     * @param size Размер пула
+     * @throws SQLException
+     */
     private void init(int size) throws SQLException {
         DbConfigReader config = DbConfigReader.getInstance();
         String url = config.getUrl();
@@ -66,6 +79,10 @@ public final class ConnectionPool {
         }
     }
 
+    /**
+     * Получение соединения с базой данных
+     * @return Соединение
+     */
     public ProxyConnection getConnection() {
         ProxyConnection connection = null;
         try {
@@ -78,6 +95,10 @@ public final class ConnectionPool {
         return connection;
     }
 
+    /**
+     * Возвращение соединения в пул
+     * @param connection Соединение
+     */
     void releaseConnection(ProxyConnection connection){
         usedConnections.remove(connection);
         try {
@@ -87,18 +108,31 @@ public final class ConnectionPool {
             Thread.currentThread().interrupt();
         }
     }
-    
+
+    /**
+     * Создание соединения
+     * @param url URL базы данных
+     * @param properties настройки соединения
+     * @return Соединение
+     * @throws SQLException
+     */
     private ProxyConnection createConnection(String url, Properties properties) throws SQLException {
         Connection connection = DriverManager.getConnection(url, properties);
         return new ProxyConnection(connection);
     }
 
+    /**
+     * Уничтожение пула
+     */
     public void destroy() {
         connectionQueue.forEach(ProxyConnection::destroy);
         usedConnections.forEach(ProxyConnection::destroy);
         deregisterDriver();
     }
 
+    /**
+     * Дерегистрация драйверов
+     */
     private void deregisterDriver(){
         Enumeration<Driver> enumDrivers = DriverManager.getDrivers();
         while (enumDrivers.hasMoreElements()) {

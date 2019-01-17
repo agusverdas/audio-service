@@ -6,15 +6,21 @@ import edu.epam.audio.command.CommandEnum;
 import edu.epam.audio.exception.CommandException;
 import edu.epam.audio.exception.ServiceException;
 import edu.epam.audio.service.SongService;
-import edu.epam.audio.util.RequestParams;
-import edu.epam.audio.util.UploadPath;
+import edu.epam.audio.command.RequestParams;
+import edu.epam.audio.command.UploadPath;
 
 import javax.servlet.http.Part;
 
-import static edu.epam.audio.util.RequestParams.*;
+import static edu.epam.audio.command.RequestParams.*;
 
 public class AddSongCommand implements Command {
     private SongService songService = new SongService();
+    /**
+     * Команда добавления песни
+     * @param content Оболочка над запросом
+     * @return Имя команды для перехода на главную
+     * @throws CommandException
+     */
     @Override
     public String execute(RequestContent content) throws CommandException {
         String uploadFilePath = content.getRequestPath() + UploadPath.UPLOAD_SONGS_DIR;

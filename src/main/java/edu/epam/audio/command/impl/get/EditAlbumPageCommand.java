@@ -6,14 +6,20 @@ import edu.epam.audio.entity.Song;
 import edu.epam.audio.exception.CommandException;
 import edu.epam.audio.exception.ServiceException;
 import edu.epam.audio.service.SongService;
-import edu.epam.audio.util.PagePath;
-import edu.epam.audio.util.RequestAttributes;
-import edu.epam.audio.util.RequestParams;
+import edu.epam.audio.command.PagePath;
+import edu.epam.audio.command.RequestAttributes;
+import edu.epam.audio.command.RequestParams;
 
 import java.util.List;
 
 public class EditAlbumPageCommand implements Command {
     private SongService songService = new SongService();
+    /**
+     * Команда перехода на страницу изменения альбома
+     * @param content Оболочка над запросом
+     * @return Путь к странице
+     * @throws CommandException
+     */
     @Override
     public String execute(RequestContent content) throws CommandException {
         try {

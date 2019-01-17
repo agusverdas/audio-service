@@ -14,7 +14,7 @@ import edu.epam.audio.entity.builder.impl.UserBuilder;
 import edu.epam.audio.exception.DaoException;
 import edu.epam.audio.exception.ServiceException;
 import edu.epam.audio.util.ParamsValidator;
-import edu.epam.audio.util.UploadPath;
+import edu.epam.audio.command.UploadPath;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.servlet.http.Part;
@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static edu.epam.audio.util.RequestAttributes.*;
-import static edu.epam.audio.util.RequestParams.*;
-import static edu.epam.audio.util.SessionAttributes.*;
+import static edu.epam.audio.command.RequestAttributes.*;
+import static edu.epam.audio.command.RequestParams.*;
+import static edu.epam.audio.command.SessionAttributes.*;
 
 public class UserService {
     private static final String INCORRECT_BONUS = "label.error.bonus";
@@ -42,6 +42,11 @@ public class UserService {
     private static final String YOU_ALREADY_HAVE_SONG = "label.repeat.buy.song";
     private static final String YOU_ALREADY_HAVE_ALBUM = "label.repeat.buy.album";
 
+    /**
+     * Вход пользователя в систему
+     * @param content Оболочка над запросом
+     * @throws ServiceException
+     */
     public void loginUser(RequestContent content) throws ServiceException {
         UserDao userDao = UserDaoImpl.getInstance();
         String email = content.getRequestParam(PARAM_NAME_EMAIL);
@@ -62,6 +67,11 @@ public class UserService {
         }
     }
 
+    /**
+     * Регистрация пользователя
+     * @param content Оболочка над запросом
+     * @throws ServiceException
+     */
     public void registerUser(RequestContent content) throws ServiceException {
         UserDao userDao = UserDaoImpl.getInstance();
         String email = content.getRequestParam(PARAM_NAME_EMAIL);
@@ -105,6 +115,11 @@ public class UserService {
         }
     }
 
+    /**
+     * Обновление профиля пользователя
+     * @param content Оболочка над запросом
+     * @throws ServiceException
+     */
     public void updateProfile(RequestContent content) throws ServiceException {
         UserDao userDao = UserDaoImpl.getInstance();
         User user = (User) content.getSessionAttribute(SESSION_ATTRIBUTE_USER);
@@ -149,6 +164,11 @@ public class UserService {
         }
     }
 
+    /**
+     * Обновление бонуса пользователя
+     * @param content Оболочка над запросом
+     * @throws ServiceException
+     */
     public void updateBonus(RequestContent content) throws ServiceException {
         long id = Long.parseLong(content.getRequestParam(PARAM_NAME_ID));
         String strBonus = content.getRequestParam(PARAM_NAME_BONUS);
@@ -175,6 +195,11 @@ public class UserService {
         }
     }
 
+    /**
+     * Загрузка всех пользователей
+     * @return Пользователи
+     * @throws ServiceException
+     */
     public List<User> loadAllUsers() throws ServiceException {
         UserDao userDao = UserDaoImpl.getInstance();
         List<User> users;
@@ -186,6 +211,11 @@ public class UserService {
         }
     }
 
+    /**
+     * Добавление денег
+     * @param content Оболочка над запросом
+     * @throws ServiceException
+     */
     public void addMoney(RequestContent content) throws ServiceException {
         User user = (User) content.getSessionAttribute(SESSION_ATTRIBUTE_USER);
         UserDao userDao = UserDaoImpl.getInstance();
@@ -210,6 +240,11 @@ public class UserService {
         }
     }
 
+    /**
+     * Покупка песни
+     * @param content Оболочка над запросом
+     * @throws ServiceException
+     */
     public void buySong(RequestContent content) throws ServiceException {
         SongDao songDao = SongDaoImpl.getInstance();
         UserDao userDao = UserDaoImpl.getInstance();
@@ -264,6 +299,11 @@ public class UserService {
         }
     }
 
+    /**
+     * Покупка альбома
+     * @param content Оболочка над запросом
+     * @throws ServiceException
+     */
     public void buyAlbum(RequestContent content) throws ServiceException {
         AlbumDao albumDao = AlbumDaoImpl.getInstance();
         SongDao songDao = SongDaoImpl.getInstance();

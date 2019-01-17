@@ -6,16 +6,22 @@ import edu.epam.audio.command.CommandEnum;
 import edu.epam.audio.exception.CommandException;
 import edu.epam.audio.exception.ServiceException;
 import edu.epam.audio.service.AlbumService;
-import edu.epam.audio.util.UploadPath;
+import edu.epam.audio.command.UploadPath;
 
 import javax.servlet.http.Part;
 
-import static edu.epam.audio.util.RequestParams.PARAM_NAME_AUTHOR;
-import static edu.epam.audio.util.RequestParams.PARAM_NAME_PHOTO;
-import static edu.epam.audio.util.RequestParams.PARAM_NAME_TITLE;
+import static edu.epam.audio.command.RequestParams.PARAM_NAME_AUTHOR;
+import static edu.epam.audio.command.RequestParams.PARAM_NAME_PHOTO;
+import static edu.epam.audio.command.RequestParams.PARAM_NAME_TITLE;
 
 public class AddAlbumCommand implements Command {
     private AlbumService albumService = new AlbumService();
+    /**
+     * Команда добавления альбома
+     * @param content Оболочка над запросом
+     * @return Имя команды для перехода на главную
+     * @throws CommandException
+     */
     @Override
     public String execute(RequestContent content) throws CommandException {
         String title = content.getRequestParam(PARAM_NAME_TITLE);

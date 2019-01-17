@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static edu.epam.audio.util.RequestAttributes.*;
-import static edu.epam.audio.util.RequestParams.*;
+import static edu.epam.audio.command.RequestAttributes.*;
+import static edu.epam.audio.command.RequestParams.*;
 
 @WebServlet("/Controller")
 @MultipartConfig
@@ -50,6 +50,14 @@ public class Controller extends HttpServlet {
         resp.sendRedirect(pathToRedirect);
     }
 
+    /**
+     * Метод выполнения запроса
+     * @param request Запрос
+     * @param response Ответ
+     * @return Путь к странице, на которую следует перейти после запроса
+     * @throws ServletException
+     * @throws IOException
+     */
     private String commandExecute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setHeader("Cache-Control","no-cache");
         response.setHeader("Cache-Control","no-store");

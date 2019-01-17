@@ -9,6 +9,12 @@ import edu.epam.audio.service.SongService;
 
 public class DeleteSongCommand implements Command {
     private SongService songService = new SongService();
+    /**
+     * Команда удаления песни
+     * @param content Оболочка над запросом
+     * @return Имя команды для перехода на главную
+     * @throws CommandException
+     */
     @Override
     public String execute(RequestContent content) throws CommandException {
         try {

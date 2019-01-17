@@ -14,23 +14,31 @@ import edu.epam.audio.entity.User;
 import edu.epam.audio.entity.builder.impl.SongBuilder;
 import edu.epam.audio.exception.DaoException;
 import edu.epam.audio.exception.ServiceException;
-import edu.epam.audio.util.RequestParams;
-import edu.epam.audio.util.UploadPath;
+import edu.epam.audio.command.UploadPath;
+import edu.epam.audio.util.FilterXSS;
 
 import javax.servlet.http.Part;
-import javax.swing.text.html.Option;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static edu.epam.audio.util.RequestAttributes.ATTRIBUTE_NAME_ERROR;
-import static edu.epam.audio.util.RequestParams.*;
+import static edu.epam.audio.command.RequestAttributes.ATTRIBUTE_NAME_ERROR;
+import static edu.epam.audio.command.RequestParams.*;
 
 public class SongService {
     private static final String INCORRECT_COST = "label.error.cost";
 
+    /**
+     * Добавление песни
+     * @param title Название
+     * @param authorParams Авторы
+     * @param cost Цена
+     * @param path Путь загрузки
+     * @param part Песня
+     * @throws ServiceException
+     */
     public void addSong(String title, String[] authorParams, String cost, String path, Part part) throws ServiceException {
         AuthorDao authorDao = AuthorDaoImpl.getInstance();
         SongDao songDao = SongDaoImpl.getInstance();
@@ -38,7 +46,7 @@ public class SongService {
         List<Author> authorsList = new ArrayList<>();
         authorNames.forEach(name -> {
             Author author = new Author();
-            author.setName(name.trim());
+            author.setName(FilterXSS.filterXSS(name.trim()));
             authorsList.add(author);
         });
         try {
@@ -52,7 +60,7 @@ public class SongService {
                 authors.add(authorOptional.get());
             }
             Song song = new SongBuilder()
-                    .addTitle(title)
+                    .addTitle(FilterXSS.filterXSS(title))
                     .addCost(Double.parseDouble(cost))
                     .build();
 
@@ -78,12 +86,23 @@ public class SongService {
         }
     }
 
+    /**
+     * Установка авторов песни
+     * @param song Песня
+     * @throws DaoException
+     */
     private void loadSongAuthor(Song song) throws DaoException {
         AuthorDao authorDao = AuthorDaoImpl.getInstance();
         List<Author> authors = authorDao.findAuthorsBySong(song);
         song.setAuthorList(authors);
     }
 
+    /**
+     * Нахождение песни по id
+     * @param songId id песни
+     * @return Песня
+     * @throws ServiceException
+     */
     public Song loadSong(long songId) throws ServiceException {
         SongDao songDao = SongDaoImpl.getInstance();
         try {
@@ -100,6 +119,11 @@ public class SongService {
         }
     }
 
+    /**
+     * Загрузка всех песен
+     * @return Все песни
+     * @throws ServiceException
+     */
     public List<Song> loadAllSongs() throws ServiceException {
         SongDao songDao = SongDaoImpl.getInstance();
         try {
@@ -113,6 +137,11 @@ public class SongService {
         }
     }
 
+    /**
+     * Загрузка песен, которые не входят в аьбом
+     * @return Песни
+     * @throws ServiceException
+     */
     public List<Song> loadSongsNotInAlbum() throws ServiceException {
         SongDao songDao = SongDaoImpl.getInstance();
         try {
@@ -126,6 +155,12 @@ public class SongService {
         }
     }
 
+    /**
+     * Загрузка всех песен пользователя
+     * @param user Пользователь
+     * @return Песни
+     * @throws ServiceException
+     */
     public List<Song> loadUserSongs(User user) throws ServiceException {
         SongDao songDao = SongDaoImpl.getInstance();
         try {
@@ -139,6 +174,11 @@ public class SongService {
         }
     }
 
+    /**
+     * Изменение песни
+     * @param content Оболочка над запросом
+     * @throws ServiceException
+     */
     public void updateSong(RequestContent content) throws ServiceException {
         SongDao songDao = SongDaoImpl.getInstance();
         long id = Long.parseLong(content.getRequestParam(PARAM_NAME_ID));
@@ -167,6 +207,11 @@ public class SongService {
         }
     }
 
+    /**
+     * Удаление песни
+     * @param content Оболочка над запросом
+     * @throws ServiceException
+     */
     public void deleteSong(RequestContent content) throws ServiceException {
         SongDao songDao = SongDaoImpl.getInstance();
         AlbumDao albumDao = AlbumDaoImpl.getInstance();

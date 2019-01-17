@@ -31,7 +31,8 @@ public enum CommandEnum {
     GET_INFO_SONG(new SongInfoPageCommand()),
     GET_BUY_SONG(new SongPaymentPageCommand()),
     GET_INFO_ALBUM(new AlbumInfoPageCommand()),
-    GET_BUY_ALBUM(new AlbumPaymentPageCommand());
+    GET_BUY_ALBUM(new AlbumPaymentPageCommand()),
+    GET_LOCALE(new ChangeLocaleCommand());
 
     private Command command;
 

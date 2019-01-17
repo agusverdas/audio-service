@@ -7,10 +7,16 @@ import edu.epam.audio.exception.CommandException;
 import edu.epam.audio.exception.ServiceException;
 import edu.epam.audio.service.UserService;
 
-import static edu.epam.audio.util.RequestAttributes.*;
+import static edu.epam.audio.command.RequestAttributes.*;
 
 public class AddMoneyCommand implements Command {
     private UserService userService = new UserService();
+    /**
+     * Команда добавления денег
+     * @param content Оболочка над запросом
+     * @return Имя команды для перехода в профиль
+     * @throws CommandException
+     */
     @Override
     public String execute(RequestContent content) throws CommandException {
         try {

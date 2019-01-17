@@ -10,8 +10,8 @@ import edu.epam.audio.exception.ServiceException;
 import edu.epam.audio.service.AlbumService;
 import edu.epam.audio.service.SongService;
 import edu.epam.audio.service.UserService;
-import edu.epam.audio.util.PagePath;
-import edu.epam.audio.util.RequestAttributes;
+import edu.epam.audio.command.PagePath;
+import edu.epam.audio.command.RequestAttributes;
 
 import java.util.List;
 
@@ -19,6 +19,13 @@ public class AdminPageCommand implements Command {
     private UserService userService = new UserService();
     private SongService songService = new SongService();
     private AlbumService albumService = new AlbumService();
+
+    /**
+     * Команда перехода на страницу администратора
+     * @param content Оболочка над запросом
+     * @return Путь к странице
+     * @throws CommandException
+     */
     @Override
     public String execute(RequestContent content) throws CommandException {
         try {

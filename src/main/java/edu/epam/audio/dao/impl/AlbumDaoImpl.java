@@ -44,10 +44,17 @@ public final class AlbumDaoImpl implements AlbumDao {
 
     private AlbumDaoImpl(){}
 
+
     public static AlbumDaoImpl getInstance(){
         return instance;
     }
 
+    /**
+     * Создание альбома
+     * @param entity Альбом
+     * @return id нового альбома
+     * @throws DaoException
+     */
     @Override
     public long create(Album entity) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -70,6 +77,12 @@ public final class AlbumDaoImpl implements AlbumDao {
         }
     }
 
+    /**
+     * Создание объекта альбом по ResultSet
+     * @param resultSet Результат запроса
+     * @return Альбом
+     * @throws SQLException
+     */
     private Optional<Album> buildAlbum(ResultSet resultSet) throws SQLException {
         Album album = null;
         if(resultSet.next()){
@@ -89,6 +102,12 @@ public final class AlbumDaoImpl implements AlbumDao {
         return Optional.ofNullable(album);
     }
 
+    /**
+     * Создание списка альбомов по ResultSet
+     * @param resultSet Результат запроса
+     * @return Список альбомов
+     * @throws SQLException
+     */
     private List<Album> buildAlbumList(ResultSet resultSet) throws SQLException {
         List<Album> albums = new ArrayList<>();
         while (resultSet.next()){
@@ -110,6 +129,11 @@ public final class AlbumDaoImpl implements AlbumDao {
         return albums;
     }
 
+    /**
+     * Выбор всех альбомов
+     * @return Все альбомы
+     * @throws DaoException
+     */
     @Override
     public List<Album> findAll() throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -124,6 +148,12 @@ public final class AlbumDaoImpl implements AlbumDao {
         }
     }
 
+    /**
+     * Выбор альбома по id
+     * @param id id Альбома
+     * @return Опционал альбома
+     * @throws DaoException
+     */
     @Override
     public Optional<Album> findEntityById(long id) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -139,6 +169,12 @@ public final class AlbumDaoImpl implements AlbumDao {
         }
     }
 
+    /**
+     * Выбор альбомов пользователя
+     * @param user Пользователь
+     * @return Альбомы
+     * @throws DaoException
+     */
     @Override
     public List<Album> findUserAlbums(User user) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -155,6 +191,11 @@ public final class AlbumDaoImpl implements AlbumDao {
         }
     }
 
+    /**
+     * Обновление альбома
+     * @param entity Альбом
+     * @throws DaoException
+     */
     @Override
     public void update(Album entity) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -173,6 +214,11 @@ public final class AlbumDaoImpl implements AlbumDao {
         }
     }
 
+    /**
+     * Удаление альбома
+     * @param entity Альбом
+     * @throws DaoException
+     */
     @Override
     public void delete(Album entity) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();

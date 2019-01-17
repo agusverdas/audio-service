@@ -50,6 +50,12 @@ public final class SongDaoImpl implements SongDao {
         return instance;
     }
 
+    /**
+     * Создание песни
+     * @param song Песня
+     * @return id Песни
+     * @throws DaoException
+     */
     @Override
     public long create(Song song) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -71,6 +77,12 @@ public final class SongDaoImpl implements SongDao {
         }
     }
 
+    /**
+     * Создание пенсни на основе ResultSet
+     * @param resultSet Результат запроса
+     * @return Опционал песни
+     * @throws SQLException
+     */
     private Optional<Song> buildSong(ResultSet resultSet) throws SQLException {
         Song song = null;
         if (resultSet.next()) {
@@ -84,6 +96,12 @@ public final class SongDaoImpl implements SongDao {
         return Optional.ofNullable(song);
     }
 
+    /**
+     * Создание списка песен на основе запроса
+     * @param resultSet Результат запроса
+     * @return Список песен
+     * @throws SQLException
+     */
     private List<Song> buildSongList(ResultSet resultSet) throws SQLException {
         List<Song> songs = new ArrayList<>();
         while (resultSet.next()) {
@@ -99,6 +117,12 @@ public final class SongDaoImpl implements SongDao {
         return songs;
     }
 
+    /**
+     * Соединение песен и авторов
+     * @param song Песня
+     * @param authors Список авторов
+     * @throws DaoException
+     */
     @Override
     public void mergeSongAuthor(Song song, List<Author> authors) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -116,6 +140,11 @@ public final class SongDaoImpl implements SongDao {
         }
     }
 
+    /**
+     * ВЫборка всех песен
+     * @return Список песен
+     * @throws DaoException
+     */
     @Override
     public List<Song> findAll() throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -129,6 +158,11 @@ public final class SongDaoImpl implements SongDao {
         }
     }
 
+    /**
+     * Поиск песен не в альбоме
+     * @return Список песен
+     * @throws DaoException
+     */
     @Override
     public List<Song> findSongsNotInAlbum() throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -142,6 +176,12 @@ public final class SongDaoImpl implements SongDao {
         }
     }
 
+    /**
+     * Поиск песни по id
+     * @param id id Песни
+     * @return Опционал песни
+     * @throws DaoException
+     */
     @Override
     public Optional<Song> findEntityById(long id) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -157,6 +197,12 @@ public final class SongDaoImpl implements SongDao {
         }
     }
 
+    /**
+     * Поиск песен по альбому
+     * @param album Альбом
+     * @return Список песен
+     * @throws DaoException
+     */
     @Override
     public List<Song> findSongsByAlbum(Album album) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -172,6 +218,12 @@ public final class SongDaoImpl implements SongDao {
         }
     }
 
+    /**
+     * Поиск песен пользователя
+     * @param user Пользователь
+     * @return Список песен
+     * @throws DaoException
+     */
     @Override
     public List<Song> findUserSongs(User user) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -187,6 +239,12 @@ public final class SongDaoImpl implements SongDao {
         }
     }
 
+    /**
+     * Поиск альбома песни
+     * @param song Песня
+     * @return id Альбома
+     * @throws DaoException
+     */
     @Override
     public long findSongAlbum(Song song) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -206,6 +264,11 @@ public final class SongDaoImpl implements SongDao {
         }
     }
 
+    /**
+     * СОединение песни и альбома
+     * @param album Альбом
+     * @throws DaoException
+     */
     @Override
     public void mergeSongAlbum(Album album) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -223,6 +286,11 @@ public final class SongDaoImpl implements SongDao {
         }
     }
 
+    /**
+     * Обновление песни
+     * @param entity Песня
+     * @throws DaoException
+     */
     @Override
     public void update(Song entity) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
@@ -240,6 +308,11 @@ public final class SongDaoImpl implements SongDao {
         }
     }
 
+    /**
+     * Удаление песни
+     * @param entity Песня
+     * @throws DaoException
+     */
     @Override
     public void delete(Song entity) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();

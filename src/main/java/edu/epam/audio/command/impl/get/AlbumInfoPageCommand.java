@@ -6,13 +6,20 @@ import edu.epam.audio.entity.Album;
 import edu.epam.audio.exception.CommandException;
 import edu.epam.audio.exception.ServiceException;
 import edu.epam.audio.service.AlbumService;
-import edu.epam.audio.util.PagePath;
-import edu.epam.audio.util.RequestAttributes;
+import edu.epam.audio.command.PagePath;
+import edu.epam.audio.command.RequestAttributes;
 
-import static edu.epam.audio.util.RequestParams.PARAM_NAME_ENTITY_ID;
+import static edu.epam.audio.command.RequestParams.PARAM_NAME_ENTITY_ID;
 
 public class AlbumInfoPageCommand implements Command {
     private AlbumService albumService = new AlbumService();
+
+    /**
+     * Команда перехода на страницу информации об альбоме
+     * @param content Оболочка над запросом
+     * @return Путь к странице
+     * @throws CommandException
+     */
     @Override
     public String execute(RequestContent content) throws CommandException {
         Long albumId = Long.parseLong(content.getRequestParam(PARAM_NAME_ENTITY_ID));

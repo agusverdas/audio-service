@@ -1,6 +1,6 @@
 package edu.epam.audio.controller;
 
-import edu.epam.audio.util.SessionAttributes;
+import edu.epam.audio.command.SessionAttributes;
 
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSession;

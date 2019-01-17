@@ -9,15 +9,21 @@ import edu.epam.audio.exception.CommandException;
 import edu.epam.audio.exception.ServiceException;
 import edu.epam.audio.service.AlbumService;
 import edu.epam.audio.service.SongService;
-import edu.epam.audio.util.PagePath;
-import edu.epam.audio.util.RequestAttributes;
-import edu.epam.audio.util.SessionAttributes;
+import edu.epam.audio.command.PagePath;
+import edu.epam.audio.command.RequestAttributes;
+import edu.epam.audio.command.SessionAttributes;
 
 import java.util.List;
 
 public class ProfilePageCommand implements Command {
     private SongService songService = new SongService();
     private AlbumService albumService = new AlbumService();
+    /**
+     * Команда перехода на страницу профиля
+     * @param content Оболочка над запросом
+     * @return Путь к странице
+     * @throws CommandException
+     */
     @Override
     public String execute(RequestContent content) throws CommandException {
         User user = (User) content.getSessionAttribute(SessionAttributes.SESSION_ATTRIBUTE_USER);

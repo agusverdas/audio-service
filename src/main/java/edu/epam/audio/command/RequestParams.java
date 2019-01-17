@@ -1,5 +1,8 @@
-package edu.epam.audio.util;
+package edu.epam.audio.command;
 
+/**
+ * Класс для параметров запроса
+ */
 public class RequestParams {
     public static final String PARAM_NAME_COMMAND = "command";
     public static final String PARAM_NAME_EMAIL = "e-mail";
@@ -17,6 +20,8 @@ public class RequestParams {
     public static final String PARAM_NAME_MONEY = "money";
     public static final String PARAM_NAME_PAYMENT = "payment";
     public static final String PARAM_NAME_ROWS = "checkedRows";
+    public static final String PARAM_NAME_LOCALE = "locale";
+    public static final String PARAM_COMMAND = "command";
 
     public static final String PARAM_VALUE_POCKET = "pocket";
     public static final String PARAM_VALUE_BONUS = "bonus";

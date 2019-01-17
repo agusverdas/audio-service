@@ -1,5 +1,8 @@
-package edu.epam.audio.util;
+package edu.epam.audio.command;
 
+/**
+ * Класс для путей к страницам
+ */
 public class PagePath {
     public static final String ADMIN_PAGE = "/pages/admin_panel.jsp";
     public static final String EDIT_PAGE = "/pages/edit_profile.jsp";
@@ -15,5 +18,7 @@ public class PagePath {
     public static final String PAYMENT_SONG_PAGE = "/pages/payment_song.jsp";
     public static final String INFO_ALBUM_PAGE = "/pages/info_album.jsp";
     public static final String PAYMENT_ALBUM_PAGE = "/pages/payment_album.jsp";
+
+    public static final String CONTROLLER_PATH = "/Controller";
     private PagePath(){}
 }

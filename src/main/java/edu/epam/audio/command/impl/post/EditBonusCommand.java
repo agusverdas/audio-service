@@ -6,12 +6,18 @@ import edu.epam.audio.command.CommandEnum;
 import edu.epam.audio.exception.CommandException;
 import edu.epam.audio.exception.ServiceException;
 import edu.epam.audio.service.UserService;
-import edu.epam.audio.util.RequestAttributes;
+import edu.epam.audio.command.RequestAttributes;
 
-import static edu.epam.audio.util.RequestParams.*;
+import static edu.epam.audio.command.RequestParams.*;
 
 public class EditBonusCommand implements Command {
     private UserService userService = new UserService();
+    /**
+     * Команда изменения бонуса
+     * @param content Оболочка над запросом
+     * @return Имя команды для перехода к панели администратора
+     * @throws CommandException
+     */
     @Override
     public String execute(RequestContent content) throws CommandException {
         long id = Long.parseLong(content.getRequestParam(PARAM_NAME_ID));

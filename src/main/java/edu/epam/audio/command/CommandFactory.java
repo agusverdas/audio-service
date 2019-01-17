@@ -6,16 +6,24 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Класс-фабрика для определения команды
+ */
 public class CommandFactory {
     private static Logger logger = LogManager.getLogger();
 
-    private static final String PARAMETER_NAME = "command";
     private static final String DASH = "-";
     private static final String UNDERSCORE = "_";
 
+    /**
+     * Метод определения команды
+     * @param request Запрос
+     * @return Команда
+     * @throws CommandException
+     */
     public Command defineCommand(HttpServletRequest request) throws CommandException {
-        String action = request.getParameter(PARAMETER_NAME);
-        logger.debug(PARAMETER_NAME + " : value :" + action);
+        String action = request.getParameter(RequestParams.PARAM_NAME_COMMAND);
+        logger.debug(RequestParams.PARAM_NAME_COMMAND + " : value :" + action);
 
         if (action == null || action.isEmpty()){
             throw new CommandException("Exception in command value.");

@@ -3,6 +3,7 @@ $(document).ready(function() {
         pageLength : 10,
         lengthChange: false,
         searching: false,
+        bInfo : false,
         ordering: false
     });
 
@@ -10,6 +11,7 @@ $(document).ready(function() {
         pageLength : 10,
         lengthChange: false,
         searching: false,
+        bInfo : false,
         ordering: false
     });
 } );

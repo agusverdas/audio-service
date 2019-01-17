@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Фильтр изменяющий кодировку на UTF-8
+ */
 @WebFilter(
         dispatcherTypes = {
         DispatcherType.REQUEST,

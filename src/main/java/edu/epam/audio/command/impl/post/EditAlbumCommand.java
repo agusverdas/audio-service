@@ -9,6 +9,12 @@ import edu.epam.audio.service.AlbumService;
 
 public class EditAlbumCommand implements Command {
     private AlbumService albumService = new AlbumService();
+    /**
+     * Команда изменения альбома
+     * @param content Оболочка над запросом
+     * @return Имя команды для перехода на главную
+     * @throws CommandException
+     */
     @Override
     public String execute(RequestContent content) throws CommandException {
         try {

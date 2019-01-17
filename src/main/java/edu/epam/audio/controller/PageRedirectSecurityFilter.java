@@ -2,8 +2,7 @@ package edu.epam.audio.controller;
 
 import edu.epam.audio.entity.Privileges;
 import edu.epam.audio.entity.User;
-import edu.epam.audio.util.PagePath;
-import edu.epam.audio.util.SessionAttributes;
+import edu.epam.audio.command.SessionAttributes;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -12,8 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static edu.epam.audio.util.PagePath.*;
+import static edu.epam.audio.command.PagePath.*;
 
+/**
+ * Фильтр проверяющий права доступа к странице для пользователя
+ */
 @WebFilter(dispatcherTypes = {
         DispatcherType.REQUEST,
         DispatcherType.FORWARD,

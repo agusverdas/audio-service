@@ -1,5 +1,8 @@
-package edu.epam.audio.util;
+package edu.epam.audio.command;
 
+/**
+ * Класс для атрибутов запроса
+ */
 public class RequestAttributes {
     public static final String ATTRIBUTE_SONGS = "songs";
     public static final String ATTRIBUTE_ALBUMS = "albums";

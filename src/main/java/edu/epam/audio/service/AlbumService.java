@@ -14,8 +14,9 @@ import edu.epam.audio.entity.User;
 import edu.epam.audio.entity.builder.impl.AlbumBuilder;
 import edu.epam.audio.exception.DaoException;
 import edu.epam.audio.exception.ServiceException;
-import edu.epam.audio.util.RequestParams;
-import edu.epam.audio.util.UploadPath;
+import edu.epam.audio.command.RequestParams;
+import edu.epam.audio.command.UploadPath;
+import edu.epam.audio.util.FilterXSS;
 
 import javax.servlet.http.Part;
 import java.io.File;
@@ -24,12 +25,20 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class AlbumService {
+    /**
+     * Добавление альбома
+     * @param title Название
+     * @param authorName Имя автора
+     * @param path Путь запроса
+     * @param part Картинка альбома
+     * @throws ServiceException
+     */
     public void addAlbum(String title, String authorName, String path, Part part) throws ServiceException {
         AuthorDao authorDao = AuthorDaoImpl.getInstance();
         AlbumDao albumDao = AlbumDaoImpl.getInstance();
 
         Author author = new Author();
-        author.setName(authorName);
+        author.setName(FilterXSS.filterXSS(authorName));
         try {
             Optional<Author> authorOptional = authorDao.findAuthorByName(author);
             if (!authorOptional.isPresent()){
@@ -39,7 +48,7 @@ public class AlbumService {
             author = authorOptional.get();
 
             Album album = new AlbumBuilder()
-                    .addTitle(title)
+                    .addTitle(FilterXSS.filterXSS(title))
                     .build();
 
             File fileSaveDir = new File(path);
@@ -59,6 +68,11 @@ public class AlbumService {
         }
     }
 
+    /**
+     * Установка автора альбома
+     * @param album Альбом
+     * @throws DaoException
+     */
     private void loadAlbumAuthor(Album album) throws DaoException {
         AuthorDao authorDao = AuthorDaoImpl.getInstance();
         Optional<Author> authorOptional = authorDao.findEntityById(album.getAuthor().getAuthorId());
@@ -68,6 +82,11 @@ public class AlbumService {
         }
     }
 
+    /**
+     * Установка песен альбома
+     * @param album Альбом
+     * @throws DaoException
+     */
     private void loadAlbumSongs(Album album) throws DaoException {
         SongDao songDao = SongDaoImpl.getInstance();
         AuthorDao authorDao = AuthorDaoImpl.getInstance();
@@ -80,6 +99,12 @@ public class AlbumService {
         album.setSongs(songs);
     }
 
+    /**
+     * Нахождение альбома по id
+     * @param albumId id альбома
+     * @return Альбом
+     * @throws ServiceException
+     */
     public Album loadAlbum(long albumId) throws ServiceException {
         AlbumDao albumDao = AlbumDaoImpl.getInstance();
 
@@ -98,6 +123,11 @@ public class AlbumService {
         }
     }
 
+    /**
+     * Загрузка всех альбомов
+     * @return Все альбомы
+     * @throws ServiceException
+     */
     public List<Album> loadAllAlbums() throws ServiceException {
         AlbumDao albumDao = AlbumDaoImpl.getInstance();
 
@@ -113,6 +143,12 @@ public class AlbumService {
         }
     }
 
+    /**
+     * Загрузка альбомов пользователя
+     * @param user Пользователь
+     * @return Альбомы
+     * @throws ServiceException
+     */
     public List<Album> loadUserAlbums(User user) throws ServiceException {
         AlbumDao albumDao = AlbumDaoImpl.getInstance();
 
@@ -128,6 +164,11 @@ public class AlbumService {
         }
     }
 
+    /**
+     * Добавление песен в альбом
+     * @param content Оболочка над запросом
+     * @throws ServiceException
+     */
     public void songsToAlbum(RequestContent content) throws ServiceException {
         Long albumId = Long.parseLong(content.getRequestParam(RequestParams.PARAM_NAME_ID));
         List<String> values = content.getRequestParams(RequestParams.PARAM_NAME_ROWS);

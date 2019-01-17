@@ -6,12 +6,18 @@ import edu.epam.audio.command.CommandEnum;
 import edu.epam.audio.exception.CommandException;
 import edu.epam.audio.exception.ServiceException;
 import edu.epam.audio.service.SongService;
-import edu.epam.audio.util.RequestAttributes;
-import edu.epam.audio.util.RequestParams;
-import edu.epam.audio.util.UploadPath;
+import edu.epam.audio.command.RequestAttributes;
+import edu.epam.audio.command.RequestParams;
+import edu.epam.audio.command.UploadPath;
 
 public class EditSongCommand implements Command {
     private SongService songService = new SongService();
+    /**
+     * Команда изменения песни
+     * @param content Оболочка над запросом
+     * @return Имя команды для перехода на страницу администратора
+     * @throws CommandException
+     */
     @Override
     public String execute(RequestContent content) throws CommandException {
         String applicationPath = content.getRequestPath();

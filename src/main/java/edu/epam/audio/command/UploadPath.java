@@ -1,4 +1,4 @@
-package edu.epam.audio.util;
+package edu.epam.audio.command;
 
 import edu.epam.audio.exception.ServiceException;
 
@@ -6,6 +6,9 @@ import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Класс для формирования путей загрузки картиновк и песен
+ */
 public final class UploadPath {
     public static final String UPLOAD_PHOTOS_DIR = "photos";
     public static final String UPLOAD_SONGS_DIR = "songs";
@@ -18,6 +21,13 @@ public final class UploadPath {
 
     private UploadPath(){}
 
+    /**
+     * Метод для загрузки песни
+     * @param path Путь запроса
+     * @param part Песня
+     * @return Путь загрузки
+     * @throws ServiceException
+     */
     public static String uploadSong(String path, Part part) throws ServiceException {
         String formedPath;
         try {
@@ -34,6 +44,13 @@ public final class UploadPath {
         return null;
     }
 
+    /**
+     * Метод для загрузки картинки
+     * @param path Путь запроса
+     * @param part Картинка
+     * @return Путь загрузки
+     * @throws ServiceException
+     */
     public static String uploadPhoto(String path, Part part) throws ServiceException {
         String formedPath;
         try {
